@@ -1,0 +1,20 @@
+.bgImageSize {
+  background-image: url("/computer.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  /* background-position: left bottom; */
+  background-position-y: 25%;
+  background-blend-mode: multiply;
+  color: #fff;
+}
+
+/* @media screen and (max-width: 1280px) {
+  .bgImageSize {
+    background-image: url("/computer.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position-y: 25%;
+    background-blend-mode: multiply;
+    color: #fff;
+  }
+} */
