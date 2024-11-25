@@ -209,14 +209,14 @@ export default function Issues() {
                           </PopoverTrigger>
                           <PopoverContent className="w-96 p-0 min-h-24">
                             <div className="grid gap-4 grid-cols-2 h-full">
-                              <div className="space-y-2 p-2">
+                              <div className="space-y-3 p-2">
                                 <h4 className="font-medium leading-none">Issue Description</h4>
                                 <span className="text-sm text-muted-foreground">
                                   {currentCategoryDetail.description ?? "NA"}
                                 </span>
                               </div>
                               <div className="bg-green-300 h-full min-h-24">
-                                <div className="space-y-2 p-2">
+                                <div className="space-y-3 p-2">
                                   <h4 className="font-medium leading-none">How to fix</h4>
                                   <span className="text-sm text-muted-foreground">
                                    {currentCategoryDetail.fix ?? "NA"}
