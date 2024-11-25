@@ -3,5 +3,5 @@ interface FaqCardProps {
 }
 
 export default function FaqCard({ children }: FaqCardProps) {
-  return <section className="flex flex-col text-center">{children}</section>;
+  return <section className="flex flex-col text-center ">{children}</section>;
 }
