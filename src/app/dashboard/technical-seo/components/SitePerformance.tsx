@@ -34,7 +34,7 @@ export default function SitePerformance() {
     data?.crawlings
       ?.flatMap((crawling: any) => crawling.crawlingData) // Get all crawlingData arrays
       .filter(isSitePerformanceData) ?? []; // Filter by tab = 'sitePerformance'
-  console.log("site perf", sitePerformanceData[0]);
+  // console.log("site perf", sitePerformanceData[0]);
 
   const pageloadSpeedArray = sitePerformanceData[0]?.data.page_load_speed || [];
 
@@ -63,7 +63,7 @@ export default function SitePerformance() {
   const pageloadSpeedArr = pageloadSpeedArray.slice(0, 4);
   // Calculate the total sum
   // const total = metric1 + metric2 + metric3 + metric4;
-  console.log(pageloadSpeedArray);
+  // console.log(pageloadSpeedArray);
 
   // Convert the numeric values to percentage strings
   // const metric1Percentage = `${((metric1 / total) * 100).toFixed(2)}%`;

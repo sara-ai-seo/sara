@@ -17,7 +17,7 @@ export default function Layout({ children }: Props) {
 
   const id = getState.property.activePropertyObj.id;
 
-  console.log(getState.updateDataState);
+  // console.log(getState.updateDataState);
 
   const updateDataStatus =
     getState.updateDataState.page == "content-analysis" &&
