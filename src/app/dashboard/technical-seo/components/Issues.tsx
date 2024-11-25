@@ -212,7 +212,7 @@ export default function Issues() {
                               <div className="space-y-2 p-2">
                                 <h4 className="font-medium leading-none">Issue Description</h4>
                                 <span className="text-sm text-muted-foreground">
-                                  {currentCategoryDetail.description ?? NA}
+                                  {currentCategoryDetail.description ?? "NA"}
                                 </span>
                               </div>
                               <div className="bg-green-300 h-full min-h-24">
