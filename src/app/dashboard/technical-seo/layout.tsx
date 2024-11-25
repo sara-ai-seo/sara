@@ -69,13 +69,13 @@ export default function TechnicalSeoLayout() {
   // }, [activeProperty,])
 
   const tabs = [
+    { title: "Issues", content: <Issues /> },
     {
       title: "Overview",
       content: <Overview onViewAllIssues={() => setSelectedTabIndex(3)} />,
     },
     { title: "Crawlability and indexability", content: <Crawlability /> },
     { title: "Site performance", content: <SitePerformance /> },
-    { title: "Issues", content: <Issues /> },
     // { title: "Internal linking", content: <InternalLinking /> },
     // { title: "Crawl comparisons", content: <CrawlComparison /> },
     // { title: "Audit history", content: <AuditHistory /> },

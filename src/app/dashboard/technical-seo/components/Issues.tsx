@@ -1,4 +1,4 @@
-import { forwardRef, useState } from "react";
+import { forwardRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { CiSearch } from "react-icons/ci";
 
@@ -8,7 +8,28 @@ import Loader from "@/app/component/Loader";
 import IssueCustomAccordion from "./IssueCustomAccordion";
 import FeaturedIcon from "@/components/svgComponents/FeaturedIcon";
 import { CrawlingData, IssueTab } from "@/types/technicalseo/technicalSeoTypes";
-import { useTechnicalSeoFetchData } from "@/app/services/technicalSeo/TechnicalSeoFetch";
+// import { useTechnicalSeoFetchData } from "@/app/services/technicalSeo/TechnicalSeoFetch";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import ApiCall from "@/app/utils/apicalls/axiosInterceptor";
+import { CurrentProperty } from "@/app/utils/currentProperty";
+import { issuesData } from "./(technicalseo)/issueData";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+import Button from "../../components/ui/Button";
+import { FaCaretUp } from "react-icons/fa6";
+
 
 export default function Issues() {
   const categories: { [key: string]: any[] } = {};
@@ -18,37 +39,57 @@ export default function Issues() {
   const [currentSitePerfId, setCurrentSitePerfId] = useState("");
   const [issueData, setissueData] = useState<
     | {
-        id: string;
-        score: number;
-        title: string;
-        description: string;
-        scoreDisplayMode: string;
-      }
+      id: string;
+      score: number;
+      title: string;
+      description: string;
+      scoreDisplayMode: string;
+    }
     | undefined
   >(undefined);
 
   const [first, setfirst] = useState(true);
-  const [currentCategory, setCurrentCategory] = useState("");
+  const [currentCategory, setCurrentCategory] = useState("all");
   const [currentCategoryDetail, setCurrentCategoryDetail] =
-    useState<CategoryItem | null>(null);
+    useState({
+      description: "",
+      fix: ""
+    });
 
-  // Type guard to check if a CrawlingData is of type SitePerformanceData
-  function isIssues(data: CrawlingData): data is IssueTab {
-    return data.tab === "issues";
+  const id = CurrentProperty()
+
+  const issues = useQuery({
+
+    queryKey: ["issues"],
+    queryFn: async () => {
+      const response = await ApiCall.get(`/user/crawler/technical-seo/by-tab/${id.id}?tab=issues`);
+      return response.data;
+    }
+  })
+
+
+  const rawData = issues?.data?.project?.crawlings[0]?.crawlingData[0]?.data?.issues;
+  const capitalizeFirstLetter = (val: string) => {
+    if (!val) return '';
+    return val.charAt(0).toUpperCase() + val.slice(1);
+  };
+
+
+  //  const renderData = rawData && Object?.entries(rawData as Record<string, number>).filter(([key, val]) => val > 0)
+  interface filteredDataDto {
+    [key: string]: number;
   }
+  const filterData = (): filteredDataDto => {
+    return (rawData && Object.entries(rawData as Record<string, number>)
+      .filter(([key, value]) => value > 0)
+      .reduce((acc, [key, value]) => {
+        acc[key] = value as number;
+        return acc;
+      }, {} as Record<string, number>));
+  };
 
-  const { data, isLoading } = useTechnicalSeoFetchData();
-  console.log("react query issue", data);
-  // Extract the `sitePerformance` data
-  const siteIssues: IssueTab[] =
-    data?.crawlings
-      .flatMap((crawling: any) => crawling.crawlingData)
-      .filter(isIssues) ?? []; // Filter by tab = 'issues tab'
 
-  const currentDescription = siteIssues[0]?.data.issueArr.find(
-    (item) => item.id === currentSitePerfId
-  );
-  console.log(siteIssues);
+
   const tabsFilter = [
     { name: "All issues" },
     {
@@ -84,198 +125,116 @@ export default function Issues() {
         />
       ),
     },
-    {
-      name: "Fixed",
-      icon: (
-        <Image
-          src={"/dashboard/fixed.svg"}
-          alt="Fixed issues"
-          width={24}
-          height={24}
-        />
-      ),
-    },
+    // {
+    //   name: "Fixed",
+    //   icon: (
+    //     <Image
+    //       src={"/dashboard/fixed.svg"}
+    //       alt="Fixed issues"
+    //       width={24}
+    //       height={24}
+    //     />
+    //   ),
+    // },
   ];
 
   interface Props {
     title: string;
   }
 
+  const getIssueByTitle = (title: string) => {
+    return issuesData.find(issue => issue.title.includes(title));
+  };
+
+
   return (
     <>
-      <main className="pb-14 grid w-full gap-8 overflow-auto min-h-[400px]">
-        <section className="flex  flex-wrap items-center z-10 bg-white justify-between w-full gap-4 ">
+
+      {/* TOP FILTERS  */}
+      <section className=" grid w-full gap-8 overflow-auto h-32">
+        <div className="flex  flex-wrap items-center z-10 bg-white justify-between w-full gap-4 ">
           <div className="flex items-center gap-2 flex-wrap">
             {tabsFilter.map((item, index) => (
               <button
                 key={index}
                 title={item.name}
-                className={`flex items-center border shadow-md rounded-md p-4 py-2 gap-2 hover:bg-[#EFF8FF] ${
-                  currentFilter === item.name ? "bg-[#EFF8FF]" : "bg-[#FFF]"
-                }`}
+                className={`flex items-center border shadow-md rounded-md p-4 py-2 gap-2 hover:bg-[#EFF8FF] ${currentFilter === item.name ? "bg-[#EFF8FF]" : "bg-[#FFF]"
+                  }`}
                 onClick={() => setCurrentFilter(item.name)}
               >
-                {item.icon && item.icon} {item.name}, 44
+                {item.icon && item.icon} {item.name}, {item.name == "All issues" ? filterData() && Object.keys(filterData()).length : 0}
               </button>
             ))}
           </div>
-          <div className="flex">
-            <div className="flex relative rounded-md min-[375px]:w-[320px] w-[300px] ">
-              <input
-                type="search"
-                placeholder="Search issues"
-                className="w-full h-full border p-3 rounded-md focus:outline-none focus:shadow-sm focus:shadow-primary pl-8 "
-              />
-              <CiSearch className=" absolute top-4 left-4 " />
-            </div>
-          </div>
-        </section>
+        </div>
 
-        {isLoading ? (
-          <div className=" w-full h-10 flex items-center justify-center">
+      </section>
+      {/* ERROR DATA  */}
+
+      {
+        issues.isPending ?
+          <div className="h-14 w-full flex items-center">
             <Loader />
-          </div>
-        ) : (
-          <section className="grid grid-cols-1 gap-8 md:grid-cols-3 max-h-[80dvh]  overflow-auto h-full ">
-            <div className="flex flex-col h-full gap-2 col-span-1 border   shadow-sm rounded-md">
-              {/* <IssueCustomAccordion title="Crawlability and indexability" /> */}
-
-              <IssueCustomAccordion
-                title="Site performance"
-                data={siteIssues[0]?.data.issueArr}
-                setCurrentSitePerfId={setCurrentSitePerfId}
-              />
-
-              <div
-                className="grid gap-4 my-4 transition-all ease-linear delay-300 p-3"
-                style={{ height: "100%" }}
-              >
-                {/* {Object.entries(categories).map(([key, value]) => {
-                  // console.log("VALUES", value)
+          </div> :
+          <div className="overflow-x-auto">
+            <Table className="min-w-full flex flex-col gap-2 h-full pb-20">
+              <TableBody>
+                {Object.entries(filterData()).map(([key, value]) => {
                   return (
-                    <>
-                      {key}: {value}
-                      <div
-                        className={`w-full flex justify-between cursor-pointer items-center `}
-                        onClick={() => {
-                          currentCategory === key
-                            ? setCurrentCategory("")
-                            : setCurrentCategory(key);
-                        }}
-                      >
-                        <h2 className={`text-[#344054] font-semibold text-lg`}>
-                          {key}
-                        </h2>
-                        <IoIosArrowDown
-                          className={`${
-                            currentCategory == key && "rotate-180"
-                          } cursor-pointer transition-all ease-out delay-300`}
-                          onClick={() => setfirst(!first)}
-                        />
-                      </div>
-                      {currentCategory === key &&
-                        value.map((eachVal, i) => (
-                          <div
-                            key={i}
-                            className={`w-full space-y-1  text-left gap-2 cursor-pointer grid items-center`}
-                          >
-                            {eachVal.categoryItems.map(
-                              (catItem: any, index: number) => (
-                                <div
-                                  key={index}
-                                  className="text-left hover:bg-blue-200 flex line-clamp-2 gap-2 w-full"
-                                  onClick={() =>
-                                    setCurrentCategoryDetail(catItem)
-                                  }
-                                >
-                                  <Image
-                                    src={"/dashboard/error.svg"}
-                                    alt="Error"
-                                    width={24}
-                                    height={24}
-                                  />
-                                  <span className="">
-                                    {catItem.title.replace(/\s+/g, " ")}
+                    <TableRow className="w-full h-full flex items-center">
+                      <TableCell className="w-full">
+                        <span className="flex items-center flex-nowrap gap-2">
+                          {/* {
+                  data.category === "Errors" ? tabsFilter[1].icon :
+                  data.category === "Warnings" ? tabsFilter[2].icon :
+                  data.category === "Notices" ? tabsFilter[3].icon : 
+                  } */}
+                          {tabsFilter[1].icon}
+                          <span>{capitalizeFirstLetter(key)}</span>
+                        </span>
+                      </TableCell>
+                      <TableCell className="w-full flex-nowrap flex">
+                        {value} pages
+                      </TableCell>
+                      <TableCell className="w-full">
+                        <Popover >
+                          <PopoverTrigger asChild onClick={()=> {
+                            const data = getIssueByTitle(key)
+                            setCurrentCategoryDetail({
+                              description: data?.Description || "",
+                              fix: data?.["How to Fix"] || ""
+                            })
+                          }}>
+                            <span className="flex items-center gap-2 cursor-pointer"> Description and how to fix <FaCaretUp /> </span>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-96 p-0 min-h-40">
+                            <div className="grid gap-4 grid-cols-2 h-full">
+                              <div className="space-y-2 p-2">
+                                <h4 className="font-medium leading-none">Issue Description</h4>
+                                <span className="text-sm text-muted-foreground">
+                                  {currentCategoryDetail.description}
+                                </span>
+                              </div>
+                              <div className="bg-green-300 h-full min-h-40">
+                                <div className="space-y-2 p-2">
+                                  <h4 className="font-medium leading-none">How to fix</h4>
+                                  <span className="text-sm text-muted-foreground">
+                                   {currentCategoryDetail.fix}
                                   </span>
                                 </div>
-                              )
-                            )}
-                          </div>
-                        ))}
-                    </>
-                  );
-                })} */}
-              </div>
+                              </div>
+                            </div>
+                          </PopoverContent>
 
-              {/* {
-                  currentCategoryDetail.map((item, i) => {
-                    return <div key={i} className="flex w-full h-full cursor-pointer  py-2 justify-between items-center" onClick={() => {
-                      setIssueCategory(item)
-                    }}>
-                      <h3 className=" w-[90%] truncate text-[#344054] font-semibold flex items-center"> <BsDot />  {item.issue.title} </h3>
-                      <span className={`p-2 px-4 rounded-3xl bg-[#ECFDF3]`}> {item.issue.count} </span>
-                    </div>
-                  })
-                } */}
-            </div>
-
-            {
-              <div className="flex flex-col md:col-span-2 col-span-1 gap-4">
-                <div className="border shadow-sm overflow-auto rounded-md w-full h-full ">
-                  <div className="flex gap-6 w-full p-4 items-center font-semibold text-[#101828] text-lg">
-                    <FeaturedIcon className="size-10" />{" "}
-                    <h2 className=" font-semibold"> Pages with poor CLS: </h2>
-                    {/* <h3 className="">{currentCategoryDetail?.title} </h3> */}
-                  </div>
-                  <div className="overflow-auto h-[30vh] w-full">
-                    <table className="w-full text-left table-fixed">
-                      <thead className="bg-[#EAECF0] h-14 text-sm font-normal">
-                        <tr>
-                          <th className="p-2 pl-4 w-[310px]"> URL </th>
-                          <th className="p-2 w-[120px]"> Page depth </th>
-                          <th className="p-2 w-[120px]"> Internal links </th>
-                          <th className="p-2 w-[120px]"> Status code </th>
-                          <th className="p-2 w-[120px]"> Indexable </th>
-                        </tr>
-                      </thead>
-                      <tbody className="overflow-auto h-40 p-2 w-full">
-                        {currentCategoryDetail?.titleItems[0].pageData.rows.map(
-                          (item, i) => {
-                            return (
-                              <tr key={i} className="px-2 space-y-1 border-y">
-                                <td className="px-2 pl-4 space-y-1">
-                                  {" "}
-                                  {item.website}{" "}
-                                </td>
-                                <td className="px-2"> {item.crawlDepth} </td>
-                                <td className="px-2"> {item.url} </td>
-                                <td className="px-2">
-                                  {" "}
-                                  {item.httpStatusCode}{" "}
-                                </td>
-                                <td className="px-2"> {item.index_status} </td>
-                              </tr>
-                            );
-                          }
-                        )}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-                <div className="border shadow-sm h-[170px] overflow-y-auto flex flex-col gap-4  rounded-md w-full p-4 2xl:p-4">
-                  <h2 className=" font-semibold text-[#344054] text-2xl ">
-                    Issue Description{" "}
-                  </h2>
-                  {/* <p className="">{currentCategoryDetail?.description}</p> */}
-                  <p>
-                    {currentDescription?.description ?? "issue Description "}
-                  </p>
-                </div>
-              </div>
-            }
-          </section>
-        )}
-      </main>
+                        </Popover>
+                      </TableCell>
+                    </TableRow>
+                  )
+                })}
+              </TableBody>
+            </Table>
+          </div>
+      }
     </>
   );
 }
