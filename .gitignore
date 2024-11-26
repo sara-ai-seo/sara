@@ -6,3 +6,6 @@ node_modules
 **/.next/
 */.next/
 .env
+src/.DS_Store
+public/.DS_Store
+.DS_Store

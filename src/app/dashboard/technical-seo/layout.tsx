@@ -69,6 +69,7 @@ export default function TechnicalSeoLayout() {
   // }, [activeProperty,])
 
   const tabs = [
+    
     {
       title: "Overview",
       content: <Overview onViewAllIssues={() => setSelectedTabIndex(3)} />,
