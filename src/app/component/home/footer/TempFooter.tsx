@@ -28,10 +28,10 @@ export default function TempFooter() {
         <Link href={`/contact`} className=" font-semibold">
           Contact Us
         </Link>
-        <Link href={`/terms`} className=" font-semibold">
+        <Link href={`/term-service`} className=" font-semibold">
           Terms and Conditions
         </Link>
-        <Link href={`/`} className=" font-semibold">
+        <Link href={`/privacy-policy`} className=" font-semibold">
           Privacy Policy
         </Link>
       </div>
