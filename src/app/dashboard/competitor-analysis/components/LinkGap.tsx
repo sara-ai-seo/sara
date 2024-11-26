@@ -45,9 +45,9 @@ export default function LinkGap() {
           <h3 className="text-[#101828] text-lg text-left font-medium">
             {linkData?.length} Reffering domains
           </h3>
-          <SearchBox value={""} setValue={function (e: any): void {
+          {/* <SearchBox value={""} setValue={function (e: any): void {
             throw new Error("Function not implemented.");
-          }} />
+          }} /> */}
         </div>
         <table className="w-full">
           <thead className="w-full bg-[#EAECF0] text-left">

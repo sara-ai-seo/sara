@@ -50,12 +50,12 @@ export default function KeywordGap({
             {data.length} Keywords
           </h3>
          <div className="flex items-center gap-3">
-         <SearchBox
+         {/* <SearchBox
             value={""}
             setValue={function (e: any): void {
               throw new Error("Function not implemented.");
             }}
-          />
+          /> */}
           <Button className="flex items-center gap-2" onClick={setStage}>
             <MdAdd />
             <span className="ml-2">Add competitor</span>
@@ -98,7 +98,6 @@ export default function KeywordGap({
                 <span className={`flex gap-1 items-center `}>
                   <p> Your rank</p>
                   <button className="" title="Here...">
-                    {" "}
                     <FaRegCircleQuestion />
                   </button>
                   <span className="hover:text-green-600 cursor-pointer transition-transform duration-300 hover:scale-1.5">
