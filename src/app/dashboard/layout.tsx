@@ -160,7 +160,7 @@ export default function Layout({ children }: Props) {
     },
   });
 
-  console.log("DD", property)
+  // console.log("DD", property)
 
   // useEffect(() => {
   //   if (!token) {

@@ -20,10 +20,14 @@ import { FormattedDate } from "@/helper";
 import { ConvertToMilliuseconds } from "@/app/utils/ConvertToMilliseconds";
 import Link from "next/link";
 import { CiSearch } from "react-icons/ci";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Overview from "./components/Overview";
 import ExploreContent from "./components/ExploreContent";
 import { contentAnalysisOverViewType } from "@/types/contentAnalysis";
+import Button from "../components/ui/Button";
+import { FaPlus } from "react-icons/fa6";
+
+
 
 export default function ContentAnalysis() {
   const [showDetail, setShowDetail] = useState(false);
@@ -31,8 +35,8 @@ export default function ContentAnalysis() {
   const activePropertyId = useSelector(
     (state: RootState) => state.property.activePropertyObj.id
   );
-
-  console.log(activePropertyId);
+const router = useRouter()
+  // console.log(activePropertyId);
 
   const tabsFilter = [
     { name: "All recommendations" },
@@ -81,12 +85,12 @@ export default function ContentAnalysis() {
     },
   });
 
-  // console.log(exploreTabData, exploreisError, exploreIsLoading);
+  // console.log("CONT",data);
 
   return (
     <main className="grid w-full h-full items-start content-start gap-6 mb-20">
       {/* {JSON.stringify(queryParameter)} */}
-      <TitleShareSettingTop title="Content analysis" />
+      <TitleShareSettingTop title="Content analysis" /> 
       {/* <LastUpdated date={FormattedDate(detail?.content[0].updatedAt ?? "")} /> */}
 
       <div className="flex gap-4 border-b-2">
@@ -112,12 +116,13 @@ export default function ContentAnalysis() {
 
       <section className="flex justify-between items-center">
         <h1 className="text-2xl">
-          <strong>Topics:</strong> Business branding
+          <strong>Topics:</strong> {data?.crawlings[0]?.data?.keywords[0]?.keyword}
         </h1>
-        <div className="relative">
+        {/* <div className="relative">
           <CiSearch className="absolute top-2.5 text-gray-500 left-2 text-2xl" />
-          <input type="text" className="rounded-md border p-2 pl-8" />
-        </div>
+          <input type="text" className="rounded-md border p-2 pl-8" placeholder={data?.crawlings[0]?.data?.keywords[0]?.keyword} />
+        </div> */}
+        <Button variant="secondary" className="flex items-center gap-2" onClick={()=> router.push("/dashboard/content-analysis/add-new")}> <FaPlus/> Add New Content</Button>
       </section>
       <section className="h-[500px] overflow-y-auto pb-20 mb-20">
         {queryParameter === null && <Overview OverviewData={data} />}

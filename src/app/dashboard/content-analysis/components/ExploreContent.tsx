@@ -48,7 +48,7 @@ export default function ExploreContent({ data }: ExploreContentProps) {
     ],
   }));
 
-  console.log(exploreResults);
+  // console.log(exploreResults);
 
   return (
     <section className="flex flex-col ">
@@ -66,7 +66,7 @@ export default function ExploreContent({ data }: ExploreContentProps) {
             </button>
           ))}
         </div>
-        <div className="flex items-center gap-2">
+        {/* <div className="flex items-center gap-2">
           <select name="" id="" className="rounded-md border p-2">
             <option value="Domain rank">Domain rank</option>
           </select>
@@ -82,13 +82,13 @@ export default function ExploreContent({ data }: ExploreContentProps) {
           <select name="" id="" className="rounded-md border p-2">
             <option value="Domain rank">Date published</option>
           </select>
-        </div>
-        <div className="rounded-md border p-2">
+        </div> */}
+        {/* <div className="rounded-md border p-2">
           <label htmlFor="sortBy">Sort by:</label>
           <select name="" id="sortBy" className="border-none outline-none">
             <option value="Domain rank">Ascending</option>
           </select>
-        </div>
+        </div> */}
       </div>
 
       <div className="border rounded-md my-8 overflow-x-auto w-full">
