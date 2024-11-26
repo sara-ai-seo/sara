@@ -30,7 +30,7 @@ currency
     //   pricingId, amount, description
     // })
     try {
-      const response = await ApiCall.post(`${process.env.NEXT_PUBLIC_BASE_URL}/payment/paypal/create`, {
+      const response = await ApiCall.post(`/payment/paypal/create`, {
         pricingId,
         description,
         amount: amount,

@@ -22,7 +22,6 @@ import { IoIosArrowRoundBack } from "react-icons/io";
 interface competitorDomains {
   target: string;
   target1: string;
-  target2: string;
   location_code: number | null;
   language_code: string;
 }
@@ -36,7 +35,6 @@ export default function page() {
     {
       target: "",
       target1: "",
-      target2: "",
       location_code: null,
       language_code: "",
     }
@@ -66,21 +64,30 @@ export default function page() {
 
   const property = CurrentProperty();
 
-  const { target1, target2, location_code, language_code } = competitorDomains;
+  const { target1, target, location_code, language_code } = competitorDomains;
 
   const payload = [
     {
-      target: trimDomain(property && property?.domain),
+      target: removeTrailingSlash(target),
       target1: removeTrailingSlash(target1),
-      target2: removeTrailingSlash(target2),
       location_code: location_code,
       language_code: language_code,
     },
   ];
 
+  
+
   const mutate = useMutation({
     mutationKey: ["crawlCompetitors"],
     mutationFn: async () => {
+      if (target === "") {
+        setErrorMessage("Please select a competitor");
+        throw new Error(errorMessage);
+      }
+      if (target1 === "") {
+        setErrorMessage("Please select second competitor");
+        throw new Error(errorMessage);
+      }
       if (location_code === null) {
         // toast.error("Please select a country");
         setErrorMessage("Please select a country");
@@ -91,14 +98,8 @@ export default function page() {
         setErrorMessage("Please select a country");
         throw new Error("Please select a country");
       }
-      if (target1 === "") {
-        setErrorMessage("Please select a competitor");
-        throw new Error(errorMessage);
-      }
-      if (target2 === "") {
-        setErrorMessage("Please select second competitor");
-        throw new Error(errorMessage);
-      }
+      
+     
 
       if (!property.id) {
         toast.error("project(url) must be selected");
@@ -120,8 +121,9 @@ export default function page() {
       setStage(1);
     },
     onError: (error: any) => {
-      console.error("Error during mutation:", error);
-      toast.error(errorMessage);
+      console.error("Error during mutation:", error.response.data.message);
+      toast.error(error.response.data.message);
+      // throw new Error(error.response.data.message)
     },
   });
 
@@ -279,7 +281,7 @@ export default function page() {
                 onChange={(e) =>
                   setCompetitorDomains({
                     ...competitorDomains,
-                    target1: e.target.value,
+                    target: e.target.value,
                   })
                 }
                 className="py-5 p-3 focus:outline-none focus:shadow-sm focus:border-secondary rounded-md border  w-full"
@@ -290,7 +292,7 @@ export default function page() {
                 onChange={(e) =>
                   setCompetitorDomains({
                     ...competitorDomains,
-                    target2: e.target.value,
+                    target1: e.target.value,
                   })
                 }
                 className="py-5 p-3 focus:outline-none focus:shadow-sm focus:border-secondary rounded-md border w-full"
