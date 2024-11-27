@@ -108,7 +108,7 @@ export default function page() {
                 onClick={() => {
                   RankMutate(
                     {
-                      target: trimDomain(id.domain),
+                      target: trimDomain(id.domain) as string,
                       location_code: 2840,
                     },
                     {
