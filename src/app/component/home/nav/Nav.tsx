@@ -57,13 +57,13 @@ export default function Nav() {
       title: "Technical SEO audit",
       description: `Run an AI-driven audit to analyze and improve your website's SEO health.`,
       file: "/seo.png",
-      link: "/seo-audit",
+      link: "/technical-seo-audit",
     },
     {
       title: "Rank tracker",
       description: `Discover strategic keywords for your industry and target audience.`,
       file: "/rank.png",
-      link: "/rank",
+      link: "/rank-tracker",
     },
     {
       title: "Smart keyword explorer",
@@ -81,7 +81,7 @@ export default function Nav() {
       title: "Semantic content analysis",
       description: `Enhance your content's relevance with semantic analysis.`,
       file: "/content.png",
-      link: "/keyword",
+      link: "/content-analysis",
     },
     {
       title: "Competitor analysis",
@@ -143,7 +143,7 @@ export default function Nav() {
                 return (
                   <MenuItem>
                     <div
-                      className="flex z-50 h-full text-base p-2 hover:bg-blue-200 hover:rounded-md items-start w-full gap-3"
+                      className="flex z-50 h-full text-base p-2 cursor-pointer hover:bg-blue-200 hover:rounded-md items-start w-full gap-3"
                       onClick={() => router.push(`${item.link}`)}
                     >
                       <Image

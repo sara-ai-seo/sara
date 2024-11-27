@@ -46,10 +46,13 @@ export default function AddProject() {
     onSuccess: async (data) => {
       console.log("data", data);
       await technicalSeoMutation.mutateAsync(data.project.id);
-      RankMutate({
-        target: trimDomain(data.project.domain),
-        location_code: 2840,
-      });
+      const trimmedDomain = trimDomain(data.project.domain);
+      if (trimmedDomain !== null) {
+        RankMutate({
+          target: trimmedDomain,
+          location_code: 2840,
+        });
+      }
       dispatch(setActiveProperty(inputUrl));
       dispatch(setActivePropertyObj(data.project));
       navigate.push("/dashboard");
