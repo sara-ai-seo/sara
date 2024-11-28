@@ -3,7 +3,7 @@ import chartData, {
   PiechartMockedData,
   mockedData,
 } from "@/app/component/data/mockedData";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { AiOutlineExpandAlt } from "react-icons/ai";
 import { CiImageOn } from "react-icons/ci";
 import { FaLink, FaPlus, FaVideo } from "react-icons/fa6";
@@ -26,6 +26,7 @@ import { useKeywordAnalysisData } from "@/app/services/crawlers/keywordExplorer"
 
 import moment from "moment";
 import Loader from "@/app/component/Loader";
+import { KeywordDataDto } from "@/app/types/keywords";
 
 export const DetailButton = ({ title }: { title: string }) => (
   <button className="" title={title}>
@@ -33,10 +34,13 @@ export const DetailButton = ({ title }: { title: string }) => (
     <GoQuestion />{" "}
   </button>
 );
-export default function KeywordAnalysis() {
+export default function KeywordAnalysis({addNew}: {addNew: ()=> void}) {
   const [detail, setDetail] = useState(false);
   const [keyword, setKeyword] = useState("");
+  const [currentData, setCurrentData] = useState<KeywordDataDto | null>(null)
+
   const currentProperty = CurrentProperty();
+
 
   const { keywordAnalysisData, isPending, isSuccess, isError } =
     useKeywordAnalysisData(currentProperty.id);
@@ -45,7 +49,20 @@ export default function KeywordAnalysis() {
   const data =
     keywordAnalysisData?.[0]?.project?.crawlings?.[0]?.crawlingData?.[0]?.data
       ?.tasks?.[0]?.result;
+
+      const dataDate = keywordAnalysisData?.[0]?.project?.crawlings?.[0]?.crawlingData?.[0].createdAt
   // console.log("keyword-analysis", keywordAnalysisData?.[0]);
+
+  // console.log("DD", data)
+  function setCurrent(){
+    const newd = data?.find((item:any)=> item.keyword === keyword)
+    return setCurrentData(newd)
+  }
+
+  useEffect(()=> {
+    setCurrent()
+  }, [keyword])
+  console.log("DD", currentData)
 
   function Detail() {
     return (
@@ -68,7 +85,7 @@ export default function KeywordAnalysis() {
           <div className="flex">
             <span className="flex items-center gap-3 text-base">
               <p className={` font-medium text-[#101828] `}>Last updated: </p>
-              <p className="font-normal"> two weeks ago </p>
+              <p className="font-normal"> {moment(dataDate).fromNow()} </p>
             </span>
           </div>
         </div>
@@ -80,32 +97,32 @@ export default function KeywordAnalysis() {
             />
 
             <div className="grid md:grid-cols-1 min-[475px]:grid-cols-2 grid-cols-1 min-[475px]: gap-10">
-              <ProgressiveCircleReusable value={35} title={"medium"} />
+              <ProgressiveCircleReusable value={currentData?.competition_index ?? 0} title={currentData?.competition ?? ""} />
 
-              <p className="mt-auto">
+              {/* <p className="mt-auto">
                 You need about backlinks from about 22 websites to get into the
                 top 10 search results for this keyword.
-              </p>
+              </p> */}
             </div>
           </div>
           <div className="rounded-md md:grid-cols-1 min-[500px]:grid-cols-2 grid-cols-1 col-span-2 grid gap-6">
             <Card
               title={"Volume"}
-              amount={59}
+              amount={currentData?.search_volume ?? 0}
               style={""}
               percent={undefined}
               chart={undefined}
             />
             <Card
-              title={"Traffic forecast"}
-              amount={59}
+              title={"High top-of-page bid"}
+              amount={currentData?.high_top_of_page_bid}
               style={""}
               percent={undefined}
               chart={undefined}
             />
             <Card
               title={"Cost per click (CPC)"}
-              amount={59}
+              amount={currentData?.cpc}
               style={""}
               percent={undefined}
               chart={undefined}
@@ -272,7 +289,7 @@ export default function KeywordAnalysis() {
               {data?.length} keywords{" "}
             </p>
             <span>
-              <PlainButton title={"Add keyword"} icon={<FaPlus />} />
+              <PlainButton title={"Add keyword"} icon={<FaPlus />} handleClick={addNew} />
             </span>
           </div>
           <table className="w-full">
@@ -349,6 +366,8 @@ export default function KeywordAnalysis() {
                           onClick={() => {
                             setDetail(true);
                             setKeyword(data.keyword);
+                            setCurrent()
+                            
                           }}
                           className="bg-[#EFF8FF] p-0.5 text-[#1570EF] cursor-pointer rounded text-2xl"
                         />{" "}
