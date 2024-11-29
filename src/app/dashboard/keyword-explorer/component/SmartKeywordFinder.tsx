@@ -2,13 +2,13 @@ import { mockedData } from "@/app/component/data/mockedData";
 import { Menu, Transition } from "@headlessui/react";
 import React, { Fragment, useEffect, useState } from "react";
 import { CiImageOn, CiSearch } from "react-icons/ci";
-import { FaLink, FaVideo } from "react-icons/fa6";
+import { FaLink, FaPlus, FaQuestion, FaVideo } from "react-icons/fa6";
 import { FiRefreshCw } from "react-icons/fi";
 import { GoDotFill } from "react-icons/go";
 import { IoCartOutline, IoChevronDownOutline } from "react-icons/io5";
 import { MdArrowUpward } from "react-icons/md";
 import { DetailButton } from "./KeywordAnalysis";
-import { getSmartKeywordFinder } from "@/app/services/keyword_services/smartKeywordFinder";
+import { getSmartKeywordFinder, useKeywordIdeas } from "@/app/services/keyword_services/useSmartKeywordFinder";
 import { CurrentProperty } from "@/app/utils/currentProperty";
 import { abbreviateNumber } from "@/app/utils/abbreviateNumber";
 import moment from "moment";
@@ -17,8 +17,10 @@ import { LuCopy } from "react-icons/lu";
 import { GrUpdate } from "react-icons/gr";
 import { MdOutlineIndeterminateCheckBox } from "react-icons/md";
 import toast from "react-hot-toast";
-import { KeywordServicesFetch } from "@/app/services/keyword_services/keyword";
+import { KeywordServicesFetch } from "@/app/services/keyword_services/keyword-services";
 import { useMutation } from "@tanstack/react-query";
+import PlainButton from "@/app/component/PlainButton";
+import { AiOutlineProduct } from "react-icons/ai";
 
 const tabsFilter = [
   { name: "All keywords" },
@@ -84,14 +86,16 @@ export function SelectorDropdown({
   );
 }
 
-export default function SmartKeywordFinder() {
+export default function SmartKeywordFinder({addNew} : {addNew: ()=> void}) {
   const [keyword, setKeyword] = useState("");
   const [keywordData, setKeywordData] = useState<any[]>([]);
-  console.log(keywordData);
+  // console.log(keywordData);
   const [keywordLength, setKeywordLength] = useState<any[]>([]);
   const [keywordCategory, setKeywordCategory] = useState("All keywords");
   const [selected, setSelected] = useState("Volume");
   const [isCopy, setIsCopy] = useState(false);
+  const [smartKeyword, setSmartKeyword] = useState<any | null>(null);
+  const [smartKeywordDetail, setSmartKeywordDetail] = useState<[] | null>(null);
 
   const { id } = CurrentProperty();
   const KeywordService = new KeywordServicesFetch();
@@ -99,20 +103,48 @@ export default function SmartKeywordFinder() {
   const {
     isPending,
     isError,
-    data: smartKeywordFinder,
-  } = getSmartKeywordFinder(id);
+    data: smartKeywordIdea,
+  } = useKeywordIdeas(id);
 
   // const mutation  = useMutation({
   //   mutationFn: ()=>KeywordService.crawl(id, {})
   // })
 
   // summary table data
-  const data: any[] =
-    smartKeywordFinder?.[0]?.project?.crawlings?.[0]?.crawlingData?.[0]?.data
-      ?.tasks?.[0]?.result;
+const ret = smartKeywordIdea?.project?.crawlings?.map((item: any) => item.crawlingData[0])
+const retu = smartKeywordIdea?.project?.crawlings.flatMap((crawlingData: any)=> crawlingData )
 
-  const totalVolume = keywordData?.reduce((acc: number, current: any) => {
-    return Number(acc + current.search_volume);
+
+
+const dataItems = retu?.flatMap((item: { crawlingData: any[]; }) => item.crawlingData.flatMap(data => {
+ if(data.tab === "tasks"){
+const id =  data.data.flatMap((res:any) => res.id)
+const detail = data.data.flatMap((res:any) => res.result[0].items)
+return data.data
+ } else {
+  return []
+ }
+
+}))
+
+const smart = smartKeywordIdea?.project?.crawlings[0]?.crawlingData[0]
+const smartDetail = smartKeywordIdea?.project?.crawlings[0]?.crawlingData[0]?.data[0]?.result[0]?.items?.map((item:any) => item)
+const seedKeyword = smartKeywordIdea?.project?.crawlings[0]?.crawlingData[0]?.data[0]?.data?.keywords[0]
+
+
+
+
+// console.log("ITEMS", smartKeywordDetail);
+
+  // console.log("IDEA", returned);
+
+  const data: any[] =
+  smartKeywordIdea?.[0]?.project?.crawlings?.[0]?.crawlingData?.[0]?.data
+  ?.tasks?.[0]?.result;
+
+
+  const totalVolume = (smartKeywordDetail ?? []).reduce((acc: number, current: any) => {
+    return Number(acc + current.keyword_info.search_volume);
   }, 0);
 
   const handleOnchangeKeyword = (
@@ -173,16 +205,25 @@ export default function SmartKeywordFinder() {
   };
 
   useEffect(() => {
-    setKeywordData(data);
-  }, [data]);
+    setKeywordData(dataItems);
+    
+  }, [dataItems]);
+  useEffect(() => {
+    setSmartKeyword(smart);
+    setSmartKeywordDetail(smartDetail);
+
+  }, [smart, smartKeyword, smartKeywordDetail]);
 
   return (
     <main className="py-10 grid gap-8 w-fit">
       <section className="flex min-[500px]:flex-row flex-col min-[500px]:items-center gap-2 justify-between w-full">
         <h1 className=" text-2xl text-black font-semibold">
-          Keyword: <span className=" font-normal">{keyword} </span>
+          Keyword: <span className=" font-normal">{seedKeyword} </span>
         </h1>
-        <div className="flex relative rounded-md sm:w-[320px] ">
+        <span>
+              <PlainButton title={"Add keyword"} icon={<FaPlus />} handleClick={addNew} />
+          </span>
+        {/* <div className="flex relative rounded-md sm:w-[320px] ">
           <input
             type="search"
             value={keyword}
@@ -190,9 +231,10 @@ export default function SmartKeywordFinder() {
             className="w-full h-full border p-3 rounded-md focus:outline-none focus:shadow-sm focus:shadow-primary pl-8 "
           />
           <CiSearch className=" absolute top-4 left-4 " />
-        </div>
+          
+        </div> */}
       </section>
-      <section className="flex xl:flex-row flex-col xl:items-center gap-3 xl:justify-between w-full">
+      {/* <section className="flex xl:flex-row flex-col xl:items-center gap-3 xl:justify-between w-full">
         <div className="flex items-center gap-2 flex-wrap">
           {tabsFilter.map((item, index) => (
             <button
@@ -226,27 +268,35 @@ export default function SmartKeywordFinder() {
             setSelected={() => setSelected}
           />
         </div>
-      </section>
+      </section> */}
       <section className="overflow-x-auto rounded-md w-full border shadow-sm p-6 ">
         <div className="flex items-center gap-3 mb-3">
           <>
-            {validItemsCount.length > 0 ? (
+            {/* {validItemsCount.length > 0 ? (
               <p className="text-[#101828] font-medium min-[375px]:text-lg text-sm">
                 {validItemsCount.length} selected keywords
               </p>
             ) : (
               <>
                 <p className="text-[#101828] font-medium min-[375px]:text-lg text-sm">
-                  {keywordData?.length ?? keywordLength.length} keywords
+                  {dataItems?.length ?? 0} keywords
                 </p>
                 <p className="text-[#344054] font-medium text-xs px-3 p-2 rounded-2xl bg-[#F2F4F7] ">
                   {abbreviateNumber(totalVolume)} total volume{" "}
                 </p>
               </>
-            )}
+            )} */}
+             <>
+                <p className="text-[#101828] font-medium min-[375px]:text-lg text-sm">
+                  {keywordData?.length ?? 0} keywords
+                </p>
+                <p className="text-[#344054] font-medium text-xs px-3 p-2 rounded-2xl bg-[#F2F4F7] ">
+                  {abbreviateNumber(totalVolume)} total volume{" "}
+                </p>
+              </>
           </>
 
-          {validItemsCount.length > 0 && (
+          {/* {validItemsCount.length > 0 && (
             <div className="flex items-center gap-3 ml-auto">
               <button
                 type="button"
@@ -271,17 +321,17 @@ export default function SmartKeywordFinder() {
                 Update
               </button>
             </div>
-          )}
+          )} */}
         </div>
         <div className="overflow-x-auto w-full">
           <table className="w-full table-fixed">
             <thead className="bg-[#F9FAFB] w-full">
-              <tr className=" h-[44px] text-xs text-[#475467]  font-medium">
-                <th className="w-10 text-left">
+              <tr className=" h-[44px] text-xs text-[#475467]  font-medium w-full overflow-x-auto">
+                {/* <th className="w-10 text-left">
                   <MdOutlineIndeterminateCheckBox className="text-lg text-[#175CD3] rounded-md" />
-                </th>
-                <th className="text-left p-2 w-[370px]">Keywords</th>
-                <th className="w-[110px]">
+                </th> */}
+                <th className="text-left p-2 min-w-[400px]"> Keywords</th>
+                <th className="min-w-[200px]">
                   <span className="flex items-center gap-1 p-2">
                     Volume <MdArrowUpward />
                   </span>
@@ -290,28 +340,33 @@ export default function SmartKeywordFinder() {
                   {" "}
                   <span className="flex items-center gap-1 p-2">
                     {" "}
-                    GV <DetailButton title={""} />{" "}
+                    Backlinks <DetailButton title={""} />{" "}
                   </span>{" "}
                 </th>
                 <th className="w-[110px]">
                   {" "}
                   <span className="flex items-center gap-1 p-2">
                     {" "}
-                    KD <DetailButton title={""} />{" "}
+                    Competition <DetailButton title={""} />{" "}
                   </span>{" "}
                 </th>
-                <th className="w-[110px]">
-                  {" "}
-                  <span className="flex items-center gap-1 p-2">
-                    {" "}
-                    TF <DetailButton title={""} />{" "}
-                  </span>{" "}
+                <th className="">
+                  <div className="flex items-center gap-1 p-2 ">
+                    Competition level <DetailButton title={""} />
+                  </div>{" "}
                 </th>
                 <th className="w-[110px]">
                   {" "}
                   <span className="flex items-center gap-1 p-2">
                     {" "}
                     CPC <DetailButton title={""} />{" "}
+                  </span>{" "}
+                </th>
+                <th className="w-[110px]">
+                  {" "}
+                  <span className="flex items-center gap-1 p-2">
+                    {" "}
+                    Rank <DetailButton title={""} />{" "}
                   </span>{" "}
                 </th>
                 <th className="w-[170px]">
@@ -345,66 +400,73 @@ export default function SmartKeywordFinder() {
               {keywordData?.length === 0 && (
                 <div className="h-20 w-full text-nowrap">No data</div>
               )}
-              {keywordData?.map((data: any, i: number) => {
+              {smartKeywordDetail?.map((data: any, i: number) => {
+                // console.log("DD", data)
                 return (
-                  <tr className=" border-b">
-                    <td>
+                  <tr className={`border-b ${i === smartKeywordDetail.length - 1 ? 'border-b-0' : ''}`}>
+                    {/* <td>
                       <input
                         type="checkbox"
                         checked={keywordLength.includes(i)}
                         className=""
                         onChange={(e) => handleOnchangeKeyword(e, i)}
                       />
-                    </td>
+                    </td> */}
                     <td className=" p-2">{data.keyword} </td>
 
                     <td className="rounded-full">
-                      <span className={``}>{data.search_volume ?? 0} </span>{" "}
+                      <span className={``}>{data?.keyword_info?.search_volume ?? 0} </span>
                     </td>
                     <td className="rounded-full">
-                      <span className={``}>{data.gv ?? 0} </span>{" "}
+                      <span className={``}>{data?.avg_backlinks_info?.backlinks ?? 0} </span>
                     </td>
                     <td className="  p-2  rounded-full">
                       <span
                         className={`p-1 w-2/3 rounded-3xl text-center flex items-center justify-center ${
-                          data.kd > 39
+                          data.keyword_info?.competition > 0.6
                             ? "bg-[#F6FEF9] text-[#12B76A]"
                             : "bg-[#FFFAEB] text-[#B54708] "
                         }`}
                       >
                         <GoDotFill />
-                        {(data?.competition_index +
-                          data?.search_volume / 1000) /
-                          2}
+                        {data?.keyword_info?.competition ?? 0}
                       </span>
                     </td>
-                    <td className="rounded-full">
-                      <span className={``}>{data.tf ?? 0}</span>
+                    <td className="rounded-full p-2">
+                      <span className={``}>{data?.keyword_info?.competition_level ?? ""}</span>
                     </td>
-                    <td className="rounded-full">
-                      <span className={``}>{data.cpc ?? 0}</span>
+                    <td className="rounded-full p-2">
+                      <span className={``}>{data?.keyword_info?.cpc ?? 0}</span>
                     </td>
-                    <td className="rounded-full">
-                      {/* <span className={`flex items-center gap-2 text-sm`}>
-                        {data.serp.includes("link") && <FaLink />}
-                        {data.serp.includes("image") && <CiImageOn />}
-                        {data.serp.includes("shop") && <IoCartOutline />}
-                        {data.serp.includes("video") && <FaVideo />}
-                      </span> */}
+                    <td className="rounded-full p-2">
+                      <span className={``}>{data?.avg_backlinks_info?.rank ?? 0}</span>
                     </td>
-                    <td className="rounded-full">
+                    <td className="rounded-full p-2">
+                      <span className={`flex items-center gap-2 text-sm`}>
+                        {data.serp_info.serp_item_types.includes("link") && <FaLink />}
+                        {data.serp_info.serp_item_types.includes("image") && <CiImageOn />}
+                        {data.serp_info.serp_item_types.includes("shop") && <IoCartOutline />}
+                        {data.serp_info.serp_item_types.includes("video") && <FaVideo />}
+                        {data.serp_info.serp_item_types.includes("people_also_ask") && <FaQuestion />}
+                        {data.serp_info.serp_item_types.includes("related_searches") && <CiSearch />}
+                        {data.serp_info.serp_item_types.includes("popular_products") && <AiOutlineProduct />}
+                      </span>
+
+                    </td>
+                    <td className="rounded-full p-2 ">
                       <span className={``}>
-                        {moment(smartKeywordFinder?.[0].project).fromNow()}
+                        {moment(data?.search_intent_info?.last_updated_time).fromNow()}
+                       
                       </span>
                     </td>
-                    <td className=" ">
+                    {/* <td className=" ">
                       <span
                         onClick={() => ""}
                         className={`border flex p-3 items-center justify-center rounded-lg cursor-pointer text-primary `}
                       >
                         <FiRefreshCw />
                       </span>
-                    </td>
+                    </td> */}
                   </tr>
                 );
               })}

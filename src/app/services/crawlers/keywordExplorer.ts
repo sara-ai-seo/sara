@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { KeywordServicesFetch } from "../keyword_services/keyword";
+import { KeywordServicesFetch } from "../keyword_services/keyword-services";
 
 const keywordServices = new KeywordServicesFetch();
 
