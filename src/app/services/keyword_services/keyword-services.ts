@@ -16,11 +16,8 @@ export class KeywordServicesFetch {
 
   async keywordAnalysisData(id: number) {
     try {
-      const response = await Promise.all([
-        ApiCall.get(`/user/crawler/keyword/by-tab/${id}?tab=0`),
-        ApiCall.get(`/user/crawler/keyword/by-tab/${id}?tab=2`),
-      ]);
-      return response.map((res) => res.data);
+      const response = await ApiCall.get(`/user/crawler/keyword/${id}`)
+      return response.data;
     } catch (error:any) {
       console.error("Error:", error.response.data.message);
       throw new Error(`Failed to fetch keyword analysis data, ${error.response.data.message}`);

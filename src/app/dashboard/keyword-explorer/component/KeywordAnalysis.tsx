@@ -7,7 +7,6 @@ import React, { useState, useEffect } from "react";
 import { AiOutlineExpandAlt } from "react-icons/ai";
 import { CiImageOn } from "react-icons/ci";
 import { FaLink, FaPlus, FaVideo } from "react-icons/fa6";
-import { FiRefreshCw } from "react-icons/fi";
 import { GoDotFill, GoQuestion } from "react-icons/go";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { IoCartOutline } from "react-icons/io5";
@@ -27,6 +26,7 @@ import { useKeywordAnalysisData } from "@/app/services/crawlers/keywordExplorer"
 import moment from "moment";
 import Loader from "@/app/component/Loader";
 import { KeywordDataDto } from "@/app/types/keywords";
+import { KeywordAnalysisDto, KeywordAnalysisCrawlingResponse } from "@/types/keyword/keywordAnalysisDto";
 
 export const DetailButton = ({ title }: { title: string }) => (
   <button className="" title={title}>
@@ -38,12 +38,17 @@ export default function KeywordAnalysis({addNew}: {addNew: ()=> void}) {
   const [detail, setDetail] = useState(false);
   const [keyword, setKeyword] = useState("");
   const [currentData, setCurrentData] = useState<KeywordDataDto | null>(null)
+  const [keywordData, setKeywordData] = useState<[] | null>(null)
 
   const currentProperty = CurrentProperty();
 
 
   const { keywordAnalysisData, isPending, isSuccess, isError } =
     useKeywordAnalysisData(currentProperty.id);
+
+    const oneKeyword = keywordAnalysisData?.project?.crawlings.map((item:any) => item.crawlingData)
+
+    
 
   // summary table data
   const data =
@@ -52,17 +57,33 @@ export default function KeywordAnalysis({addNew}: {addNew: ()=> void}) {
 
       const dataDate = keywordAnalysisData?.[0]?.project?.crawlings?.[0]?.crawlingData?.[0].createdAt
   // console.log("keyword-analysis", keywordAnalysisData?.[0]);
+// const oneKeyword:KeywordAnalysisDto = keywordAnalysisData?.project?.crawlings.map((item:any) => item.crawlingData)
 
-  // console.log("DD", data)
+
+
+
+
+  console.log("@", keywordData )
+  // console.log("@", keywordAnalysisData?.project?.crawlings.map((item:any) => item.crawlingData) )
+  
+
+
   function setCurrent(){
     const newd = data?.find((item:any)=> item.keyword === keyword)
     return setCurrentData(newd)
   }
 
   useEffect(()=> {
+    if(isSuccess){
+      setKeywordData(oneKeyword)
+    }
     setCurrent()
-  }, [keyword])
-  console.log("DD", currentData)
+  }, [keyword, keywordData])
+
+  // console.log("DD", keywordAnalysisData?.[0]?.project?.crawlings?.[0]?.crawlingData[0]?.data?.tasks[0].result[0].items[0].country_distribution)
+
+  // console.log("DD", keywordAnalysisData?.[2]?.project?.crawlings?.[0]?.crawlingData[0]?.data?.tasks[0]?.result[0])
+  // console.log("DD", keywordAnalysisData)
 
   function Detail() {
     return (
@@ -286,7 +307,7 @@ export default function KeywordAnalysis({addNew}: {addNew: ()=> void}) {
         <div className="rounded-md shadow-sm border h-full w-full">
           <div className="flex w-full items-center justify-between p-6 h-[75px]">
             <p className={` font-medium text-[#101828] text-lg`}>
-              {data?.length} keywords{" "}
+              {oneKeyword?.length} keywords{" "}
             </p>
             <span>
               <PlainButton title={"Add keyword"} icon={<FaPlus />} handleClick={addNew} />
@@ -295,7 +316,7 @@ export default function KeywordAnalysis({addNew}: {addNew: ()=> void}) {
           <table className="w-full">
             <thead className="bg-[#F9FAFB] w-full">
               <tr className=" h-[44px] text-xs text-[#475467]  font-medium">
-                <th>
+                <th className="text-left px-6">
                   {/* {" "}
                   <span className="flex items-center gap-2 p-2 px-6">
                     {" "}
@@ -361,7 +382,7 @@ export default function KeywordAnalysis({addNew}: {addNew: ()=> void}) {
                     <td className="px-6">
                       <span className="flex items-center gap-2 ">
                         {/* <input type="checkbox" className="" /> */}
-                        {data.keyword}{" "}
+                        {data[0] }
                         <AiOutlineExpandAlt
                           onClick={() => {
                             setDetail(true);
@@ -410,17 +431,17 @@ export default function KeywordAnalysis({addNew}: {addNew: ()=> void}) {
                     </td>
                     <td className="  p-2 px-6 rounded-full">
                       <span className={``}>
-                        {moment(keywordAnalysisData?.[0].project).fromNow()}
+                        {/* {moment(keywordAnalysisData?.[0].project).fromNow()} */}
                       </span>
                     </td>
-                    <td className="  p-2 px-6  ">
+                    {/* <td className="  p-2 px-6  ">
                       <span
                         className={`  border flex p-3 items-center justify-center rounded-lg cursor-pointer text-primary `}
                       >
                         {" "}
                         <FiRefreshCw />
                       </span>{" "}
-                    </td>
+                    </td> */}
                   </tr>
                 );
               })}
