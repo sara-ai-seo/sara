@@ -43,7 +43,7 @@ export default function Button({
         variant === "primary" && "bg-primary text-white",
         variant === "secondary" &&
           "bg-grey-95 text-black border border-grey-90 outline-grey-90 focus-visible:ring-2  focus-visible:ring-offset-2",
-        variant === "text" && "bg-white text-purple-100 hover:outline-none shadow-none focus:outline-none focus-visible:ring-0",
+        variant === "text" && "bg-white border hover:outline-none shadow-none hover:shadow-sm hover:text-gray-500 focus:outline-none focus-visible:ring-0",
         variant === "outlined" && "bg-white border-purple-100 text-purple-100",
         variant === "cancel" && "bg-red-500 text-white",
         props.className,

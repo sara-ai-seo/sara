@@ -243,7 +243,7 @@ export default function Layout({ children }: Props) {
   function openProjectModal() {
     dispatch(setModal("addProject"));
   }
-
+// console.log("PL", property)
   return (
     <>
       <div>
