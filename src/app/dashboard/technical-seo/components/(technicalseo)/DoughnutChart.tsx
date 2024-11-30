@@ -37,26 +37,25 @@ export default function DoughnutChart() {
   )
 }
 
+interface CustomDoughnutChartDto {
+  labels: string[],
+    label: string,
+    data: number[],
+    backgroundColor: string[],
+    borderColor: string[],
+    borderWidth: number
+  
+}
+export const CustomDoughnutChart = ({labels, label, data, backgroundColor, borderColor} : CustomDoughnutChartDto) => {
 
-export const AnotherDoughnutChart = () => {
-
-  const anotherdata = {
-    labels: ['Red', 'Blue','Yellow'],
+  const chartData = {
+    labels: labels,
     datasets: [
       {
-        label: '# of Votes',
-        data: [12, 19,20,82,10],
-        backgroundColor: [
-          'rgba(255, 99, 132, 0.2)',
-          'rgba(54, 162, 235, 0.2)',
-        'rgba(75, 192, 192, 0.2)',
-        'rgba(153, 102, 255, 0.2)',
-        'rgba(255, 159, 64, 0.2)',
-        ],
-        borderColor: [
-          'rgba(255, 99, 132, 1)',
-          'rgba(54, 162, 235, 1)',
-        ],
+        label: label,
+        data: data,
+        backgroundColor: backgroundColor,
+        borderColor: borderColor,
         borderWidth: 1,
       },
     ],
@@ -74,6 +73,6 @@ export const AnotherDoughnutChart = () => {
    
   }
 
-  return <Doughnut data={anotherdata} options={anotherOptions} />
+  return <Doughnut data={chartData} options={anotherOptions} />
 }
 
