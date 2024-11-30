@@ -74,7 +74,7 @@ const OtpInput: React.FC = () => {
     console.log("No session found");
   }
 
-  console.log(token);
+  // console.log(token);
   const router = useRouter();
 
   const route = useRouter();
