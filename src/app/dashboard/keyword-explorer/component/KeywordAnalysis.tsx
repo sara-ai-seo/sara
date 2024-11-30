@@ -26,7 +26,25 @@ import { useKeywordAnalysisData } from "@/app/services/crawlers/keywordExplorer"
 import moment from "moment";
 import Loader from "@/app/component/Loader";
 import { KeywordDataDto } from "@/app/types/keywords";
-import { KeywordAnalysisDto, KeywordAnalysisCrawlingResponse } from "@/types/keyword/keywordAnalysisDto";
+import { CrawlingData, GoogleSearchVolume, BingSearchVolumeData, KeywordIdea, GlobalSearchVolume } from "@/types/keyword/keywordAnalysisDto";
+import {
+  ColumnDef,
+  flexRender,
+  getCoreRowModel,
+  useReactTable,
+} from "@tanstack/react-table"
+
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+
+
+
 
 export const DetailButton = ({ title }: { title: string }) => (
   <button className="" title={title}>
@@ -34,10 +52,10 @@ export const DetailButton = ({ title }: { title: string }) => (
     <GoQuestion />{" "}
   </button>
 );
-export default function KeywordAnalysis({addNew}: {addNew: ()=> void}) {
+export default function KeywordAnalysis({ addNew }: { addNew: () => void }) {
   const [detail, setDetail] = useState(false);
   const [keyword, setKeyword] = useState("");
-  const [currentData, setCurrentData] = useState<KeywordDataDto | null>(null)
+  const [currentData, setCurrentData] = useState<any | null>(null)
   const [keywordData, setKeywordData] = useState<[] | null>(null)
 
   const currentProperty = CurrentProperty();
@@ -46,44 +64,44 @@ export default function KeywordAnalysis({addNew}: {addNew: ()=> void}) {
   const { keywordAnalysisData, isPending, isSuccess, isError } =
     useKeywordAnalysisData(currentProperty.id);
 
-    const oneKeyword = keywordAnalysisData?.project?.crawlings.map((item:any) => item.crawlingData)
+  const oneKeyword = keywordAnalysisData?.project?.crawlings.map((item: any) => item.crawlingData)
+  useEffect(() => {
+    setKeywordData(oneKeyword)
+  }, [keywordData, oneKeyword])
 
-    
 
   // summary table data
   const data =
     keywordAnalysisData?.[0]?.project?.crawlings?.[0]?.crawlingData?.[0]?.data
       ?.tasks?.[0]?.result;
 
-      const dataDate = keywordAnalysisData?.[0]?.project?.crawlings?.[0]?.crawlingData?.[0].createdAt
+  const dataDate = keywordAnalysisData?.[0]?.project?.crawlings?.[0]?.crawlingData?.[0].createdAt
   // console.log("keyword-analysis", keywordAnalysisData?.[0]);
-// const oneKeyword:KeywordAnalysisDto = keywordAnalysisData?.project?.crawlings.map((item:any) => item.crawlingData)
+  // const oneKeyword:KeywordAnalysisDto = keywordAnalysisData?.project?.crawlings.map((item:any) => item.crawlingData)
 
 
 
 
 
-  console.log("@", keywordData )
+  console.log("@", currentData)
   // console.log("@", keywordAnalysisData?.project?.crawlings.map((item:any) => item.crawlingData) )
-  
 
 
-  function setCurrent(){
-    const newd = data?.find((item:any)=> item.keyword === keyword)
+
+
+  function setCurrent() {
+    const newd = data?.find((item: any) => item.keyword === keyword)
     return setCurrentData(newd)
   }
 
-  useEffect(()=> {
-    if(isSuccess){
+  useEffect(() => {
+    if (isSuccess) {
       setKeywordData(oneKeyword)
     }
     setCurrent()
   }, [keyword, keywordData])
 
-  // console.log("DD", keywordAnalysisData?.[0]?.project?.crawlings?.[0]?.crawlingData[0]?.data?.tasks[0].result[0].items[0].country_distribution)
 
-  // console.log("DD", keywordAnalysisData?.[2]?.project?.crawlings?.[0]?.crawlingData[0]?.data?.tasks[0]?.result[0])
-  // console.log("DD", keywordAnalysisData)
 
   function Detail() {
     return (
@@ -301,6 +319,8 @@ export default function KeywordAnalysis({addNew}: {addNew: ()=> void}) {
     );
   }
 
+
+
   return (
     <main className="py-10 grid ">
       {!detail ? (
@@ -313,141 +333,74 @@ export default function KeywordAnalysis({addNew}: {addNew: ()=> void}) {
               <PlainButton title={"Add keyword"} icon={<FaPlus />} handleClick={addNew} />
             </span>
           </div>
-          <table className="w-full">
-            <thead className="bg-[#F9FAFB] w-full">
-              <tr className=" h-[44px] text-xs text-[#475467]  font-medium">
-                <th className="text-left px-6">
-                  {/* {" "}
-                  <span className="flex items-center gap-2 p-2 px-6">
-                    {" "}
-                    <input type="checkbox" className="" /> Keywords{" "}
-                  </span> */}
-                  Keywords
-                </th>
-                <th>
-                  {" "}
-                  <span className="flex items-center gap-1 p-2 px-6">
-                    {" "}
-                    Volume <DetailButton title={""} /> <MdArrowUpward />{" "}
-                  </span>{" "}
-                </th>
-                <th>
-                  {" "}
-                  <span className="flex items-center gap-1 p-2 px-6">
-                    {" "}
-                    KD <DetailButton title={""} />{" "}
-                  </span>{" "}
-                </th>
-                <th>
-                  {" "}
-                  <span className="flex items-center gap-1 p-2 px-6">
-                    {" "}
-                    CPC <DetailButton title={""} />{" "}
-                  </span>{" "}
-                </th>
-                {/* <th>
-                  {" "}
-                  <span className="flex items-center gap-1 p-2 px-6">
-                    {" "}
-                    SERP features <DetailButton title={""} />{" "}
-                  </span>{" "}
-                </th> */}
 
-                <th>
-                  <span className="flex items-center gap-1 p-2 px-6">LTB</span>
-                </th>
 
-                <th>
-                  <span className="flex items-center gap-1 p-2 px-6">HTB</span>
-                </th>
-                <th>
-                  {" "}
-                  <span className="flex items-center gap-1 p-2 px-6">
-                    {" "}
-                    Update
-                  </span>{" "}
-                </th>
-                <th> </th>
-              </tr>
-            </thead>
-            <tbody>
-              {isPending && (
-                <div className="h-20 w-full">
+
+          <div className="rounded-md border w-full overflow-auto">
+            <Table>
+              <TableHeader className="w-full">
+                <TableRow className="w-full">
+                  <TableHead className="">Keyword</TableHead>
+                  <TableHead>CPC</TableHead>
+                  <TableHead>Search Volume</TableHead>
+                  <TableHead>Competition</TableHead>
+                  <TableHead className="">KD</TableHead>
+                  <TableHead className="">Location Code</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody className="w-full">
+                {keywordData?.length === 0 && (
+                  <TableRow className="w-full">
+                    <TableCell className="p-4 text-center">No data found</TableCell>
+                  </TableRow>
+                )}
+                
+                {isPending && (
+                <div className="h-20 w-full justify-center items-center">
                   <Loader />
                 </div>
               )}
-              {data?.map((data: any, index: number) => {
-                return (
-                  <tr key={index} className=" border-b">
-                    <td className="px-6">
-                      <span className="flex items-center gap-2 ">
-                        {/* <input type="checkbox" className="" /> */}
-                        {data[0] }
-                        <AiOutlineExpandAlt
-                          onClick={() => {
-                            setDetail(true);
-                            setKeyword(data.keyword);
-                            setCurrent()
-                            
-                          }}
-                          className="bg-[#EFF8FF] p-0.5 text-[#1570EF] cursor-pointer rounded text-2xl"
-                        />{" "}
-                      </span>
-                    </td>
-                    <td className="  p-2 px-6 rounded-full">
-                      <span className={``}>{data.search_volume ?? 0} </span>{" "}
-                    </td>
-                    <td className="  p-2  rounded-full">
-                      <span
-                        className={`p-1 w-2/3 rounded-3xl text-center flex items-center justify-center ${
-                          data.competition_index > 39
-                            ? "bg-[#F6FEF9] text-[#12B76A]"
-                            : "bg-[#FFFAEB] text-[#B54708] "
-                        }`}
-                      >
-                        {" "}
-                        <GoDotFill />
-                        {data.competition_index ?? 0}{" "}
-                      </span>{" "}
-                    </td>
-                    <td className="  p-2 px-6 rounded-full">
-                      <span className={``}>${data.cpc ?? 0}</span>{" "}
-                    </td>
-                    {/* <td className="  p-2 px-6 rounded-full"> */}
-                    {/* <span className={`flex items-center gap-2 text-sm`}>
-                        {data.serp.includes("link") && <FaLink />}
-                        {data.serp.includes("image") && <CiImageOn />}
-                        {data.serp.includes("shop") && <IoCartOutline />}
-                        {data.serp.includes("video") && <FaVideo />}
-                      </span>{" "} */}
-                    {/* </td> */}
 
-                    <td className="  p-2 px-6 rounded-full">
-                      {data.high_top_of_page_bid ?? 0}
-                    </td>
+                {
 
-                    <td className="  p-2 px-6 rounded-full">
-                      {data.low_top_of_page_bid ?? 0}
-                    </td>
-                    <td className="  p-2 px-6 rounded-full">
-                      <span className={``}>
-                        {/* {moment(keywordAnalysisData?.[0].project).fromNow()} */}
-                      </span>
-                    </td>
-                    {/* <td className="  p-2 px-6  ">
-                      <span
-                        className={`  border flex p-3 items-center justify-center rounded-lg cursor-pointer text-primary `}
-                      >
-                        {" "}
-                        <FiRefreshCw />
-                      </span>{" "}
-                    </td> */}
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+                  keywordData?.map((item: any, i: number) => {
+                    const google = item.find((fig: CrawlingData) => fig.tab === "googleSearchVolume")?.data as GoogleSearchVolume
+                    const bing = item.find((fig: CrawlingData) => fig.tab === "bingSearchVolume")?.data as BingSearchVolumeData
+                    const globalSearchVolume = item.find((fig: CrawlingData) => fig.tab === "globalSearchVolume")?.data as GlobalSearchVolume
+                    const keywordIdeas = item.find((fig: CrawlingData) => fig.tab === "keywordIdeas")?.data as KeywordIdea
+                    return (
+                      <TableRow key={i} className="w-full">
+                        <TableCell className="">
+                          <span className="flex items-center gap-2 ">
+
+                            {google.keyword}
+                            {/* <AiOutlineExpandAlt
+                              onClick={() => {
+                                const current = item.find((keyword:any) => google.keyword === keyword  )
+                                setDetail(true);
+                                setKeyword(google.keyword);
+                                setCurrent()
+
+                              }}
+                              className="bg-[#EFF8FF] p-0.5 text-[#1570EF] cursor-pointer rounded text-2xl"
+                            /> */}
+                          </span>
+                        </TableCell>
+                        <TableCell className=""> {google.cpc} </TableCell>
+                        <TableCell className=""> {google.search_volume} </TableCell>
+                        <TableCell className=""> {google.competition} </TableCell>
+                        <TableCell className=""> {google.competition_index} </TableCell>
+                        <TableCell className=""> {google.location_code} </TableCell>
+                      </TableRow>
+                    )
+                  })
+                }
+              </TableBody>
+            </Table>
+
+          </div>
         </div>
+
       ) : (
         <Detail />
       )}
