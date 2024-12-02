@@ -100,15 +100,40 @@ import {
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
 export const ProgressBarChart = ({ dataArray }: ProgressBarChartProps) => {
+  // console.log(dataArray);
+  const ranges = [
+    [0, 15],
+    [16, 30],
+    [31, 45],
+    [46, 55],
+    [56, 65],
+    [66, 75],
+    [76, 85],
+    [86, 95],
+  ];
+  const result: number[] = [];
   const total = dataArray?.reduce((acc, val) => acc + val, 0);
 
-  const labels = dataArray.map((value) => {
+  ranges.forEach(([start, end]) => {
+    // Filter numbers in the current range
+    const numbersInRange = dataArray.filter(
+      (num) => num >= start && num <= end
+    );
+    // Find the highest number in this range
+    if (numbersInRange.length > 0) {
+      const maxNumber = Math.max(...numbersInRange);
+      result.push(maxNumber);
+    }
+  });
+
+  const labels = result.map((value) => {
     if (value <= 15) return "0-15 sec";
     else if (value <= 30) return "15-30 sec";
     else if (value <= 45) return "30-45 secs";
     else return "45+ secs";
   });
-  const colors = dataArray.map((value) => {
+  console.log(labels);
+  const colors = result.map((value) => {
     if (value <= 15) return "#28a745";
     else if (value <= 30) return "#007bff";
     else if (value <= 45) return "#cce5ff";
@@ -120,7 +145,7 @@ export const ProgressBarChart = ({ dataArray }: ProgressBarChartProps) => {
     datasets: [
       {
         label: "Response Time",
-        data: dataArray,
+        data: result,
         backgroundColor: colors,
         borderRadius: {
           topLeft: 10,
@@ -128,7 +153,7 @@ export const ProgressBarChart = ({ dataArray }: ProgressBarChartProps) => {
           topRight: 10,
           bottomRight: 10,
         },
-        barPercentage: 0.8,
+        barPercentage: 0.1,
         categoryPercentage: 1.0,
       },
     ],
@@ -138,7 +163,6 @@ export const ProgressBarChart = ({ dataArray }: ProgressBarChartProps) => {
   const options: ChartOptions<"bar"> = {
     indexAxis: "y" as const,
     responsive: true,
-
     scales: {
       x: {
         stacked: true,
