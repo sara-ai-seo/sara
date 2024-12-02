@@ -373,7 +373,7 @@ const seedKeyword = smartKeywordIdea?.project?.crawlings[0]?.crawlingData[0]?.da
                   {" "}
                   <span className="flex items-center gap-1 p-2">
                     {" "}
-                    SERP features <DetailButton title={""} />{" "}
+                    SERP features <DetailButton title={""} />
                   </span>{" "}
                 </th>
                 <th className="w-[110px]">
