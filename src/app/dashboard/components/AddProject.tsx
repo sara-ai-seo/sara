@@ -13,11 +13,14 @@ import { useMutation } from "@tanstack/react-query";
 
 import useRankMutation, {
   RankTrackerCrawler,
+  useRankMutationByPayload,
+  useRankTrackingOverview,
 } from "@/app/services/crawlers/rank_tracking";
 import { CurrentProperty } from "@/app/utils/currentProperty";
 import { trimDomain } from "@/app/utils/trimDomain";
 import { usePathname, useRouter } from "next/navigation";
 import { useTechnicalSeoMutation } from "@/app/services/technicalSeo/TechnicalSeoFetch";
+import toast from "react-hot-toast";
 
 export default function AddProject() {
   const [err, setErr] = useState({ status: false, msg: "" });
@@ -27,12 +30,7 @@ export default function AddProject() {
   const pathname = usePathname();
   const navigate = useRouter();
 
-  const {
-    mutate: RankMutate,
-    isError,
-    isPaused,
-    isPending,
-  } = useRankMutation(property.id);
+  const rankMutation = useRankMutationByPayload();
 
   const technicalSeoMutation = useTechnicalSeoMutation();
 
@@ -48,10 +46,25 @@ export default function AddProject() {
       await technicalSeoMutation.mutateAsync(data.project.id);
       const trimmedDomain = trimDomain(data.project.domain);
       if (trimmedDomain !== null) {
-        RankMutate({
-          target: trimmedDomain,
-          location_code: 2840,
-        });
+        rankMutation.mutate(
+          {
+            id: data.project.id,
+            target: trimmedDomain,
+            location_code: 2840,
+          },
+          {
+            onSuccess: (data, variables) => {
+              const { id } = variables;
+              useRankTrackingOverview("overview", id);
+              useRankTrackingOverview("ranking", id);
+              toast.success("Ranking Crawler successfully");
+            },
+            onError: (error) => {
+              console.error("Mutation failed:", error);
+              toast.error("Ranking Crawler failed");
+            },
+          }
+        );
       }
       dispatch(setActiveProperty(inputUrl));
       dispatch(setActivePropertyObj(data.project));
