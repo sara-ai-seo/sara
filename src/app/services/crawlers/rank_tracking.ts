@@ -123,14 +123,46 @@ export const useRankMutation = (
     onError: (error) => {
       setProgress && setProgress(0);
       console.error("Mutation failed:", error);
+      toast.error("Ranking Crawler failed");
       return `Mutation failed:, ${error}`;
     },
     onSuccess: (data) => {
       useRankTrackingOverview("overview", id);
       useRankTrackingOverview("ranking", id);
+      toast.success("Ranking Crawler successfully");
       setProgress && setProgress(0);
     },
   });
 };
 
 export default useRankMutation;
+
+export const useRankMutationByPayload = () => {
+  return useMutation({
+    mutationFn: async ({
+      id,
+      target,
+      location_code,
+    }: {
+      id: number;
+      target: string;
+      location_code?: number;
+    }) => {
+      return await RankCrawl(target, id, location_code);
+    },
+    // onError: (error) => {
+    // setProgress && setProgress(0);
+    // console.error("Mutation failed:", error);
+    // toast.error("Ranking Crawler failed");
+    // return `Mutation failed:, ${error}`;
+    // },
+    // onSuccess: (data, variables) => {
+    //   const { id } = variables;
+    // useRankTrackingOverview("overview", id);
+    // useRankTrackingOverview("ranking", id);
+    // RankTrackingOverview("ranking", id);
+    // toast.success("Ranking Crawler successfully");
+    // setProgress && setProgress(0);
+    // },
+  });
+};
