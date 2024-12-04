@@ -1,30 +1,20 @@
 import PlainButton from "@/app/component/PlainButton";
-import chartData, {
-  PiechartMockedData,
-  mockedData,
-} from "@/app/component/data/mockedData";
 import React, { useState, useEffect } from "react";
 import { AiOutlineExpandAlt } from "react-icons/ai";
-import { CiImageOn } from "react-icons/ci";
-import { FaLink, FaPlus, FaVideo } from "react-icons/fa6";
+import { FaPlus } from "react-icons/fa6";
 import { GoDotFill, GoQuestion } from "react-icons/go";
 import { IoMdArrowRoundBack } from "react-icons/io";
-import { IoCartOutline } from "react-icons/io5";
-import { MdArrowUpward } from "react-icons/md";
 import {
   Title,
   TitleWithoutUnderline,
 } from "../../technical-seo/components/Overview";
-import ProgressiveCircle from "../../components/SeoprogressCircle";
 import ProgressiveCircleReusable from "../../components/ProgressiveCircleReusable";
-import PieChart from "../../technical-seo/components/(technicalseo)/PieChart";
 import { CustomDoughnutChart } from "../../technical-seo/components/(technicalseo)/DoughnutChart";
 import { CurrentProperty } from "@/app/utils/currentProperty";
 import { useKeywordAnalysisData } from "@/app/services/crawlers/keywordExplorer";
 
 import moment from "moment";
 import Loader from "@/app/component/Loader";
-import { KeywordDataDto } from "@/app/types/keywords";
 import { CrawlingData, GoogleSearchVolume, BingSearchVolumeData, KeywordIdea, GlobalSearchVolume } from "@/types/keyword/keywordAnalysisDto";
 import {
   Card,
@@ -70,21 +60,6 @@ export default function KeywordAnalysis({ addNew }: { addNew: () => void }) {
   }, [keywordAnalysisData])
 
 
-  // summary table data
-  const data =
-    keywordAnalysisData?.[0]?.project?.crawlings?.[0]?.crawlingData?.[0]?.data
-      ?.tasks?.[0]?.result;
-
-  const dataDate = keywordAnalysisData?.[0]?.project?.crawlings?.[0]?.crawlingData?.[0].createdAt
-  // console.log("keyword-analysis", keywordAnalysisData?.[0]);
-  // const oneKeyword:KeywordAnalysisDto = keywordAnalysisData?.project?.crawlings.map((item:any) => item.crawlingData)
-
-  interface detailDataDto {
-    google: GoogleSearchVolume | null;
-    bing: BingSearchVolumeData | null;
-    keywordIdeas: KeywordIdea | null;
-    globalSearchVolume: GlobalSearchVolume | null;
-  }
 
   const colors = [
     "#FF6F61",
@@ -101,27 +76,6 @@ export default function KeywordAnalysis({ addNew }: { addNew: () => void }) {
 
   const curr: GoogleSearchVolume = (currentData ?? [])?.find((item: any) => item.tab === "googleSearchVolume")?.data
   const currGlobal: GlobalSearchVolume[] = (currentData ?? [])?.find((item: any) => item.tab === "globalSearchVolume")?.data
-
-  // console.log("@", currGlobal)
-  // console.log("@", keywordAnalysisData?.project?.crawlings.map((item:any) => item.crawlingData) )
-
-
-
-
-  // function setCurrent() {
-  //   const googleData = keywordData?.find((item: any) => item[0]?.tab === "googleSearchVolume" 
-  // && item[0]?.data.keyword === keyword
-  // );
-  //   console.log(googleData);
-  // }
-
-  // useEffect(() => {
-  //   if (isSuccess) {
-  //     setKeywordData(oneKeyword)
-  //   }
-  //   setCurrent()
-  // }, [keyword, keywordData])
-
 
 
   function Detail() {
@@ -159,11 +113,6 @@ export default function KeywordAnalysis({ addNew }: { addNew: () => void }) {
 
             <div className="grid md:grid-cols-1 min-[475px]:grid-cols-2 grid-cols-1 min-[475px]: gap-10">
               <ProgressiveCircleReusable value={(currentData ?? [])?.find((item: any) => item.tab === "googleSearchVolume")?.data?.competition_index ?? 0} title={currentData?.competition ?? ""} />
-
-              {/* <p className="mt-auto">
-                You need about backlinks from about 22 websites to get into the
-                top 10 search results for this keyword.
-              </p> */}
             </div>
           </div>
           <div className="rounded-md md:grid-cols-1 min-[500px]:grid-cols-2 grid-cols-1 col-span-2 grid gap-6">
@@ -398,8 +347,8 @@ export default function KeywordAnalysis({ addNew }: { addNew: () => void }) {
                   keywordData?.map((item: any, i: number) => {
                     const google = item.find((fig: CrawlingData) => fig.tab === "googleSearchVolume")?.data as GoogleSearchVolume
                     const bing = item.find((fig: CrawlingData) => fig.tab === "bingSearchVolume")?.data as BingSearchVolumeData
-                    const globalSearchVolume = item.find((fig: CrawlingData) => fig.tab === "globalSearchVolume")?.data as GlobalSearchVolume
-                    const keywordIdeas = item.find((fig: CrawlingData) => fig.tab === "keywordIdeas")?.data as KeywordIdea
+                    // const globalSearchVolume = item.find((fig: CrawlingData) => fig.tab === "globalSearchVolume")?.data as GlobalSearchVolume
+                    // const keywordIdeas = item.find((fig: CrawlingData) => fig.tab === "keywordIdeas")?.data as KeywordIdea
                     return (
                       <TableRow key={i} className="w-full">
                         <TableCell className="">
