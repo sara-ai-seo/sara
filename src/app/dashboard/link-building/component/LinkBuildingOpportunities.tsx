@@ -14,7 +14,7 @@ import { trimDomain } from '@/app/utils/trimDomain';
 import ApiCall from '@/app/utils/apicalls/axiosInterceptor';
 
 export default function LinkBuildingOpportunities() {
-  const [stage, setStage] = useState(1);
+  const [stage, setStage] = useState(0);
   const [competitor, setCompetitor] = useState("");
 
   return (
@@ -40,7 +40,7 @@ export default function LinkBuildingOpportunities() {
                   </textarea>
 
                   <div className="flex justify-end items-center gap-6">
-                    <Button className=" border flex items-center gap-2 rounded-md font-semibold p-2 px-3 "
+                    <Button variant="text" className=" border flex items-center gap-2 rounded-md font-semibold p-2 px-3 "
                       onClick={() => setCompetitor("")}
                     >
 
