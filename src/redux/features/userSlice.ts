@@ -10,6 +10,9 @@ const initialState : UserType = {
         createdAt: "",
         updatedAt: "",
         name: "",
+        location: {
+            code: 0
+        }
     },
     message: '',
     token: ''

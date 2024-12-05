@@ -455,7 +455,7 @@ export default function RankOverview({ se, type }: Props) {
     ],
   };
 
-  console.log("CHECK", data);
+  // console.log("CHECK", data);
 
   return isPending ? (
     <div className="h-20 w-full flex justify-center items-center">
