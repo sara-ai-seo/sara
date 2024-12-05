@@ -16,6 +16,7 @@ import toast from "react-hot-toast";
 import moment from "moment";
 import { handleDownloadAsImage } from "@/app/utils/downloadFileAsImage";
 
+
 export default function LinkBuilding() {
   const [data, setData] = useState("");
   const tabs = [
@@ -23,14 +24,14 @@ export default function LinkBuilding() {
       title: "Backlink overview",
       content: <LinkBuildingOverview sendData={setData} />,
     },
-    {
-      title: "Linking building opportunities",
-      content: <LinkBuildingOpportunities />,
-    },
     { title: "Backlink pages", content: <BacllinkPages sendData={setData} /> },
     {
       title: "Reffering domains",
       content: <ReferingDomains sendData={setData} />,
+    },
+    {
+      title: "Linking building opportunities",
+      content: <LinkBuildingOpportunities />,
     },
   ];
   const property = CurrentProperty();

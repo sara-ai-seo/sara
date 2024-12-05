@@ -6,6 +6,9 @@ interface User {
     createdAt: string;
     updatedAt: string;
     name: string;
+    location: {
+        code: number
+    }
 }
 
 export interface UserType {

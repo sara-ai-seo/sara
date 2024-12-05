@@ -56,7 +56,6 @@ export const RankTrackerCrawler = (
           location_code: location_code ?? 2840,
         },
       ]);
-
       return response.data;
     },
     onError: (error) => error.message,
@@ -123,8 +122,8 @@ export const useRankMutation = (
     onError: (error) => {
       setProgress && setProgress(0);
       console.error("Mutation failed:", error);
-      toast.error("Ranking Crawler failed");
-      return `Mutation failed:, ${error}`;
+      return toast.error("Ranking Crawler failed");
+      // return `Mutation failed:, ${error}`;
     },
     onSuccess: (data) => {
       useRankTrackingOverview("overview", id);

@@ -68,7 +68,7 @@ export default function LinkBuildingOpportunities() {
       :
       (
         <main className='my-10 grid gap-6'>
-          <section className="flex items-center justify-between w-full ">
+          {/* <section className="flex items-center justify-between w-full ">
             <div className="flex items-center gap-2">
               <SelectorDropdownMenu items={["May", "June", "July"]} selected={'DTS'} setSelected={function (e: any): void {
                 throw new Error('Function not implemented.');
@@ -86,21 +86,19 @@ export default function LinkBuildingOpportunities() {
             <SearchBox value={''} setValue={function (e: any): void {
               throw new Error('Function not implemented.');
             }} />
-          </section>
+          </section> */}
           <section className="grid gap-4 my-10 border shadow-sm rounded-md">
-            {/* <div className="grid h-full w-full overflow-auto border rounded-md "> */}
             <div className="flex p-4 px-6 w-full items-center justify-between">
               <p className={` font-medium text-[#101828] items-center text-lg flex gap-4`}>227 Source pages </p>
-              <div className="flex">
-                <span><PlainButton title={'Add competitor'} icon={<FaPlus />} /></span>
+              <div className="flex ">
+                {/* <span><PlainButton title={'Add competitor'} icon={<FaPlus />} /></span> */}
+               
+                <span><Button className=" gap-2 items-center flex" onClick={()=> setStage(0)}>  <FaPlus /> Add competitor</Button> </span>
               </div>
             </div>
             <table className='py-4 w-full text-xs'>
               <thead className=' bg-[#EAECF0] h-12'>
                 <tr className='rounded-md items-center'>
-                  {/* <th className='font-medium text-xs text-[#475467]   text-left p-2 px-6'> 
-              <span className={`flex items-center gap-1 text-xs`}> Referring domains </span>
-              </th> */}
                   <th className='font-medium text-xs text-[#475467]   text-left p-2 px-6'>
                     <span className={`flex items-center gap-1 text-xs`}> Source domain and URL <button title='The volume of ...'> <GoQuestion />
                     </button> </span>
