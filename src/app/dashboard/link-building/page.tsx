@@ -20,12 +20,12 @@ export default function LinkBuilding() {
   const [data, setData] = useState("");
   const tabs = [
     {
-      title: "Linking building opportunities",
-      content: <LinkBuildingOpportunities />,
-    },
-    {
       title: "Backlink overview",
       content: <LinkBuildingOverview sendData={setData} />,
+    },
+    {
+      title: "Linking building opportunities",
+      content: <LinkBuildingOpportunities />,
     },
     { title: "Backlink pages", content: <BacllinkPages sendData={setData} /> },
     {

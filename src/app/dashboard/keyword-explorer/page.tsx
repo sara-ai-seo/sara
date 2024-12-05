@@ -181,7 +181,10 @@ export default function page() {
     <main className="grid w-full h-full items-start content-start gap-6  mb-20 overflow-auto">
       <section className={`flex flex-col gap-4 text-[#101828] `}>
         <div className={`flex items-center gap-2`}>
-          <Button variant="text" onClick={() => setStage(1)} className="flex items-center gap-2"> <FaAngleLeft /> Back</Button>
+          {
+            data?.crawlings?.length > 0 && <Button variant="text" onClick={() => setStage(1)} className="flex items-center gap-2"> <FaAngleLeft /> Back</Button>
+          }
+          
           <h1 className={`font-semibold text-4xl 2xl:text-5xl`}>
             Keyword explorer
           </h1>
@@ -200,7 +203,7 @@ export default function page() {
               setKeywords((prev) => ({ ...prev, keywords: e.target.value }))
             }
             rows={3}
-            cols={70}
+            cols={50}
             value={keywords.keywords}
             placeholder="e.g. dog food, pet care, how to care for your dog..."
             className=" p-2 border rounded-md shadow-sm"
@@ -235,7 +238,7 @@ export default function page() {
               setKeywordIdea((prev) => ({ ...prev, keywordIdea: e.target.value }))
             }
             rows={3}
-            cols={70}
+            cols={50}
             value={keywordIdea.keywordIdea}
             placeholder="e.g. dog food, pet care, how to care for your dog..."
             className=" p-2 border rounded-md shadow-sm"

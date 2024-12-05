@@ -39,7 +39,7 @@ export default function LinkBuildingOverview({sendData}: ParentProp) {
     const data = crawlings.map((item: any)=> item?.crawlingData[0]?.data?.domain_trust_score);
     return data.slice(0,5)
 }
-console.log("RD", rDomains)
+// console.log("RD", rDomains)
   function extractBacklinks() {
     const crawlings = OverviewData?.project?.crawlings;
     const data = crawlings.map((item: any)=> item?.crawlingData[0]?.data?.total_backlinks);
