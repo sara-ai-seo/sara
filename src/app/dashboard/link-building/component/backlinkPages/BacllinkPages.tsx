@@ -193,7 +193,7 @@ console.log("CD",crawlingData)
                 </tr>
               </thead>
               <tbody>
-                {crawlingData?.map((data: backlinkPageData, i:number) => {
+                {(Array.isArray(crawlingData) ? crawlingData : []).map((data: backlinkPageData, i:number) => {
                   return (
                     <tr className=" border-b" key={i}>
                       <td className=" p-2 ">
