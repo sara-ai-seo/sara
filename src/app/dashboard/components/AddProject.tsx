@@ -21,10 +21,15 @@ import { trimDomain } from "@/app/utils/trimDomain";
 import { usePathname, useRouter } from "next/navigation";
 import { useTechnicalSeoMutation } from "@/app/services/technicalSeo/TechnicalSeoFetch";
 import toast from "react-hot-toast";
+import { UseLinkBuilding } from "../link-building/component/UseLinkbuilding";
+import { useSelector } from "react-redux";
+import { RootState } from "@/app/store";
 
 export default function AddProject() {
   const [err, setErr] = useState({ status: false, msg: "" });
   const [inputUrl, setInputUrl] = useState("");
+  const [progress, setProgress] = useState(0);
+
   const dispatch = useDispatch();
   const property = CurrentProperty();
   const pathname = usePathname();
@@ -32,7 +37,12 @@ export default function AddProject() {
 
   const rankMutation = useRankMutationByPayload();
 
+
+
   const technicalSeoMutation = useTechnicalSeoMutation();
+  const linkBuilding = UseLinkBuilding();
+  const User = useSelector((state: RootState) => state.user.user);
+  
 
   // console.log("PROPERTY",property)
   const mutate = useMutation({
@@ -42,30 +52,31 @@ export default function AddProject() {
     },
     onError: (error) => error.message,
     onSuccess: async (data) => {
-      console.log("data", data);
+      // console.log("data", data);
       await technicalSeoMutation.mutateAsync(data.project.id);
       const trimmedDomain = trimDomain(data.project.domain);
-      if (trimmedDomain !== null) {
-        rankMutation.mutate(
-          {
-            id: data.project.id,
-            target: trimmedDomain,
-            location_code: 2840,
-          },
-          {
-            onSuccess: (data, variables) => {
-              const { id } = variables;
-              useRankTrackingOverview("overview", id);
-              useRankTrackingOverview("ranking", id);
-              toast.success("Ranking Crawler successfully");
-            },
-            onError: (error) => {
-              console.error("Mutation failed:", error);
-              toast.error("Ranking Crawler failed");
-            },
-          }
-        );
-      }
+      linkBuilding.mutateAsync({id: data.project.id, domain: data.project.domain})
+      rankMutation.mutateAsync({id: data.project.id, target: data.project.domain, location_code: 2840})
+      // if (trimmedDomain !== null) {
+      //   rankMutation.mutate(
+      //     {
+      //       id: data.project.id,
+      //       target: trimmedDomain,
+      //       location_code: User.location.code,
+      //     },
+      //     {
+      //       onSuccess: (data, variables) => {
+      //         const { id } = variables;
+      //         toast.success("Ranking Crawler successfully");
+              
+      //       },
+      //       onError: (error) => {
+      //         console.error("Mutation failed:", error);
+      //         toast.error("Ranking Crawler failed");
+      //       },
+      //     }
+      //   );
+      // }
       dispatch(setActiveProperty(inputUrl));
       dispatch(setActivePropertyObj(data.project));
       navigate.push("/dashboard");
