@@ -43,7 +43,7 @@ export default function BacllinkPages({sendData}:ParentProp) {
   if(isSuccess) {
     sendData(backlinkPages?.project?.crawlings[0]?.crawlingData[0]?.updatedAt);
   }
-console.log("CD",crawlingData)
+// console.log("CD",crawlingData)
   return (
     <main className="py-10 grid gap-8 overflow-auto ">
       {/* <section className="flex h-fit gap-2 flex-wrap items-center z-10 bg-white justify-between w-full">

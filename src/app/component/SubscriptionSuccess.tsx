@@ -17,7 +17,7 @@ export default function SubscriptionSuccess() {
                 </h1>
             </div>
             <Card className='p-4 flex flex-col justify-center gap-3' >
-                <h2> YoPAxiou have successfully subscribed for one month basic plan</h2>
+                <h2> You have successfully subscribed for one month basic plan</h2>
                 <div className="flex items-center justify-center gap-3 w-full">
                     <Button onClick={()=> router.push("/dashboard")}> Go to dashboard </Button>
                     <Button onClick={()=> router.push("/")} variant='secondary'> Go to Home</Button>

@@ -12,10 +12,55 @@ import Button from '../../components/ui/Button';
 import { toast } from 'react-hot-toast';
 import { trimDomain } from '@/app/utils/trimDomain';
 import ApiCall from '@/app/utils/apicalls/axiosInterceptor';
+import { CurrentProperty } from '@/app/utils/currentProperty';
+import { UseLinkBuildingOpportunities, getLinkBuildingOpportunities, useLinkBuildingOpportunities } from './UseLinkbuilding';
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+import Link from 'next/link';
+import moment from 'moment';
 
 export default function LinkBuildingOpportunities() {
-  const [stage, setStage] = useState(0);
+  const property = CurrentProperty();
+  const { linkMutate, opportunitiesQuery } = useLinkBuildingOpportunities(property.id)
+
+  const [stage, setStage] = useState(opportunitiesQuery?.data?.project?.crawlings.length < 1 ? 0 : 1);
   const [competitor, setCompetitor] = useState("");
+
+
+  const opportunities = UseLinkBuildingOpportunities(property.id);
+  const getOpportunities = getLinkBuildingOpportunities(property.id)
+
+
+  // console.log("@",opportunitiesQuery?.data?.project?.crawlings )
+  // const opportunitiesData = opportunitiesQuery?.data?.project?.crawlings?.map((item: any)=> {
+  //   const data = item.crawlingData[0]?.data
+  //   return data
+  // })
+
+  const opportunitiesData = opportunitiesQuery?.data?.project?.crawlings.flatMap((item: any) =>
+    item?.crawlingData[0].data
+  );
+
+  console.log("@", opportunitiesQuery.data)
+
+  function postOpportunity() {
+    const trimmedCompetitor = trimDomain(competitor);
+    if (trimmedCompetitor !== null) {
+      return linkMutate.mutate(trimmedCompetitor);
+      setStage(1)
+    }
+    // Handle the case where trimDomain returns null
+    console.error('Invalid competitor domain');
+    return Promise.reject('Invalid competitor domain');
+  }
 
   return (
 
@@ -29,8 +74,8 @@ export default function LinkBuildingOpportunities() {
             <div className="flex flex-col gap-2 ">
               <div className="flex items-start gap-6">
                 <div className='flex flex-col gap-2'>
-                  <label className=" font-medium " htmlFor="keyword"> Enter competitor’s domains separated by commas</label>
-                  <textarea rows={5} cols={70} placeholder="e.g. domain.com, abcde.com, zyxwv.com..."
+                  <label className=" font-medium " htmlFor="keyword"> Enter competitor’s domain</label>
+                  <textarea rows={5} cols={70} placeholder="e.g. domain.com"
                     className=" p-2 border rounded-md "
                     value={competitor}
                     onChange={(e) => setCompetitor(e.target.value)}
@@ -54,7 +99,7 @@ export default function LinkBuildingOpportunities() {
                 </div>
                 <div className='mt-8'>
                   {/* <FilledButton title='Find link opportunities' /> */}
-                  <Button className={``} loading={false} > Find link opportunities</Button>
+                  <Button className={``} loading={linkMutate.isPending} onClick={postOpportunity} > Find link opportunities</Button>
                 </div>
               </div>
 
@@ -92,106 +137,100 @@ export default function LinkBuildingOpportunities() {
               <p className={` font-medium text-[#101828] items-center text-lg flex gap-4`}>227 Source pages </p>
               <div className="flex ">
                 {/* <span><PlainButton title={'Add competitor'} icon={<FaPlus />} /></span> */}
-               
-                <span><Button className=" gap-2 items-center flex" onClick={()=> setStage(0)}>  <FaPlus /> Add competitor</Button> </span>
+
+                <span><Button className=" gap-2 items-center flex" onClick={() => setStage(0)}>  <FaPlus /> Add competitor</Button> </span>
               </div>
             </div>
-            <table className='py-4 w-full text-xs'>
-              <thead className=' bg-[#EAECF0] h-12'>
-                <tr className='rounded-md items-center'>
-                  <th className='font-medium text-xs text-[#475467]   text-left p-2 px-6'>
+            <Table className='py-4 w-full text-xs'>
+              <TableHeader className=' bg-[#EAECF0] h-12'>
+                <TableRow className='rounded-md items-center'>
+                  <TableHead className='font-medium text-xs text-[#475467]   text-left '>
                     <span className={`flex items-center gap-1 text-xs`}> Source domain and URL <button title='The volume of ...'> <GoQuestion />
                     </button> </span>
-                  </th>
+                  </TableHead>
 
-                  <th className='font-medium text-xs text-[#475467]   text-left p-2 '>
+                  <th className='font-medium text-xs text-[#475467]   text-left '>
                     <span className={`flex items-center gap-1 text-xs`}> DTS <button title='The volume of ...'>
                     </button> <GoQuestion /> </span>
                   </th>
-                  <th className='font-medium text-xs text-[#475467]   text-left p-2 '>
-                    <span className={`flex items-center gap-1 text-xs`}> PTS <button title='The volume of ...'>
+                  <TableHead className='font-medium text-xs text-[#475467]   text-left '>
+                    <span className={`flex items-center gap-1 text-xs`}> Email <button title='The volume of ...'>
                     </button> <GoQuestion /> </span>
-                  </th>
+                  </TableHead>
 
-                  <th className='font-medium text-xs text-[#475467]   text-left p-2 '>
-                    <span className={`flex items-center gap-1 text-xs`}> Domain traffic </span>
-                  </th>
-                  <th className='font-medium text-xs text-[#475467]   text-left p-2 '>
-                    <span className={`flex items-center gap-1 text-xs`}> Page traffic </span>
-                  </th>
-                  <th className='font-medium text-xs text-[#475467]   text-left p-2 '>
-                    <span className={`flex items-center gap-1 text-xs`}> Com.backlinks <button title='The volume of ...'>
+                  <TableHead className='font-medium text-xs text-[#475467]   text-left '>
+                    <span className={`flex items-center gap-1 text-xs`}> Phone  </span>
+                  </TableHead>
+                  <TableHead className='font-medium text-xs text-[#475467]   text-left '>
+                    <span className={`flex items-center gap-1 text-xs`}> Last visited </span>
+                  </TableHead>
+                  <TableHead className='font-medium text-xs text-[#475467]   text-left '>
+                    <span className={`flex items-center gap-1 text-xs`}> Social handles <button title='The volume of ...'>
                     </button> <GoQuestion /> </span>
-                  </th>
-                  <th className='font-medium text-xs text-[#475467]   text-left p-2 '>
+                  </TableHead>
+                  {/* <TableHead className='font-medium text-xs text-[#475467]   text-left p-2 '>
                     <span className={`flex items-center gap-1 text-xs`}> Email<button title='The volume of ...'>
                     </button> <GoQuestion /> </span>
-                  </th>
-                  <th className='font-medium text-xs text-[#475467]   text-left p-2 '>
+                  </TableHead>
+                  <TableHead className='font-medium text-xs text-[#475467]   text-left p-2 '>
                     <span className={`flex items-center gap-1 text-xs`}> Social media<button title='The volume of ...'>
                     </button> <GoQuestion /> </span>
-                  </th>
+                  </TableHead> */}
 
-                </tr>
-              </thead>
-              <tbody>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+
                 {
-                  mockedData.map((data) => {
-                    return (
-                      <tr className=' border-b'>
-                        <td className=' p-2 px-6 '>
-                          <span className='grid'>
-                            {data.keyword}
+                  opportunitiesQuery?.data?.project?.crawlings.flatMap((data: any) => {
+                    if( data.crawlingData[0]?.data?.result[0] !== null){
 
-                            <span className='text-primary'> {data.url}</span>
-                          </span>
-                        </td>
-                        <td className=' p-2 px-6 '>
-                          <span className={`flex items-center text-xs p-1 gap-1`}>{data.position} <span className={` py-0.5 px-2 rounded-full flex items-center gap-1 `}>  </span>  </span>
-                        </td>
-
-                        <td className='  p-2  rounded-full'><span className={``}>{data.volume} </span> </td>
-                        <td className=' p-2  '>
-                          <span className='grid'>
-                            {data.volume}
-
-
-                          </span>
-                        </td>
-
-
-                        <td className='  p-2  rounded-full'><span className={``}> 20th June,2024</span> </td>
-                        <td className='  p-2  rounded-full'><span className={` `}>10th July,2024 </span> </td>
-                        <td className=' p-2  '>
-                          <span className='grid'>
-                            {data.url}
-                            <button className="text-primary"> Send mail</button>
-
-                          </span>
-                        </td>
-                        <td className=' p-2  '>
-                          <span className='flex gap-1 items-center'>
-                            <FaXTwitter /> <MdFacebook /> <FaInstagram /> <FaLinkedin />
-
-
-
-                          </span>
-                        </td>
-                      </tr>
-                    )
+                      const item = data.crawlingData[0]?.data?.result[0]
+                      return (
+                        <TableRow>
+                          <TableCell className=' items-start'>
+                            <span className='grid'>
+                              {/* {item?.meta_keywords[0] ?? ""} */}
+                              <span className=' max-w-md truncate'>
+                              {item?.title ?? ""}
+                              </span>
+  
+                              <Link href={`https://.${item?.domain}`} target="_blank" rel="noopener noreferrer" className='text-primary'>
+                                {item?.domain}
+                              </Link>
+                            </span>
+                          </TableCell>
+                          <TableCell> {item?.domain_rank ?? ""} </TableCell>
+                          <TableCell className=""> {
+                            item.emails.map((email: string)=> email)
+                            } </TableCell>
+                          <TableCell className=""> {
+                            item.phone_numbers.map((email: string)=> email)
+                            } </TableCell>
+                          <TableCell> {
+                            moment(item?.last_visited).fromNow()
+                            }  </TableCell>
+  
+                            <TableCell> 
+                              { item.social_graph_urls && item.social_graph_urls.map((social: string)=> {
+                                social.includes("facebook") && <MdFacebook />
+                                social.includes("instagram") && <FaInstagram />
+                                social.includes("twitter") && <FaXTwitter /> 
+                                social.includes("linkedin") && <FaLinkedin />
+                              })} 
+                              </TableCell>
+                        </TableRow>
+                        
+                      )
+                    } 
+                    // console.log("@", item)
                   })
                 }
-
-
-              </tbody>
-            </table>
+              </TableBody>
+            </Table>
             {/* </div> */}
           </section>
         </main>)
 
   )
 }
-function useMutattion(arg0: { mutationFn: () => Promise<any>; onSuccess: () => void; onError: () => void; }): { mutate: any; } {
-  throw new Error('Function not implemented.');
-}
-
