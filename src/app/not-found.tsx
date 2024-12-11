@@ -10,7 +10,7 @@ export default function NotFound() {
           href="/"
           className="p-2 rounded-md bg-green-500 w-full text-center text-white"
         >
-          Return Home
+          Return Home.
         </Link>
       </div>
     </section>
