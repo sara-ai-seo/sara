@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -7,88 +7,93 @@ import {
   Title,
   Tooltip,
   Legend,
-} from 'chart.js';
-import { Bar } from 'react-chartjs-2';
+} from "chart.js";
+import { Bar } from "react-chartjs-2";
 
 ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    BarElement,
-    Title,
-    Tooltip,
-    Legend
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
 );
 
 interface Props {
-    labels: string[];
-    data: number[];
-    title?: string;
-    xAxisLabel?: string;
-    yAxisLabel?: string;
-    backgroundColor?: string;
+  labels: string[];
+  data: number[] | string[];
+  title?: string;
+  xAxisLabel?: string;
+  yAxisLabel?: string;
+  backgroundColor?: string;
 }
 
-const BarChartSingle: React.FC<Props> = ({ labels, data, title = 'Chart.js Bar Chart', xAxisLabel = 'Crawl date', yAxisLabel = 'Number of pages', backgroundColor }) => {
-    const options = {
-        responsive: true,
-        barThickness: 30,
-        scales: {
-            x: {
-                barPercentage: 0.01,
-                categoryPercentage: 1.0,
-                grid: {
-                    display: false
-                },
-                title: {
-                    display: true,
-                    text: xAxisLabel
-                }
-            },
-            y: {
-                grid: {
-                    display: false
-                },
-                title: {
-                    display: true,
-                    text: yAxisLabel
-                }
-            }
+const BarChartSingle: React.FC<Props> = ({
+  labels,
+  data,
+  title = "Chart.js Bar Chart",
+  xAxisLabel = "Crawl date",
+  yAxisLabel = "Number of pages",
+  backgroundColor,
+}) => {
+  const options = {
+    responsive: true,
+    barThickness: 30,
+    scales: {
+      x: {
+        barPercentage: 0.01,
+        categoryPercentage: 1.0,
+        grid: {
+          display: false,
         },
-        plugins: {
-            legend: {
-                position: 'top' as const,
-                display: false
-            },
-            title: {
-                text: title,
-            },
+        title: {
+          display: true,
+          text: xAxisLabel,
         },
-    };
+      },
+      y: {
+        grid: {
+          display: false,
+        },
+        title: {
+          display: true,
+          text: yAxisLabel,
+        },
+      },
+    },
+    plugins: {
+      legend: {
+        position: "top" as const,
+        display: false,
+      },
+      title: {
+        text: title,
+      },
+    },
+  };
 
-    const chartData = {
-        labels,
-        datasets: [
-            {
-                label: 'Dataset 1',
-                data,
-                backgroundColor,
-                borderRadius: 10,
-                barPercentage: 1.0,
-                width: 100
-            },
-        ],
-    };
+  const chartData = {
+    labels,
+    datasets: [
+      {
+        label: "Dataset 1",
+        data,
+        backgroundColor,
+        borderRadius: 10,
+        barPercentage: 1.0,
+        width: 100,
+      },
+    ],
+  };
 
-    return (
-        <div className='h-full w-full'>
-            <Bar options={options} data={chartData} width={'150%'} height={'60%'} />
-        </div>
-    );
-}
+  return (
+    <div className="h-full w-full">
+      <Bar options={options} data={chartData} width={"150%"} height={"60%"} />
+    </div>
+  );
+};
 
 export default BarChartSingle;
-
-
 
 // import React from 'react';
 // import {
@@ -111,7 +116,6 @@ export default BarChartSingle;
 //   Legend
 // );
 
-
 // interface Props {
 //   label: [],
 //   data: []
@@ -127,7 +131,7 @@ export default BarChartSingle;
 //         barPercentage: 0.4,
 //         categoryPercentage: 0.4,
 //       grid: {
-//         display: false 
+//         display: false
 //       },
 //       title: {
 //         display: true,
@@ -137,7 +141,7 @@ export default BarChartSingle;
 //     },
 //     y: {
 //       grid: {
-//         display: false 
+//         display: false
 //       },
 //       title:{
 //         display: true,
@@ -174,7 +178,7 @@ export default BarChartSingle;
 
 // export function BarChartSingle() {
 //   return (
-//     <div className='h-full w-full'  > 
+//     <div className='h-full w-full'  >
 //       <Bar options={options} data={data} width={'200%'} height={'60%'} />
 //     </div>
 //   )
