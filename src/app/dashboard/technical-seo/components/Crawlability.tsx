@@ -50,8 +50,6 @@ export default function Crawlability() {
       crawling.crawlingData.filter(isCrawlabilityData)
     ) ?? [];
 
-  // console.log("crawl", crawlbilityAndIndexibiltyResult[0]);
-
   // useEffect(() => {
   //   const fetchData = async () => {
   //     try {
@@ -87,8 +85,21 @@ export default function Crawlability() {
   const indexable = crawlbilityAndIndexibiltyResult[0]?.data.indexable || 0;
   const non_indexable =
     crawlbilityAndIndexibiltyResult[0]?.data.non_indexible_count || 0;
-
   const total = crawlbilityAndIndexibiltyResult[0]?.data.total_page || 0;
+
+  const sanitizedIndexable = Math.min(Math.max(0, indexable), total);
+  const sanitizedNoIndexable = Math.min(
+    Math.max(0, non_indexable),
+    total - sanitizedIndexable
+  );
+
+  const indexablePercentage =
+    total > 0 ? (sanitizedIndexable / total) * 100 : 0;
+  const noIndexablePercentage =
+    total > 0 ? (sanitizedNoIndexable / total) * 100 : 0;
+  // console.log(indexable, non_indexable);
+  console.log(crawlbilityAndIndexibiltyResult[0]);
+
   const statusCodeData = crawlbilityAndIndexibiltyResult[0]?.data.status_code;
   const CrawledDetail = crawlbilityAndIndexibiltyResult[0]?.data.crawled_detail;
   const TotalLinkFound = crawlbilityAndIndexibiltyResult[0]?.data.items;
@@ -108,7 +119,7 @@ export default function Crawlability() {
 
   const mockData =
     Array.from(
-      { length: crawlbilityAndIndexibiltyResult[0]?.data.total_page },
+      { length: crawlbilityAndIndexibiltyResult[0]?.data.total_page || 0 },
       (_, i) => i + 1
     ) || [];
 
@@ -122,6 +133,15 @@ export default function Crawlability() {
   const categories = Object.keys(indexibilitData1 || []);
   const categoriesNumber = Object.values(indexibilitData1 || []);
 
+  const nonIndexablePages =
+    crawlbilityAndIndexibiltyResult[0]?.data.items.slice(0, 5);
+
+  const nonIndexablePagesData = nonIndexablePages?.map(
+    (page: any) => page.reason
+  );
+
+  const nonIndexablePagesLabels = ["0", "20", "40", "60", "80", "100"];
+
   return isLoading ? (
     <div className=" w-full h-20 flex items-center justify-center mt-10">
       <Loader />
@@ -131,45 +151,6 @@ export default function Crawlability() {
       <section
         className={`grid grid-cols-1 md:grid-cols-3 sm:grid-cols-2 gap-4 `}
       >
-        {/* <div className="grid p-2 md:p-4 col-span-1 h-[348px] justify-items-start  rounded-md w-full border ">
-
-          <Title title={"Crawl status"} info="The status of the crawl result" />
-          <div className="p-2 flex w-full ">
-            <div className=" rounded-full h-48 w-48 flex items-center justify-center">
-              <div className="relative">
-                <CircularProgressbarWithChildren
-                  value={crawledvalue}
-                  className="h-full w-full"
-                  
-                  styles={{
-                    path: {
-                      stroke: '#86EFAB',
-                      strokeLinecap: "round",
-                      transform: "rotate(-90deg)",
-                      transition: "stroke-dashoffset 0.5s ease 0s",
-                     
-                    },
-                    trail: {
-                      stroke: "#d6d6d6",
-                      strokeLinecap: "round",
-                    },
-                  }}
-                >
-                  <div className="flex flex-col">
-                    <p className="text-gray-600 text-center text-sm">Total links found</p>
-                    <p className="text-gray-900 text-center text-5xl">{Number(total).toLocaleString()}</p>
-                  </div>
-                </CircularProgressbarWithChildren>
-              </div>
-            </div>
-
-
-            <div className="flex h-full flex-col justify-end">
-              <p className=' flex items-center text-xs text-[#475467]'> <span className="text-green-300"><GoDotFill />  </span> {`Crwaled(${crawled})`} </p>
-              <p className=' flex items-center text-xs text-[#475467]'> <span className="text-green-100"><GoDotFill /></span> {`Uncrawled(${uncrawled})`} </p>
-            </div>
-          </div>
-        </div> */}
         <CrawledPagesComplete
           linkFound={TotalLinkFound}
           CrawlDetaildata={CrawledDetail}
@@ -185,14 +166,12 @@ export default function Crawlability() {
             </h1>
             <hr className="mt-2 w-full" />
           </div>
-          <div className=" h-full w-full ">
-            {/* <Suspense fallback={<h3> Loading...</h3>}> */}
+          <div className=" h-full w-full">
             <BarChartSingle
               labels={labels}
               data={mockData}
               backgroundColor="#53B1FD"
             />
-            {/* </Suspense> */}
           </div>
         </section>
       </section>
@@ -216,22 +195,14 @@ export default function Crawlability() {
               /> */}
 
               <HorizontalBar
-                indexable={indexable}
-                no_indexable={non_indexable}
+                indexable={indexablePercentage}
+                no_indexable={noIndexablePercentage}
               />
 
               {/* <DualProgressBar leftPercentage={`10px`} /> */}
-              <div className="flex justify-between w-full items-center">
-                <p className="">
-                  {/* {" "}
-                  {calculatePercentage(crawled, total).toFixed(2)}%{" "} */}
-                  {indexable}%
-                </p>
-                <p className="">
-                  {" "}
-                  {/* {calculatePercentage(uncrawled, total).toFixed(2)}%{" "} */}
-                  {non_indexable}%
-                </p>
+              <div className="flex justify-between w-full items-center ">
+                <p className="">{indexablePercentage.toFixed(2)}%</p>
+                <p className="">{noIndexablePercentage.toFixed(2)}%</p>
               </div>
             </div>
             <div className="flex flex-col justify-center items-center ">
@@ -240,20 +211,20 @@ export default function Crawlability() {
                 <span className="text-green-400">
                   <GoDotFill />{" "}
                 </span>
-                Indexable ({indexable})
+                Indexable ({indexablePercentage})
               </p>
               <p className=" text-xs flex items-center text-[#475467]">
                 {" "}
                 <span className="text-orange-400">
                   <GoDotFill />{" "}
                 </span>{" "}
-                Non indexable ({non_indexable})
+                Non indexable ({noIndexablePercentage})
               </p>
             </div>
           </div>
         </div>
 
-        <section className="w-full grid col-span-2 h-full  md:h-[348px] border rounded-md p-6">
+        <section className="w-full grid col-span-2 h-full md:h-[348px] border rounded-md p-6">
           <Title
             title="Pages not indexed by search engines"
             info={
@@ -262,8 +233,8 @@ export default function Crawlability() {
           />
           <div className=" h-full w-full ">
             <BarChartSingle
-              labels={categories}
-              data={categoriesNumber}
+              labels={nonIndexablePagesData}
+              data={nonIndexablePagesLabels}
               backgroundColor="red"
               xAxisLabel="Blocked by"
             />
@@ -282,7 +253,6 @@ export default function Crawlability() {
           />
           <div className="grid w-full gap-4 justify-items-center ">
             <div className="p-4 flex min-[1440px]:flex-row md:flex-col sm:flex-row flex-col gap-2 h-fit -y-auto">
-              {/* <HTTPStatusCode /> */}
               <ReUsableHTTPStatusCode item={statusCodeData} />
             </div>
           </div>

@@ -128,7 +128,6 @@ interface OverviewProps {
   onViewAllIssues: () => void;
 }
 export default function Overview({ onViewAllIssues }: OverviewProps) {
-
   const { data, isLoading } = useTechnicalSeoFetchData();
   // console.log("react query overview", data);
   const activeProperty = useSelector(
@@ -364,7 +363,7 @@ export default function Overview({ onViewAllIssues }: OverviewProps) {
            <p className='text-gray-900 text-center text-5xl'> {Number(technicalSeoData.metrics?.crawled?.total).toLocaleString()} </p>
          </div>
        </CircularProgressbarWithChildren> */}
-                <div className="h-fit object-contain  ">
+                <div className="h-fit object-contain">
                   {/* <CrawledPages /> */}
                   <ReusableCrawlStatus
                     TotalLinkFound={overviewResult[0]?.maxCrawlPages}

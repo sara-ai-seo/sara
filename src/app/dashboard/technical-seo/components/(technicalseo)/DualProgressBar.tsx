@@ -33,16 +33,26 @@ export const HorizontalBar: React.FC<HorizontalBarProps> = ({
   no_indexable,
 }) => {
   // Calculate total and percentages
-  const total = indexable + no_indexable;
-  const indexablePercentage = (indexable / total) * 100;
-  const noIndexablePercentage = (no_indexable / total) * 100;
+  // const total = indexable + no_indexable;
+  // const indexablePercentage = (indexable / total) * 100;
+  // const noIndexablePercentage = (no_indexable / total) * 100;
 
   return (
     <div className="w-full h-6 bg-gray-200 rounded-full overflow-hidden flex">
-      <div className="bg-green-500 h-full" style={{ width: `${indexable}%` }} />
       <div
         className="bg-red-500 h-full"
-        style={{ width: `${no_indexable}%` }}
+        style={{
+          width: `${no_indexable}%`,
+          minWidth: no_indexable > 0 ? "1%" : "0%", // Ensures minimal width
+        }}
+      />
+
+      <div
+        className="bg-green-500 h-full"
+        style={{
+          width: `${indexable}%`,
+          minWidth: indexable > 0 ? "1%" : "0%", // Ensures minimal width
+        }}
       />
     </div>
   );
