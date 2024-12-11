@@ -42,7 +42,7 @@ export default function SitePerformance() {
     sitePerformanceData[0]?.data.page_load_speed.reduce((acc, currentValue) => {
       return (acc += currentValue);
     }, 0) || 0;
-
+  console.log(sitePerformanceData[0]);
   const average_page_load_speed =
     sitePerformanceData[0]?.data.average_page_load_speed || 0;
 
