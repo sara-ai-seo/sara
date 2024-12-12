@@ -53,7 +53,7 @@ export default function ExploreContent({ data }: ExploreContentProps) {
   return (
     <section className="flex flex-col ">
       <div className="flex justify-between items-center gap-2 ">
-        <div className="flex gap-2">
+        {/* <div className="flex gap-2">
           {tab.map((item, i) => (
             <button
               onClick={() => setCurrentTab(item)}
@@ -65,7 +65,7 @@ export default function ExploreContent({ data }: ExploreContentProps) {
               {item}
             </button>
           ))}
-        </div>
+        </div> */}
         {/* <div className="flex items-center gap-2">
           <select name="" id="" className="rounded-md border p-2">
             <option value="Domain rank">Domain rank</option>

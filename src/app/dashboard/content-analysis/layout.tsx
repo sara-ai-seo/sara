@@ -15,6 +15,7 @@ export default function Layout({ children }: Props) {
   const getState = useSelector((state: RootState) => state);
   //handle when id is undefined.
 
+  // const [stage, setStage] = useState(0)
   const id = getState.property.activePropertyObj.id;
 
   // console.log(getState.updateDataState);
@@ -47,7 +48,7 @@ export default function Layout({ children }: Props) {
 
   return (
     <>
-      {(data && data.project.crawlings.length === 0) || updateDataStatus ? (
+      {(data && data.project.crawlings.length === 0)  ? (
         <EmptyState />
       ) : (
         <div>{children}</div>

@@ -4,14 +4,59 @@ import PlainButton from "./PlainButton";
 import { shareOrFallback } from "../utils/shareContentOrFallback";
 import { useDispatch } from "react-redux";
 import { setUpdateDataState } from "../../redux/features/updateDataStateSlice";
+import Button from "../dashboard/components/ui/Button";
+import { CurrentProperty } from "../utils/currentProperty";
+import ApiCall from "../utils/apicalls/axiosInterceptor";
+import toast from "react-hot-toast";
+
 
 interface Props {
   title: string;
   updateData?: () => void;
   settings?: () => void;
+  keyword: string
 }
-export default function TitleShareSettingTop({ title, updateData }: Props) {
+export default function TitleShareSettingTop({ title, updateData, keyword }: Props) {
   const dispatch = useDispatch();
+  const property = CurrentProperty()
+
+   const searchContentTopic = async (keyword: string) => {
+  
+    try {
+      const result = ApiCall.post(
+        `/user/crawler/content-analysis/${property?.id}`,
+        {
+          keywords: [
+            {
+              keyword: keyword,
+            },
+          ],
+        }
+      );
+  
+      toast.promise(
+        result,
+        {
+          loading: "Crawling data",
+          success: (data) => `Search successful`,
+          error: (err) => `Something  just happened`,
+        },
+        {
+          style: {
+            minWidth: "250px",
+          },
+        }
+      );
+  
+      const res = await result;
+  
+    } catch (error) {
+      console.error("Error during search:", error);
+    }
+  };
+  
+
+
   return (
     <section
       className={`flex justify-between w-full items-center gap-4 text-[#101828] `}
@@ -19,16 +64,19 @@ export default function TitleShareSettingTop({ title, updateData }: Props) {
       <h1 className={`font-semibold text-4xl 2xl:text-5xl `}>{title} </h1>
       <div className="flex w-fit  items-center justify-end gap-2 md:gap-4 ">
         <span className="">
-          <button
-            onClick={() =>
+          <Button
+
+            onClick={() => {
               dispatch(
                 setUpdateDataState({ page: "content-analysis", state: "empty" })
               )
+              searchContentTopic(keyword)
             }
-            className="rounded-lg text-base p-2 bg-primary text-white font-semibold hover:bg-blue-500"
+              
+            }
           >
             Update data
-          </button>
+          </Button>
         </span>
         <span className="">
           <PlainButton

@@ -6,6 +6,13 @@ import { connotation } from "../data/connotationData";
 import DoughnutChartWithBottomLegend from "./DoughnutChartWithBottomLegend";
 import { sentimentDataset } from "../data/sentmentData";
 import { contentAnalysisOverViewType } from "@/types/contentAnalysis";
+import {
+  Table,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
 
 interface OverviewProps {
   OverviewData: contentAnalysisOverViewType;
@@ -100,18 +107,18 @@ export default function Overview({ OverviewData }: OverviewProps) {
         </div>
         <hr className="mt-4" />
         <div className="overflow-x-auto max-w-full mt-4">
-          <table className="border rounded-lg border-separate border-spacing-0">
-            <tr className="bg-[#F9FAFB] border-b">
-              <th className="w-full  text-left p-3">Domain</th>
-              <th className="w-full  text-left p-3">Mentions</th>
-            </tr>
+          <Table className="border rounded-lg border-separate border-spacing-0">
+            <TableRow className="bg-[#F9FAFB] border-b">
+              <TableHead className="w-full  text-left p-3">Domain</TableHead>
+              <TableHead className="w-full  text-left p-3">Mentions</TableHead>
+            </TableRow>
             {top_domains.map((toDomain, i) => (
-              <tr className="border-b">
-                <td className="w-full  text-left p-3">{toDomain.domain}</td>
-                <td className="w-full  text-left p-3">{toDomain.count}</td>
-              </tr>
+              <TableRow className="border-b">
+                <TableCell className="w-full  text-left p-3">{toDomain.domain}</TableCell>
+                <TableCell className="w-full  text-left p-3">{toDomain.count}</TableCell>
+              </TableRow>
             ))}
-          </table>
+          </Table>
         </div>
       </div>
     </section>
