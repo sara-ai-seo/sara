@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/table"
 import Link from 'next/link';
 import moment from 'moment';
+import { useMutation } from '@tanstack/react-query';
 
 export default function LinkBuildingOpportunities() {
   const property = CurrentProperty();
@@ -35,32 +36,24 @@ export default function LinkBuildingOpportunities() {
   const [competitor, setCompetitor] = useState("");
 
 
-  const opportunities = UseLinkBuildingOpportunities(property.id);
-  const getOpportunities = getLinkBuildingOpportunities(property.id)
+console.log("#", trimDomain(competitor))
+  const postOpportunities = useMutation({
+    mutationFn: async (target:string) => {
 
-
-  // console.log("@",opportunitiesQuery?.data?.project?.crawlings )
-  // const opportunitiesData = opportunitiesQuery?.data?.project?.crawlings?.map((item: any)=> {
-  //   const data = item.crawlingData[0]?.data
-  //   return data
-  // })
-
-  const opportunitiesData = opportunitiesQuery?.data?.project?.crawlings.flatMap((item: any) =>
-    item?.crawlingData[0].data
-  );
-
-  console.log("@", opportunitiesQuery.data)
-
-  function postOpportunity() {
-    const trimmedCompetitor = trimDomain(competitor);
-    if (trimmedCompetitor !== null) {
-      return linkMutate.mutate(trimmedCompetitor);
+     return await ApiCall.post(`user/crawler/back-link/opportunities/${property.id}`, [{
+        target: trimDomain(target)
+      }])
+    },
+    onSuccess: () => {
+      toast.success('Successfully crawled competitor detail', { position: 'top-right' });
+      setCompetitor("")
+      opportunitiesQuery.refetch()
       setStage(1)
-    }
-    // Handle the case where trimDomain returns null
-    console.error('Invalid competitor domain');
-    return Promise.reject('Invalid competitor domain');
-  }
+    },
+    onError: (error: any) => {
+      toast.error(`Error crawling competitor detail: ${error}`, { position: 'top-right' });
+    },
+  })
 
   return (
 
@@ -99,7 +92,7 @@ export default function LinkBuildingOpportunities() {
                 </div>
                 <div className='mt-8'>
                   {/* <FilledButton title='Find link opportunities' /> */}
-                  <Button className={``} loading={linkMutate.isPending} onClick={postOpportunity} > Find link opportunities</Button>
+                  <Button className={``} loading={postOpportunities.isPending} onClick={()=> postOpportunities.mutate(competitor)} > Find link opportunities</Button>
                 </div>
               </div>
 
@@ -134,7 +127,7 @@ export default function LinkBuildingOpportunities() {
           </section> */}
           <section className="grid gap-4 my-10 border shadow-sm rounded-md">
             <div className="flex p-4 px-6 w-full items-center justify-between">
-              <p className={` font-medium text-[#101828] items-center text-lg flex gap-4`}>227 Source pages </p>
+              <p className={` font-medium text-[#101828] items-center text-lg flex gap-4`}>{opportunitiesQuery?.data?.project?.crawlings?.length ?? 0} Source pages </p>
               <div className="flex ">
                 {/* <span><PlainButton title={'Add competitor'} icon={<FaPlus />} /></span> */}
 
@@ -182,48 +175,47 @@ export default function LinkBuildingOpportunities() {
               <TableBody>
 
                 {
-                  opportunitiesQuery?.data?.project?.crawlings.flatMap((data: any) => {
-                    if( data.crawlingData[0]?.data?.result[0] !== null){
+                  opportunitiesQuery?.data?.project?.crawlings.map((data: any) => {
+                    if (data.crawlingData[0]?.data?.result !== null) {
 
-                      const item = data.crawlingData[0]?.data?.result[0]
-                      return (
-                        <TableRow>
-                          <TableCell className=' items-start'>
-                            <span className='grid'>
-                              {/* {item?.meta_keywords[0] ?? ""} */}
-                              <span className=' max-w-md truncate'>
+                    const item = data?.crawlingData[0]?.data?.result[0]
+                    console.log("@", item)
+                    return (
+                      <TableRow>
+                        <TableCell className=' items-start'>
+                          <span className='grid'>
+                            <span className=' max-w-md truncate'>
                               {item?.title ?? ""}
-                              </span>
-  
-                              <Link href={`https://.${item?.domain}`} target="_blank" rel="noopener noreferrer" className='text-primary'>
-                                {item?.domain}
-                              </Link>
                             </span>
-                          </TableCell>
-                          <TableCell> {item?.domain_rank ?? ""} </TableCell>
-                          <TableCell className=""> {
-                            item.emails.map((email: string)=> email)
-                            } </TableCell>
-                          <TableCell className=""> {
-                            item.phone_numbers.map((email: string)=> email)
-                            } </TableCell>
-                          <TableCell> {
-                            moment(item?.last_visited).fromNow()
-                            }  </TableCell>
-  
-                            <TableCell> 
-                              { item.social_graph_urls && item.social_graph_urls.map((social: string)=> {
-                                social.includes("facebook") && <MdFacebook />
-                                social.includes("instagram") && <FaInstagram />
-                                social.includes("twitter") && <FaXTwitter /> 
-                                social.includes("linkedin") && <FaLinkedin />
-                              })} 
-                              </TableCell>
-                        </TableRow>
-                        
-                      )
-                    } 
-                    // console.log("@", item)
+
+                            <Link href={`https://.${item?.domain}`} target="_blank" rel="noopener noreferrer" className='text-primary'>
+                              {item?.domain}
+                            </Link>
+                          </span>
+                        </TableCell>
+                        <TableCell> {item?.domain_rank ?? ""} </TableCell>
+                        <TableCell className=""> {
+                          item.emails.map((email: string) => email)
+                        } </TableCell>
+                        <TableCell className=""> {
+                          item.phone_numbers.map((email: string) => email)
+                        } </TableCell>
+                        <TableCell> {
+                          moment(item?.last_visited).fromNow()
+                        }  </TableCell>
+                        <TableCell>
+                          {item.social_graph_urls && item.social_graph_urls.map((social: string) => {
+                            social.includes("facebook") && <MdFacebook />
+                            social.includes("instagram") && <FaInstagram />
+                            social.includes("twitter") && <FaXTwitter />
+                            social.includes("linkedin") && <FaLinkedin />
+                          })}
+                        </TableCell>
+
+                      </TableRow>
+
+                    )
+                  }
                   })
                 }
               </TableBody>
@@ -234,3 +226,5 @@ export default function LinkBuildingOpportunities() {
 
   )
 }
+
+
