@@ -272,14 +272,13 @@ export const CrawledPagesComplete: FC<CrawledPagesCompleteProps> = ({
               <GoDotFill />
             </span>
             {/* {`Crawled(${crawled?.crawled.crawled})`} */}
-            {`Crawled(${CrawlDetaildata?.pages_crawled})`}
+            {`Crawled(${CrawlDetaildata?.pages_crawled ?? 0})`}
           </p>
           <p className=" flex items-center text-xs text-[#475467]">
-            {" "}
             <span className="text-green-100">
               <GoDotFill />
             </span>{" "}
-            {`Uncrawled(${CrawlDetaildata?.pages_in_queue})`}{" "}
+            {`Uncrawled(${CrawlDetaildata?.pages_in_queue ?? 0})`}
           </p>
         </div>
       </div>
