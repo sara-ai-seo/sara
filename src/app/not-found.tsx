@@ -1,10 +1,18 @@
-import React from 'react'
+import Link from "next/link";
 
-export default function page() {
+export default function NotFound() {
   return (
-    <main className="h-screen w-screen flex justify-center items-center flex-row" > 
-        Sorry, the page seem not to be available, please check the url and try again
-    
-    </main>
-  )
+    <section className="flex flex-col items-center justify-center h-screen w-full">
+      <div className="flex flex-col justify-center items-center">
+        <h2>Not Found</h2>
+        <p>Could not find requested resource</p>
+        <Link
+          href="/"
+          className="p-2 rounded-md bg-green-500 w-full text-center text-white"
+        >
+          Return Home
+        </Link>
+      </div>
+    </section>
+  );
 }

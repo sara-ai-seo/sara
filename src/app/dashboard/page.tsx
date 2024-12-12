@@ -27,7 +27,11 @@ import moment from "moment";
 import Button from "./components/ui/Button";
 import { BiExport } from "react-icons/bi";
 import { useTechnicalSeoFetchData } from "../services/technicalSeo/TechnicalSeoFetch";
-import { chartConfig, chartData, CustomPieChart } from "../component/charts/piechart";
+import {
+  chartConfig,
+  chartData,
+  CustomPieChart,
+} from "../component/charts/piechart";
 
 export default function Dashboard() {
   const exportIcon = (
@@ -59,17 +63,16 @@ export default function Dashboard() {
 
   const response = UseOverviewData(property.id);
 
-
   const User = useSelector((state: RootState) => state.user.user);
 
-  const data: DashboardDto = response.data
+  const data: DashboardDto = response.data;
 
   if (response.isPending) {
     return (
       <div className="h-14 w-full flex items-center justify-center">
         <Loader />
       </div>
-    )
+    );
   }
 
   if (response.isError) {
@@ -77,19 +80,25 @@ export default function Dashboard() {
       <div className="h-20 w-full flex items-center justify-center">
         <p>An error occurred while fetching the data.</p>
       </div>
-    )
+    );
   }
 
   const siteHealthScore = {
     score: data.techSeo.current.siteHealth,
-    previous: data.techSeo.differences.siteHealthDifference
-  }
-  const dataLabel = Array.isArray(data?.newvslost) ? data?.newvslost.map((item) => moment(item.updatedAt).format("Do MMM,YY")) : [];
-  const newRd = Array.isArray(data?.newvslost) ? data.newvslost.map((newB) => newB.newReferringMainDomains) : [];
-  const lostRd = Array.isArray(data?.newvslost) ? data.newvslost.map((newB) => newB.lostReferringMainDomains) : [];
+    previous: data.techSeo.differences.siteHealthDifference,
+  };
+  const dataLabel = Array.isArray(data?.newvslost)
+    ? data?.newvslost.map((item) => moment(item.updatedAt).format("Do MMM,YY"))
+    : [];
+  const newRd = Array.isArray(data?.newvslost)
+    ? data.newvslost.map((newB) => newB.newReferringMainDomains)
+    : [];
+  const lostRd = Array.isArray(data?.newvslost)
+    ? data.newvslost.map((newB) => newB.lostReferringMainDomains)
+    : [];
   // console.log("DT", data.techSeo )
 
-  const router = useRouter()
+  const router = useRouter();
 
   return (
     <>
@@ -112,18 +121,20 @@ export default function Dashboard() {
           </div>
           <div className="flex  items-center gap-2">
             <span>
-              <Button variant="secondary" className="flex items-center gap-2"
+              <Button
+                variant="secondary"
+                className="flex items-center gap-2"
                 onClick={() => {
                   handleDownloadAsImage(
                     "dashboardOverview",
                     "dashboardOverview"
-                  )
+                  );
                 }}
               >
                 <BiExport />
                 <span> Export</span>
-
-              </Button>            </span>
+              </Button>{" "}
+            </span>
             <span>
               <Button
                 className="bg-primary  text-white min-[375px]:text-base text-sm hover:bg-primary outline-2 hover:outline-2 hover:outline-offset-2 p-2 rounded-md"
@@ -140,18 +151,29 @@ export default function Dashboard() {
             className={`w-full grid items-center grid-cols-1 md:grid-cols-2 lg:grid-cols-3 pt-8 gap-4 justify-between`}
           >
             <OrganicTrafficCard />
-            <TimeToInteractive amount={data?.techSeo?.current?.timeToInteractive ?? 0}
-              difference={data?.techSeo?.differences?.timeToInteractiveDifference ?? 0}
+            <TimeToInteractive
+              amount={data?.techSeo?.current?.timeToInteractive ?? 0}
+              difference={
+                data?.techSeo?.differences?.timeToInteractiveDifference ?? 0
+              }
               chartData={data.techSeo.current.timeToInteractiveHistory}
-              previous={data?.techSeo.current.timeToInteractive - data?.techSeo?.differences?.timeToInteractiveDifference}
+              previous={
+                data?.techSeo.current.timeToInteractive -
+                data?.techSeo?.differences?.timeToInteractiveDifference
+              }
             />
 
             <LCP
               amount={data?.techSeo?.current?.largestContentfulPaint}
-              previous={data?.techSeo?.current?.largestContentfulPaint - data?.techSeo?.differences?.largestContentfulPaintDifference}
-              chartData={data?.techSeo?.current?.largestContentfulPaintHistory} 
-              difference={data?.techSeo?.differences?.largestContentfulPaintDifference}
-              />
+              previous={
+                data?.techSeo?.current?.largestContentfulPaint -
+                data?.techSeo?.differences?.largestContentfulPaintDifference
+              }
+              chartData={data?.techSeo?.current?.largestContentfulPaintHistory}
+              difference={
+                data?.techSeo?.differences?.largestContentfulPaintDifference
+              }
+            />
           </section>
           {/* )} */}
 
