@@ -17,8 +17,12 @@ import HTTPStatusCode from "./HTTPStatusCode";
 // import { TechnicalSeoType } from "@/types/TechnicalSeoType";
 import SiteHealthScore from "../../components/SiteHealthScore";
 import { DoughnutSample } from "../../components/DoiughnutSample";
-import { CrawledPages } from "../../components/SeoprogressCircle";
 import {
+  CrawledPages,
+  CrawledPagesComplete,
+} from "../../components/SeoprogressCircle";
+import {
+  CrawledDetail,
   CrawlingDataOverview,
   OverviewDataType,
 } from "@/types/technicalseo/technicalSeoTypes";
@@ -28,6 +32,8 @@ import { ReusableCrawlStatus } from "./(technicalseo)/ReusableCrawlStatus";
 import Loader from "@/app/component/Loader";
 import { CSVLink, CSVDownload } from "react-csv";
 import { forwardRef } from "react";
+import { Doughnut } from "react-chartjs-2";
+import DoughnutCenterLabel from "./(technicalseo)/DoughnutCenterLabel";
 // import { TechnicalSeoType } from "@/types/TechnicalSeoType";
 // import { useEffect } from "react";
 // import { removeTrailingSlash } from "@/app/utils/RemoveSlash";
@@ -178,7 +184,16 @@ export default function Overview({ onViewAllIssues }: OverviewProps) {
       ? overviewResult[0]?.coreWebVital?.first_input_delay
       : null;
 
-  // console.log(overviewResult[0]);
+  const CrawledDetails: CrawledDetail = {
+    pages_crawled:
+      overviewResult.length > 0 ? overviewResult[0]?.pagesCrawled : null!,
+    pages_in_queue:
+      overviewResult.length > 0 ? overviewResult[0]?.pagesInQueue : null!,
+    max_crawl_pages:
+      overviewResult.length > 0 ? overviewResult[0]?.maxCrawlPages : null!,
+  };
+
+  console.log(overviewResult[0]);
   const LcpLabel = [
     String(LcpAnalysis?.poor),
 
@@ -299,12 +314,8 @@ export default function Overview({ onViewAllIssues }: OverviewProps) {
           <section
             className={`grid grid-cols-1 md:grid-cols-4 md:gap-4 md:space-y-0 space-y-4 w-full`}
           >
-            {/* <div className="w-full col-span-1 h-full md:h-[464px]  border rounded-md p-6"> */}
-            {/* <ReusableProgressiveCircle title="Site health" info="The overall site health rating" val={(technicalSeoData.data[0].site_health * 100).toFixed(0)} pageTitle={"Site health"} /> */}
-
             <SiteHealthScore site_health={site_health!} />
 
-            {/* </div> */}
             <section className="w-full h-full col-span-3 md:h-[464px] border rounded-md p-6">
               <SubHead
                 title="Core web vitals"
@@ -354,43 +365,32 @@ export default function Overview({ onViewAllIssues }: OverviewProps) {
                 info="The status of the crawl result"
                 className="font-bold"
               />
-              <div className="p-2 flex lg:flex-row flex-col w-full h-fit ">
-                {/* <CircularProgressbarWithChildren value={crawledvalue} className='h-48' styles={{
-         path: { stroke: crawledvalue < 40 ? '#D92D20' : crawledvalue > 40 && crawledvalue < 71 ? '#FDB022' : '#039855' }
-       }} >
-         <div className="flex flex-col">
-           <p className='text-gray-600 text-center text-sm'> Total links found </p>
-           <p className='text-gray-900 text-center text-5xl'> {Number(technicalSeoData.metrics?.crawled?.total).toLocaleString()} </p>
-         </div>
-       </CircularProgressbarWithChildren> */}
-                <div className="h-fit object-contain">
-                  {/* <CrawledPages /> */}
-                  <ReusableCrawlStatus
+              <div className="p-2 flex lg:flex-row flex-col w-full justify-between h-full">
+                <div className="object-contain  h-56 w-56">
+                  {/* <ReusableCrawlStatus
                     TotalLinkFound={overviewResult[0]?.maxCrawlPages}
-                  />
+                  /> */}
+
+                  <DoughnutCenterLabel CrawlDetaildata={CrawledDetails} />
                 </div>
 
-                <div className="flex flex-col w-full self-end">
+                <div className="flex flex-col w-full mt-auto -translate-y-6">
                   <p className=" flex items-center text-xs text-[#475467]">
                     <span className="text-green-300">
                       <GoDotFill />{" "}
                     </span>
-                    Crawled{" "}
+                    Crawled
                     <strong className="ml-0.5">
-                      (
-                      {/* {technicalSeoData.metrics?.crawled?.crawled.toLocaleString() ??
-               0} */}
-                      {overviewResult[0]?.pagesCrawled ?? 0})
+                      ({overviewResult[0]?.pagesCrawled ?? 0})
                     </strong>
                   </p>
                   <p className=" flex items-center text-xs text-[#475467]">
-                    {" "}
                     <span className="text-green-100">
                       <GoDotFill />
-                    </span>{" "}
-                    Uncrawled{" "}
+                    </span>
+                    Uncrawled
                     <strong className="ml-0.5">
-                      ({overviewResult[0]?.pagesInQueue ?? 0}) )
+                      ({overviewResult[0]?.pagesInQueue ?? 0})
                     </strong>
                   </p>
                 </div>
@@ -404,43 +404,6 @@ export default function Overview({ onViewAllIssues }: OverviewProps) {
               />
               <div className="p-4 flex lg:flex-row flex-col gap-2 h-48 w-full">
                 <ReusableHTTPStatusCode item={overviewResult[0]?.status_code} />
-                {/* <div className="flex flex-col justify-end  overflow-y-auto">
-         <p className=" text-xs flex items-center text-[#475467]">
-           {" "}
-           <span className="text-green-400">
-             <GoDotFill />{" "}
-           </span>
-           {`Info - 1xx (${statusCodeData?.info}) `}{" "}
-         </p>
-         <p className=" text-xs flex items-center text-[#475467]">
-           {" "}
-           <span className="text-green-600">
-             <GoDotFill />{" "}
-           </span>{" "}
-           {`Success - 2xx (${statusCodeData?.success}) `}{" "}
-         </p>
-         <p className=" text-xs flex items-center text-[#475467]">
-           {" "}
-           <span className="text-orange-400">
-             <GoDotFill />{" "}
-           </span>
-           {`Redirect - 3xx (${statusCodeData?.redirect}) `}{" "}
-         </p>
-         <p className=" text-xs flex items-center text-[#475467]">
-           {" "}
-           <span className="text-red-400">
-             <GoDotFill />{" "}
-           </span>{" "}
-           {`Client error - 4xx (${statusCodeData?.client_error})`}{" "}
-         </p>
-         <p className=" text-xs flex items-center text-[#475467]">
-           {" "}
-           <span className="text-red-200">
-             <GoDotFill />{" "}
-           </span>{" "}
-           {`Server error - 5xx (${statusCodeData?.server_error})`}{" "}
-         </p>
-       </div> */}
               </div>
             </div>
             <div className="grid p-2 md:p-4 col-span-1 h-[308px] justify-items-start rounded-md w-full border ">
