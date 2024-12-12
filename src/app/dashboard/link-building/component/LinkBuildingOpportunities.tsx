@@ -179,7 +179,7 @@ export default function LinkBuildingOpportunities() {
                     if (data.crawlingData[0]?.data?.result !== null) {
 
                     const item = data?.crawlingData[0]?.data?.result[0]
-                    console.log("@", item)
+                    // console.log("@", item)
                     return (
                       <TableRow>
                         <TableCell className=' items-start'>
