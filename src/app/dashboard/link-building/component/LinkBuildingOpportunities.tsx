@@ -36,7 +36,7 @@ export default function LinkBuildingOpportunities() {
   const [competitor, setCompetitor] = useState("");
 
 
-console.log("#", trimDomain(competitor))
+// console.log("#", trimDomain(competitor))
   const postOpportunities = useMutation({
     mutationFn: async (target:string) => {
 
