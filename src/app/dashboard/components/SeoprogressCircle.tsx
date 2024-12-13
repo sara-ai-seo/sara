@@ -166,9 +166,9 @@ export const CrawledPagesComplete: FC<CrawledPagesCompleteProps> = ({
 
   // Calculate uncrawled pages and percentage
   const uncrawled =
-    CrawlDetaildata.max_crawl_pages - CrawlDetaildata.pages_crawled;
+    CrawlDetaildata?.max_crawl_pages - CrawlDetaildata?.pages_crawled;
   const crawledPercentage = (
-    (CrawlDetaildata.pages_crawled / CrawlDetaildata.max_crawl_pages) *
+    (CrawlDetaildata?.pages_crawled / CrawlDetaildata?.max_crawl_pages) *
     100
   ).toFixed(2);
 
@@ -177,7 +177,7 @@ export const CrawledPagesComplete: FC<CrawledPagesCompleteProps> = ({
     labels: ["Crawled", "Uncrawled"],
     datasets: [
       {
-        data: [CrawlDetaildata.pages_crawled, uncrawled],
+        data: [CrawlDetaildata?.pages_crawled, uncrawled],
         backgroundColor: ["#4CAF50", "#D1FADF"], // Green and Red
         hoverBackgroundColor: ["#66BB6A", "#E57373"],
       },
@@ -189,7 +189,7 @@ export const CrawledPagesComplete: FC<CrawledPagesCompleteProps> = ({
     responsive: true,
     plugins: {
       legend: {
-        display: false, // Hide legend
+        display: false,
         position: "top",
       },
 
@@ -222,7 +222,7 @@ export const CrawledPagesComplete: FC<CrawledPagesCompleteProps> = ({
       // Line 2: Bold font
       ctx.font = "bold 16px Arial";
       ctx.fillStyle = "#000";
-      const line2 = `${CrawlDetaildata.pages_crawled}`;
+      const line2 = `${CrawlDetaildata?.pages_crawled ?? 0}`;
       ctx.fillText(line2, centerX, centerY + 10); // Adjust vertical position
 
       ctx.restore();

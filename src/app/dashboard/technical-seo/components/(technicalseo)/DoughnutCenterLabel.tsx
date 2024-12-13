@@ -74,7 +74,7 @@ export default function DoughnutCenterLabel({
       // Line 2: Bold font
       ctx.font = "bold 16px Arial";
       ctx.fillStyle = "#000";
-      const line2 = `${CrawlDetaildata.pages_crawled}`;
+      const line2 = `${CrawlDetaildata?.pages_crawled ?? 0}`;
       ctx.fillText(line2, centerX, centerY + 10); // Adjust vertical position
 
       ctx.restore();
