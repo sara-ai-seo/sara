@@ -243,7 +243,7 @@ export default function Layout({ children }: Props) {
   function openProjectModal() {
     dispatch(setModal("addProject"));
   }
-// console.log("PL", property)
+  // console.log("PL", property)
   return (
     <>
       <div>
@@ -401,7 +401,11 @@ export default function Layout({ children }: Props) {
               </div>
             )} */}
             <div className=" w-full h-full overflow-auto p-2 md:p-8">
-            { property?.length < 1  ? <DashboardOverviewPlaceholder /> : children}
+              {property?.length < 1 ? (
+                <DashboardOverviewPlaceholder />
+              ) : (
+                children
+              )}
             </div>
           </section>
         </main>
@@ -409,3 +413,5 @@ export default function Layout({ children }: Props) {
     </>
   );
 }
+
+// Dayvid4444@ dayvid4444@admires.store
