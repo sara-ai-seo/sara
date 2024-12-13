@@ -3,6 +3,7 @@ import { RootState } from "@/app/store";
 import { useSelector } from "react-redux";
 import ApiCall from "../../utils/apicalls/axiosInterceptor";
 import toast from "react-hot-toast";
+import { AxiosError } from "axios";
 
 const fetchTechseoData = async (id: number) => {
   const result = await ApiCall.get(`/user/crawler/technical-seo/${id}`);
@@ -29,8 +30,15 @@ const CrawlTechnicalSeo = async (id: number) => {
   try {
     const response = await ApiCall.post(`/user/crawler/technical-seo/${id}`);
   } catch (error) {
-    console.log(error);
-
+    // console.log("crawl axios", error);
+    if (error instanceof AxiosError) {
+      if (
+        error.response?.data.message ===
+        "Insufficient credit to process your request"
+      ) {
+        throw new Error(error.response?.data.message);
+      }
+    }
     throw new Error("Crawl Technical SEO Failed");
   } finally {
     // setLoading(false);
@@ -43,8 +51,9 @@ export function useTechnicalSeoMutation() {
     onSuccess: () => {
       toast.success("Recrawl Technical SEO Successfully");
     },
-    onError: () => {
-      toast.error("Recrawl Technical SEO Failed");
+    onError: (error) => {
+      console.log("crawl ", error);
+      toast.error(error.message);
     },
   });
 

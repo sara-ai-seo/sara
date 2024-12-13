@@ -5,6 +5,7 @@ import { RootState } from "@/app/store";
 import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import { SetStateAction } from "react";
+import { AxiosError } from "axios";
 
 interface RankProps {
   location_code: number;
@@ -100,8 +101,17 @@ export const RankCrawl = async (
 
     return response.data;
   } catch (error) {
-    console.error("Error:", error);
-    throw error;
+    // console.error("Error:", error);
+    // throw error;
+    if (error instanceof AxiosError) {
+      if (
+        error.response?.data.message ===
+        "Insufficient credit to process your request"
+      ) {
+        throw new Error(error.response?.data.message);
+      }
+    }
+    throw new Error("Ranking Crawler failed");
   }
 };
 
@@ -122,7 +132,7 @@ export const useRankMutation = (
     onError: (error) => {
       setProgress && setProgress(0);
       console.error("Mutation failed:", error);
-      return toast.error("Ranking Crawler failed");
+      return toast.error(error.message);
       // return `Mutation failed:, ${error}`;
     },
     onSuccess: (data) => {

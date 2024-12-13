@@ -24,6 +24,7 @@ import toast from "react-hot-toast";
 import { UseLinkBuilding } from "../link-building/component/UseLinkbuilding";
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/store";
+import { AxiosError } from "axios";
 
 export default function AddProject() {
   const [err, setErr] = useState({ status: false, msg: "" });
@@ -37,46 +38,45 @@ export default function AddProject() {
 
   const rankMutation = useRankMutationByPayload();
 
-
-
   const technicalSeoMutation = useTechnicalSeoMutation();
   const linkBuilding = UseLinkBuilding();
   const User = useSelector((state: RootState) => state.user.user);
-  
 
   // console.log("PROPERTY",property)
   const mutate = useMutation({
     mutationFn: async (domain: string) => {
-      const response = await ApiCall.post("/user/project/", { domain });
-      return response.data;
+      try {
+        const response = await ApiCall.post("/user/project/", { domain });
+        return response.data;
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          if (
+            error.response?.data.message ===
+            "Insufficient credit to process your request"
+          ) {
+            throw new Error(error.response?.data.message);
+          }
+        }
+        throw new Error("Create Project Failed");
+      }
     },
-    onError: (error) => error.message,
+    onError: (error) => {
+      toast.error(error.message);
+    },
     onSuccess: async (data) => {
       // console.log("data", data);
       await technicalSeoMutation.mutateAsync(data.project.id);
       const trimmedDomain = trimDomain(data.project.domain);
-      linkBuilding.mutateAsync({id: data.project.id, domain: data.project.domain})
-      rankMutation.mutateAsync({id: data.project.id, target: data.project.domain, location_code: 2840})
-      // if (trimmedDomain !== null) {
-      //   rankMutation.mutate(
-      //     {
-      //       id: data.project.id,
-      //       target: trimmedDomain,
-      //       location_code: User.location.code,
-      //     },
-      //     {
-      //       onSuccess: (data, variables) => {
-      //         const { id } = variables;
-      //         toast.success("Ranking Crawler successfully");
-              
-      //       },
-      //       onError: (error) => {
-      //         console.error("Mutation failed:", error);
-      //         toast.error("Ranking Crawler failed");
-      //       },
-      //     }
-      //   );
-      // }
+      linkBuilding.mutateAsync({
+        id: data.project.id,
+        domain: data.project.domain,
+      });
+      rankMutation.mutateAsync({
+        id: data.project.id,
+        target: data.project.domain,
+        location_code: 2840,
+      });
+
       dispatch(setActiveProperty(inputUrl));
       dispatch(setActivePropertyObj(data.project));
       navigate.push("/dashboard");
