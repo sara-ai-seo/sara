@@ -115,9 +115,6 @@ export default function page() {
                       onSuccess: () => {
                         toast.success("Rankings re-tracked successfully");
                       },
-                      onError: () => {
-                        toast.error("Rankings re-tracked fails");
-                      },
                     }
                   );
                 }}
