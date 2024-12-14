@@ -10,8 +10,6 @@ import * as Yup from "yup";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-
-
 export default function EmptyState() {
   const activePropertyObj = useSelector(
     (state: RootState) => state.property.activePropertyObj
