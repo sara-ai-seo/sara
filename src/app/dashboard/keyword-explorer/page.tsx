@@ -1,6 +1,6 @@
 "use client";
 import { IoCloudUploadOutline } from "react-icons/io5";
-import { useEffect, useState } from "react";;
+import { useEffect, useState } from "react";
 import React, { Fragment } from "react";
 import { Tab } from "@headlessui/react";
 import PlainButton from "@/app/component/PlainButton";
@@ -18,7 +18,7 @@ import { shareOrFallback } from "@/app/utils/shareContentOrFallback";
 import { FaAngleLeft } from "react-icons/fa6";
 import CountrySelect from "@/components/ui/CountrySelect";
 import { countrieswithflag } from "@/app/component/data/countrieswithflag";
-
+import { AxiosError } from "axios";
 
 interface CrawlingData {
   id: number;
@@ -28,8 +28,6 @@ interface CrawlingData {
   updatedAt: string;
   crawlings: any[];
 }
-
-
 
 export default function page() {
   const [stage, setStage] = useState(1);
@@ -46,38 +44,64 @@ export default function page() {
   });
 
   const tabs = [
-    { title: "Keyword analysis", content: <KeywordAnalysis addNew={() => setStage(0)} /> },
-    { title: "Smart keyword finder", content: <SmartKeywordFinder  addNew={() => setStage(0) }/> },
+    {
+      title: "Keyword analysis",
+      content: <KeywordAnalysis addNew={() => setStage(0)} />,
+    },
+    {
+      title: "Smart keyword finder",
+      content: <SmartKeywordFinder addNew={() => setStage(0)} />,
+    },
     // { title: "Keyword list", content: <KeywordList /> }
   ];
 
   const currentId = CurrentProperty();
 
-
   const { mutate, isPending } = useMutation({
     mutationFn: async () => {
-      const dKeywords = keywords.keywords.split(",").map(item => [item.trim()]);
-      if (keywords.keywords === "") {
+      // Validate input fields
+      if (!keywords.keywords.trim()) {
         throw new Error("Please enter keywords");
       }
 
-      if (keywords.locationName === "") {
-        // toast.error("Please select a country", { position: "top-right" });
-        throw new Error("Please select the location");;
+      if (!keywords.locationName.trim()) {
+        throw new Error("Please select the location");
       }
-      await Promise.all(
-        dKeywords.map(async (itemArray) => {
-          const response = await ApiCall.post(`/user/crawler/keyword/${currentId.id}`, {
-            location_name: keywords.locationName,
-            location_code: keywords.locationCode,
-            keywords: itemArray, // Access the keyword from the wrapped array
-          });
-          return response;
-        })
-      );
+
+      const dKeywords = keywords.keywords
+        .split(",")
+        .map((item) => [item.trim()]);
+
+      try {
+        // Make API calls for each keyword
+        await Promise.all(
+          dKeywords.map(async (itemArray) => {
+            const response = await ApiCall.post(
+              `/user/crawler/keyword/${currentId.id}`,
+              {
+                location_name: keywords.locationName,
+                location_code: keywords.locationCode,
+                keywords: itemArray, // Access the keyword from the wrapped array
+              }
+            );
+            return response;
+          })
+        );
+      } catch (error: any) {
+        // Handle API-specific errors
+        if (error instanceof AxiosError && error.response) {
+          throw new Error(
+            error.response.data.message || "An unexpected error occurred."
+          );
+        }
+        throw new Error(
+          "Failed to complete the keyword search. Please try again."
+        );
+      }
     },
-    onError: (error: any) => {
-      toast.error(`An error occurred: ${error.response.data.message}`, {
+    onError: (error) => {
+      const errorMessage = error.message || "An unknown error occurred.";
+      toast.error(`An error occurred: ${errorMessage}`, {
         position: "top-right",
       });
     },
@@ -86,44 +110,64 @@ export default function page() {
         position: "top-right",
       });
       setStage(1);
-      handleClearAll()
+      handleClearAll();
     },
   });
 
-  const { mutate: keywordIdeaMutate, isPending: keywordIdeaIsPending } = useMutation({
-    mutationFn: async () => {
-      const dKeywords = keywordIdea.keywordIdea.split(",").map(item => [item.trim()]);
-      if (keywordIdea.keywordIdea === "") {
-        throw new Error("Please enter keywords");
-      }
+  const { mutate: keywordIdeaMutate, isPending: keywordIdeaIsPending } =
+    useMutation({
+      mutationFn: async () => {
+        const dKeywords = keywordIdea.keywordIdea
+          .split(",")
+          .map((item) => [item.trim()]);
+        if (keywordIdea.keywordIdea === "") {
+          throw new Error("Please enter keywords");
+        }
 
-      if (keywordIdea.locationCode === 0) {
-        // toast.error("Please select a country", { position: "top-right" });
-        throw new Error("Please select the location");
-      }
-      await Promise.all(
-        dKeywords.map(async (itemArray) => {
-          const response = await ApiCall.post(`/user/crawler/keyword/keyword-ideas/${currentId.id}`, {
-            location_code: keywordIdea.locationCode,
-            keywords: itemArray, // Access the keyword from the wrapped array
-          });
-          return response;
-        })
-      );
-    },
-    onError: (error: any) => {
-      toast.error(`An error occurred: ${error.response.data.message}`, {
-        position: "top-right",
-      });
-    },
-    onSuccess: () => {
-      toast.success("Keyword suggestion was successful", {
-        position: "top-right",
-      });
-      setStage(1);
-      handleClearAll()
-    },
-  });
+        if (keywordIdea.locationCode === 0) {
+          // toast.error("Please select a country", { position: "top-right" });
+          throw new Error("Please select the location");
+        }
+
+        try {
+          await Promise.all(
+            dKeywords.map(async (itemArray) => {
+              const response = await ApiCall.post(
+                `/user/crawler/keyword/keyword-ideas/${currentId.id}`,
+                {
+                  location_code: keywordIdea.locationCode,
+                  keywords: itemArray, // Access the keyword from the wrapped array
+                }
+              );
+              return response;
+            })
+          );
+        } catch (error) {
+          // Handle API-specific errors
+          if (error instanceof AxiosError && error.response) {
+            throw new Error(
+              error.response.data.message || "An unexpected error occurred."
+            );
+          }
+          throw new Error(
+            "Failed to complete the keyword search. Please try again."
+          );
+        }
+      },
+      onError: (error) => {
+        const errorMessage = error.message || "An unknown error occurred.";
+        toast.error(`An error occurred: ${errorMessage}`, {
+          position: "top-right",
+        });
+      },
+      onSuccess: () => {
+        toast.success("Keyword suggestion was successful", {
+          position: "top-right",
+        });
+        setStage(1);
+        handleClearAll();
+      },
+    });
 
   const keywordService = new KeywordServicesFetch();
 
@@ -149,7 +193,6 @@ export default function page() {
     });
   };
 
-
   const handleCountrySelect = (selectedCountry: string) => {
     const detail = countrieswithflag.find(
       (country) => country.location_name === selectedCountry
@@ -162,8 +205,8 @@ export default function page() {
       }),
         setKeywordIdea({
           ...keywordIdea,
-          locationCode: detail.location_code
-        })
+          locationCode: detail.location_code,
+        });
     }
   };
 
@@ -181,10 +224,17 @@ export default function page() {
     <main className="grid w-full h-full items-start content-start gap-6  mb-20 overflow-auto">
       <section className={`flex flex-col gap-4 text-[#101828] `}>
         <div className={`flex items-center gap-2`}>
-          {
-            data?.crawlings?.length > 0 && <Button variant="text" onClick={() => setStage(1)} className="flex items-center gap-2"> <FaAngleLeft /> Back</Button>
-          }
-          
+          {data?.crawlings?.length > 0 && (
+            <Button
+              variant="text"
+              onClick={() => setStage(1)}
+              className="flex items-center gap-2"
+            >
+              {" "}
+              <FaAngleLeft /> Back
+            </Button>
+          )}
+
           <h1 className={`font-semibold text-4xl 2xl:text-5xl`}>
             Keyword explorer
           </h1>
@@ -209,7 +259,8 @@ export default function page() {
             className=" p-2 border rounded-md shadow-sm"
           ></textarea>
           <div className="flex justify-end items-center gap-6">
-            <Button variant="text"
+            <Button
+              variant="text"
               className=" border flex items-center gap-2 rounded-md font-semibold p-2 px-3 "
               onClick={handleClearAll}
             >
@@ -218,8 +269,15 @@ export default function page() {
           </div>
         </div>
         <div className={`flex items-center gap-6 mt-6`}>
-          <CountrySelect handleCountrySelect={handleCountrySelect} data={countrieswithflag} />
-          <Button onClick={() => mutate()} loading={isPending} disabled={isPending}>
+          <CountrySelect
+            handleCountrySelect={handleCountrySelect}
+            data={countrieswithflag}
+          />
+          <Button
+            onClick={() => mutate()}
+            loading={isPending}
+            disabled={isPending}
+          >
             Search Keywords
           </Button>
         </div>
@@ -235,7 +293,10 @@ export default function page() {
           </label>
           <textarea
             onChange={(e) =>
-              setKeywordIdea((prev) => ({ ...prev, keywordIdea: e.target.value }))
+              setKeywordIdea((prev) => ({
+                ...prev,
+                keywordIdea: e.target.value,
+              }))
             }
             rows={3}
             cols={50}
@@ -245,13 +306,19 @@ export default function page() {
           ></textarea>
         </div>
         <div className={`flex items-center gap-6 mt-6`}>
-          <CountrySelect handleCountrySelect={handleCountrySelect} data={countrieswithflag} />
-          <Button onClick={() => keywordIdeaMutate()} loading={keywordIdeaIsPending} disabled={keywordIdeaIsPending} >
+          <CountrySelect
+            handleCountrySelect={handleCountrySelect}
+            data={countrieswithflag}
+          />
+          <Button
+            onClick={() => keywordIdeaMutate()}
+            loading={keywordIdeaIsPending}
+            disabled={keywordIdeaIsPending}
+          >
             Search Suggestions
           </Button>
         </div>
       </section>
-
     </main>
   ) : stage == 1 ? (
     <main className="grid w-full h-full items-start content-start gap-6 mb-20 overflow-auto">
@@ -314,10 +381,11 @@ export default function page() {
                   <Tab as={Fragment}>
                     {({ selected }) => (
                       <p
-                        className={` cursor-pointer p-2 active:outline-none text-sm font-semibold border-t-0 border-l-0 border-r-0 active:border-r-none ${selected
-                          ? "text-primary border-b-2 border-primary"
-                          : " text-[#667085] active:border-none"
-                          }`}
+                        className={` cursor-pointer p-2 active:outline-none text-sm font-semibold border-t-0 border-l-0 border-r-0 active:border-r-none ${
+                          selected
+                            ? "text-primary border-b-2 border-primary"
+                            : " text-[#667085] active:border-none"
+                        }`}
                       >
                         {tab.title}
                       </p>

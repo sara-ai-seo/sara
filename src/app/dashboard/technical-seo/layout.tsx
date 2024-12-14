@@ -28,6 +28,7 @@ import { handleDownloadAsImage } from "@/app/utils/downloadFileAsImage";
 import Loader from "@/app/component/Loader";
 import toast from "react-hot-toast";
 import ProgressBarPercent from "@/app/component/ProgressBarPercent";
+import { AxiosError } from "axios";
 
 export default function TechnicalSeoLayout() {
   const [loading, setLoading] = useState(false);
@@ -69,7 +70,6 @@ export default function TechnicalSeoLayout() {
   // }, [activeProperty,])
 
   const tabs = [
-    
     {
       title: "Overview",
       content: <Overview onViewAllIssues={() => setSelectedTabIndex(3)} />,
@@ -102,6 +102,14 @@ export default function TechnicalSeoLayout() {
       );
     } catch (error) {
       console.log(error);
+      if (error instanceof AxiosError) {
+        if (
+          error.response?.data.message ===
+          "Insufficient credit to process your request"
+        ) {
+          throw new Error(error.response?.data.message);
+        }
+      }
 
       throw new Error("Crawl Technical SEO Failed");
     } finally {
@@ -115,8 +123,8 @@ export default function TechnicalSeoLayout() {
       toast.success("Recrawl Technical SEO Successfully");
       setProgress(0);
     },
-    onError: () => {
-      toast.error("Recrawl Technical SEO Failed");
+    onError: (error) => {
+      toast.error(error.message);
       setProgress(0);
     },
   });
