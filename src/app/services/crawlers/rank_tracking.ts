@@ -51,13 +51,27 @@ export const RankTrackerCrawler = (
 ) => {
   const rankCrawler = useMutation({
     mutationFn: async () => {
-      const response = await ApiCall.post(`/user/crawler/rank-tracking/${id}`, [
-        {
-          target,
-          location_code: location_code ?? 2840,
-        },
-      ]);
-      return response.data;
+      try {
+        const response = await ApiCall.post(
+          `/user/crawler/rank-tracking/${id}`,
+          [
+            {
+              target,
+              location_code: location_code ?? 2840,
+            },
+          ]
+        );
+        return response.data;
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          if (error.response) {
+            throw new Error(
+              error.response?.data.message || "Something went wrong!"
+            );
+          }
+          throw new Error("Ranking Crawler failed");
+        }
+      }
     },
     onError: (error) => error.message,
     onSuccess: () => {
@@ -101,15 +115,13 @@ export const RankCrawl = async (
 
     return response.data;
   } catch (error) {
-    // console.error("Error:", error);
-    // throw error;
     if (error instanceof AxiosError) {
-      if (
-        error.response?.data.message ===
-        "Insufficient credit to process your request"
-      ) {
-        throw new Error(error.response?.data.message);
+      if (error.response) {
+        throw new Error(
+          error.response?.data.message || "An unexpected error occurred."
+        );
       }
+      throw new Error("An unexpected error occurred.");
     }
     throw new Error("Ranking Crawler failed");
   }

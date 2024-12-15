@@ -89,10 +89,13 @@ export default function page() {
         );
       } catch (error: any) {
         // Handle API-specific errors
-        if (error instanceof AxiosError && error.response) {
-          throw new Error(
-            error.response.data.message || "An unexpected error occurred."
-          );
+        if (error instanceof AxiosError) {
+          if (error.response) {
+            throw new Error(
+              error.response.data.message || "An unexpected error occurred."
+            );
+          }
+          throw new Error("An unexpected error occurred.");
         }
         throw new Error(
           "Failed to complete the keyword search. Please try again."
@@ -100,8 +103,7 @@ export default function page() {
       }
     },
     onError: (error) => {
-      const errorMessage = error.message || "An unknown error occurred.";
-      toast.error(`An error occurred: ${errorMessage}`, {
+      toast.error(`${error.message}`, {
         position: "top-right",
       });
     },
@@ -144,10 +146,13 @@ export default function page() {
           );
         } catch (error) {
           // Handle API-specific errors
-          if (error instanceof AxiosError && error.response) {
-            throw new Error(
-              error.response.data.message || "An unexpected error occurred."
-            );
+          if (error instanceof AxiosError) {
+            if (error.response) {
+              throw new Error(
+                error.response.data.message || "An unexpected error occurred."
+              );
+            }
+            throw new Error("An unexpected error occurred.");
           }
           throw new Error(
             "Failed to complete the keyword search. Please try again."
@@ -155,8 +160,7 @@ export default function page() {
         }
       },
       onError: (error) => {
-        const errorMessage = error.message || "An unknown error occurred.";
-        toast.error(`An error occurred: ${errorMessage}`, {
+        toast.error(` ${error.message}`, {
           position: "top-right",
         });
       },
