@@ -50,12 +50,12 @@ export default function AddProject() {
         return response.data;
       } catch (error) {
         if (error instanceof AxiosError) {
-          if (
-            error.response?.data.message ===
-            "Insufficient credit to process your request"
-          ) {
-            throw new Error(error.response?.data.message);
+          if (error.response) {
+            throw new Error(
+              error.response?.data.message || "Something went wrong!"
+            );
           }
+          throw new Error("Create Project Failed");
         }
         throw new Error("Create Project Failed");
       }

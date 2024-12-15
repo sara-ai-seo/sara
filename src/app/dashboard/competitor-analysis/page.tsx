@@ -18,6 +18,7 @@ import Button from "../components/ui/Button";
 import { shareOrFallback } from "@/app/utils/shareContentOrFallback";
 import { IoCloudUploadOutline } from "react-icons/io5";
 import { IoIosArrowRoundBack } from "react-icons/io";
+import { AxiosError } from "axios";
 
 interface competitorDomains {
   target: string;
@@ -75,35 +76,29 @@ export default function page() {
     },
   ];
 
-  
-
   const mutate = useMutation({
     mutationKey: ["crawlCompetitors"],
     mutationFn: async () => {
       if (target === "") {
-        setErrorMessage("Please select a competitor");
-        toast.error(errorMessage)
+        // setErrorMessage("Please select a competitor");
+        toast.error("Please select a competitor");
         throw new Error(errorMessage);
       }
       if (target1 === "") {
-        setErrorMessage("Please select second competitor");
-        toast.error(errorMessage)
+        // setErrorMessage("Please select second competitor");
+        toast.error("Please select second competitor");
         throw new Error(errorMessage);
       }
       if (location_code === null) {
-        // toast.error("Please select a country");
-        setErrorMessage("Please select a country");
-        toast.error(errorMessage)
+        // setErrorMessage("Please select a country");
+        toast.error("Please select a country");
         throw new Error("Please select a country");
       }
       if (language_code === "") {
-        // toast.error("Please select a country");
-        setErrorMessage("Please select a country");
-        toast.error(errorMessage)
+        // setErrorMessage("Please select a country");
+        toast.error("Please select a country");
         throw new Error("Please select a country");
       }
-      
-     
 
       if (!property.id) {
         toast.error("project(url) must be selected");
@@ -115,19 +110,27 @@ export default function page() {
           payload
         );
         return response;
-      } catch (error: any) {
-        toast.error(error);
-        console.log(error);
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          if (error.response) {
+            throw new Error(
+              error.response.data.message || "Something went wrong!"
+            );
+          }
+          throw new Error("Network Error or No Response from Server");
+        }
+        throw new Error("Create Project Failed");
+        // toast.error(error);
+        // console.log(error);
       }
     },
     onSuccess: () => {
       toast.success("Crawl Completed!");
       setStage(1);
     },
-    onError: (error: any) => {
-      console.error("Error during mutation:", error.response.data.message);
-      toast.error(error.response.data.message);
-      // throw new Error(error.response.data.message)
+    onError: (error) => {
+      console.log(error);
+      toast.error(error.message);
     },
   });
 
