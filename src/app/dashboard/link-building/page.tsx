@@ -15,7 +15,7 @@ import { trimDomain } from "@/app/utils/trimDomain";
 import toast from "react-hot-toast";
 import moment from "moment";
 import { handleDownloadAsImage } from "@/app/utils/downloadFileAsImage";
-
+import { AxiosError } from "axios";
 
 export default function LinkBuilding() {
   const [data, setData] = useState("");
@@ -37,15 +37,29 @@ export default function LinkBuilding() {
   const property = CurrentProperty();
 
   const { isSuccess, isPending, isError, mutate } = useMutation({
-    mutationFn: async () =>
-      await ApiCall.post(`user/crawler/back-link/${property.id}`, {
-        targets: { "1": trimDomain(property.domain) },
-      }),
+    mutationFn: async () => {
+      try {
+        await ApiCall.post(`user/crawler/back-link/${property.id}`, {
+          targets: { "1": trimDomain(property.domain) },
+        });
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          if (error.response) {
+            throw new Error(
+              error.response.data.message || "Something went wrong!"
+            );
+          }
+          throw new Error("Network Error or No Response from Server");
+        }
+        throw new Error("Link Building Crawling Failed");
+      }
+    },
+
     onSuccess: () => {
       toast.success("Successfully crawled", { position: "top-right" });
     },
-    onError: () => {
-      toast.error("Error crawling link building", { position: "top-right" });
+    onError: (error) => {
+      toast.error(error.message, { position: "top-right" });
     },
   });
 
