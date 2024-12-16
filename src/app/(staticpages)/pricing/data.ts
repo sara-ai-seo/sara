@@ -2,8 +2,8 @@ export const pricingdata = [
     {
         icon: '/pricing/basic.svg',
         title:'Basic plan',
-        price: '$79/mth',
-        amount: 79,
+        price: '$99/mth',
+        amount: 99,
         pricingId:2,
         points: [
             'Unlimited projects',
@@ -25,8 +25,8 @@ export const pricingdata = [
     {
         icon: '/pricing/pro.svg',
         title:'Pro plan',
-        price: '$149/mth',
-        amount:149,
+        price: '$189/mth',
+        amount:189,
         pricingId:3,
         points: [
             'Unlimited projects',
@@ -48,8 +48,8 @@ export const pricingdata = [
     {
         icon: '/pricing/enterprise.svg',
         title:'Enterprise plan',
-        price: '$229/mth',
-        amount:229,
+        price: '$280/mth',
+        amount:280,
         pricingId:4,
         points: [
             'Unlimited projects',
@@ -74,10 +74,10 @@ export const annualPricingData = [
     {
         icon: '/pricing/basic.svg',
         title:'Basic plan',
-        price: '$790/yr',
-        amount:790,
+        price: '$990/yr',
+        amount:990,
         pricingId:5,
-        save: '$158',
+        save: '$198',
         points: [
             'Unlimited projects',
             '600 credit units per month',
@@ -97,10 +97,10 @@ export const annualPricingData = [
     {
         icon: '/pricing/pro.svg',
         title:'Pro plan',
-        price: '$1490/yr',
-        amount:1490,
+        price: '$1890/yr',
+        amount:1890,
         pricingId:6,
-        save: '$298',
+        save: '$378',
         points: [
             'Unlimited projects',
             '12,000 credit units per month',
@@ -120,10 +120,10 @@ export const annualPricingData = [
     {
         icon: '/pricing/enterprise.svg',
         title:'Enterprise plan',
-        price: '$2290/yr',
-        amount:2290,
+        price: '$2800/yr',
+        amount:2800,
         pricingId:7,
-        save: '$598',
+        save: '$560',
         points: [
             'Unlimited projects',
             '30,000 credit units per month',
