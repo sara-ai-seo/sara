@@ -42,7 +42,7 @@ export default function PricingComponent() {
     });
     setPaying({ ...paying, status: true });
   };
-  console.log(currentPlan)
+  console.log("@",currentPlan)
   return (
     <>
 
