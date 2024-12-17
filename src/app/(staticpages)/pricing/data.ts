@@ -27,7 +27,7 @@ export const pricingdata = [
         title:'Pro plan',
         price: '$189/mth',
         amount:189,
-        pricingId:3,
+        pricingId:4,
         points: [
             'Unlimited projects',
             '1,000 credit units per month',
@@ -50,7 +50,7 @@ export const pricingdata = [
         title:'Enterprise plan',
         price: '$280/mth',
         amount:280,
-        pricingId:4,
+        pricingId:6,
         points: [
             'Unlimited projects',
             '2,500 credit units per month',
@@ -76,7 +76,7 @@ export const annualPricingData = [
         title:'Basic plan',
         price: '$990/yr',
         amount:990,
-        pricingId:5,
+        pricingId:3,
         save: '$198',
         points: [
             'Unlimited projects',
@@ -99,7 +99,7 @@ export const annualPricingData = [
         title:'Pro plan',
         price: '$1890/yr',
         amount:1890,
-        pricingId:6,
+        pricingId:5,
         save: '$378',
         points: [
             'Unlimited projects',
