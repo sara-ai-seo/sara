@@ -50,6 +50,7 @@ export default function KeywordAnalysis({ addNew }: { addNew: () => void }) {
 
   const currentProperty = CurrentProperty();
 
+  
 
   const { keywordAnalysisData, isPending, isSuccess, isError } =
     useKeywordAnalysisData(currentProperty.id);
@@ -59,7 +60,7 @@ export default function KeywordAnalysis({ addNew }: { addNew: () => void }) {
     setKeywordData(oneKeyword)
   }, [keywordAnalysisData])
 
-
+// console.log("#", keywordData)
 
   const colors = [
     "#FF6F61",
@@ -76,7 +77,9 @@ export default function KeywordAnalysis({ addNew }: { addNew: () => void }) {
 
   const curr: GoogleSearchVolume = (currentData ?? [])?.find((item: any) => item.tab === "googleSearchVolume")?.data
   const currGlobal: GlobalSearchVolume[] = (currentData ?? [])?.find((item: any) => item.tab === "globalSearchVolume")?.data
-
+  const keywordIdeas: any = (currentData ?? [])?.find((item: any) => item.tab === "keywordIdeas")?.data as KeywordIdea
+  // console.log("@",  (currentData ?? [])?.find((item: any) => item.tab === "googleSearchVolume"))
+  console.log("@", keywordIdeas )
 
   function Detail() {
     return (
@@ -100,7 +103,9 @@ export default function KeywordAnalysis({ addNew }: { addNew: () => void }) {
             <span className="flex items-center gap-3 text-base">
               <p className={` font-medium text-[#101828] `}>Last updated: </p>
               <p className="font-normal"> 
-                {moment((currentData ?? [])?.find((item: any) => item.tab === "googleSearchVolume").updatedAt).fromNow()} </p>
+                {moment((currentData ?? [])?.find((item: any) => item?.tab === "googleSearchVolume").updatedAt).fromNow() ?? ""}
+
+                </p>
             </span>
           </div>
         </div>
@@ -198,52 +203,42 @@ export default function KeywordAnalysis({ addNew }: { addNew: () => void }) {
                 </h2>
                 <p className="rounded-2xl bg-[#F2F4F7] text-[#344054] px-3 p-2 text-xs font-medium">
                   {" "}
-                  2,343 keywords{" "}
+                  {keywordIdeas?.length}
                 </p>
               </div>
               <div className="rounded-md border shadow-sm">
-                <table className="w-full">
-                  <thead className="bg-gray-100 w-full">
-                    <tr className="w-full justify-between">
-                      <th className="p-4 text-left rounded-tl-md "> Keyword</th>
-                      <th className="p-4 text-left rounded-tr-md h-14">
+                <Table className="w-full">
+                  <TableHeader className="bg-gray-100 w-full">
+                    <TableRow className="w-full justify-between">
+                      <TableHead className="p-4 text-left rounded-tl-md "> Keyword</TableHead>
+                      <TableHead className="p-4 text-left rounded-tr-md h-14">
                         {" "}
                         Volume
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="w-full">
-                    <tr className="w-full">
-                      <td className="p-4 w-full"> Branding</td>
-                      <td className="p-4 text-left "> 344</td>
-                    </tr>
-                    <tr className="w-full">
-                      <td className="p-4 w-full"> Brand basics</td>
-                      <td className="p-4 text-left "> 344</td>
-                    </tr>
-                    <tr className="w-full">
-                      <td className="p-4 w-full"> Business branding</td>
-                      <td className="p-4 text-left "> 344</td>
-                    </tr>
-                    <tr className="w-full">
-                      <td className="p-4 w-full"> Brand features</td>
-                      <td className="p-4 text-left "> 344</td>
-                    </tr>
-                    <tr className="w-full">
-                      <td className="p-4 w-full"> Top brands</td>
-                      <td className="p-4 text-left "> 344</td>
-                    </tr>
-                  </tbody>
-                </table>
+                      </TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody className="w-full">
+                    {
+                      keywordIdeas?.map((item: any, i: number) => {
+                        return (
+                          <TableRow key={i} className="w-full">
+                            <TableCell className="p-4 w-full"> {item.keyword}</TableCell>
+                            <TableCell className="p-4 text-left "> {item.volume}</TableCell>
+                          </TableRow>
+                        )
+                      })
+                    }
+                  </TableBody>
+                </Table>
               </div>
-              <div className="flex justify-end w-full">
+              {/* <div className="flex justify-end w-full">
                 <button className="p-2 px-3 bg-[#EFF8FF] text-primary rounded-md font-semibold">
                   View all
                 </button>
-              </div>
+              </div> */}
             </div>
 
-            <div className="flex flex-col gap-4">
+            {/* <div className="flex flex-col gap-4">
               <div className="flex items-center gap-4">
                 <h2 className="text-[#101828] font-semibold text-lg">
                   Questions
@@ -254,46 +249,46 @@ export default function KeywordAnalysis({ addNew }: { addNew: () => void }) {
                 </p>
               </div>
               <div className="rounded-md border shadow-sm">
-                <table className="w-full">
-                  <thead className="bg-gray-100 w-full">
-                    <tr className="w-full justify-between">
+                <Table className="w-full">
+                  <TableHeader className="bg-gray-100 w-full">
+                    <TableRow className="w-full justify-between">
                       <th className="p-4 text-left rounded-tl-md "> Keyword</th>
-                      <th className="p-4 text-left rounded-tr-md h-14">
+                      <TableHead className="p-4 text-left rounded-tr-md h-14">
                         {" "}
                         Volume
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="w-full">
-                    <tr className="w-full">
-                      <td className="p-4 w-full"> What is branding</td>
-                      <td className="p-4 text-left "> 344</td>
-                    </tr>
-                    <tr className="w-full">
-                      <td className="p-4 w-full">How to brand a business</td>
-                      <td className="p-4 text-left "> 664</td>
-                    </tr>
-                    <tr className="w-full">
-                      <td className="p-4 w-full"> Why do business branding</td>
-                      <td className="p-4 text-left "> 122</td>
-                    </tr>
-                    <tr className="w-full">
-                      <td className="p-4 w-full"> How to brand a business</td>
-                      <td className="p-4 text-left "> 422</td>
-                    </tr>
-                    <tr className="w-full">
-                      <td className="p-4 w-full"> How to brand a business</td>
-                      <td className="p-4 text-left "> 43</td>
-                    </tr>
-                  </tbody>
-                </table>
+                      </TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody className="w-full">
+                    <TableRow className="w-full">
+                      <TableCell className="p-4 w-full"> What is branding</TableCell>
+                      <TableCell className="p-4 text-left "> 344</TableCell>
+                    </TableRow>
+                    <TableRow className="w-full">
+                      <TableCell className="p-4 w-full">How to brand a business</TableCell>
+                      <TableCell className="p-4 text-left "> 664</TableCell>
+                    </TableRow>
+                    <TableRow className="w-full">
+                      <TableCell className="p-4 w-full"> Why do business branding</TableCell>
+                      <TableCell className="p-4 text-left "> 122</TableCell>
+                    </TableRow>
+                    <TableRow className="w-full">
+                      <TableCell className="p-4 w-full"> How to brand a business</TableCell>
+                      <TableCell className="p-4 text-left "> 422</TableCell>
+                    </TableRow>
+                    <TableRow className="w-full">
+                      <TableCell className="p-4 w-full"> How to brand a business</TableCell>
+                      <TableCell className="p-4 text-left "> 43</TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
               </div>
               <div className="flex justify-end w-full">
                 <button className="p-2 px-3 bg-[#EFF8FF] text-primary rounded-md font-semibold">
                   View all
                 </button>
               </div>
-            </div>
+            </div> */}
           </div>
         </section>
       </div>
@@ -342,40 +337,38 @@ export default function KeywordAnalysis({ addNew }: { addNew: () => void }) {
                   </div>
                 )}
 
-                {
+{
+  keywordData?.map((item: any, i: number) => {
+    const google = item.find((fig: CrawlingData) => fig.tab === "googleSearchVolume")?.data ?? {} as GoogleSearchVolume
+    const bing = item.find((fig: CrawlingData) => fig.tab === "bingSearchVolume")?.data ?? {} as BingSearchVolumeData
+    
+    // Skip rendering if no google data is available
+    if (!google?.keyword) return null;
 
-                  keywordData?.map((item: any, i: number) => {
-                    const google = item.find((fig: CrawlingData) => fig.tab === "googleSearchVolume")?.data as GoogleSearchVolume
-                    const bing = item.find((fig: CrawlingData) => fig.tab === "bingSearchVolume")?.data as BingSearchVolumeData
-                    // const globalSearchVolume = item.find((fig: CrawlingData) => fig.tab === "globalSearchVolume")?.data as GlobalSearchVolume
-                    // const keywordIdeas = item.find((fig: CrawlingData) => fig.tab === "keywordIdeas")?.data as KeywordIdea
-                    return (
-                      <TableRow key={i} className="w-full">
-                        <TableCell className="">
-                          <span className="flex items-center gap-2 ">
-
-                            {google.keyword}
-                            <AiOutlineExpandAlt
-                              onClick={() => {
-                                setDetail(true);
-                                setKeyword(google.keyword);
-                                // setCurrent()
-                                setCurrentData(item)
-
-                              }}
-                              className="bg-[#EFF8FF] p-0.5 text-[#1570EF] cursor-pointer rounded text-2xl"
-                            />
-                          </span>
-                        </TableCell>
-                        <TableCell className=""> {google.cpc} </TableCell>
-                        <TableCell className=""> {google.search_volume} </TableCell>
-                        <TableCell className=""> {google.competition} </TableCell>
-                        <TableCell className=""> {google.competition_index} </TableCell>
-                        <TableCell className=""> {google.location_code} </TableCell>
-                      </TableRow>
-                    )
-                  })
-                }
+    return (
+      <TableRow key={i} className="w-full">
+        <TableCell className="">
+          <span className="flex items-center gap-2 ">
+            {google.keyword}
+            <AiOutlineExpandAlt
+              onClick={() => {
+                setDetail(true);
+                setKeyword(google?.keyword);
+                setCurrentData(item)
+              }}
+              className="bg-[#EFF8FF] p-0.5 text-[#1570EF] cursor-pointer rounded text-2xl"
+            />
+          </span>
+        </TableCell>
+        <TableCell className=""> {google.cpc ?? '-'} </TableCell>
+        <TableCell className=""> {google.search_volume ?? '-'} </TableCell>
+        <TableCell className=""> {google.competition ?? '-'} </TableCell>
+        <TableCell className=""> {google.competition_index ?? '-'} </TableCell>
+        <TableCell className=""> {google.location_code ?? '-'} </TableCell>
+      </TableRow>
+    )
+  })
+}
               </TableBody>
             </Table>
 

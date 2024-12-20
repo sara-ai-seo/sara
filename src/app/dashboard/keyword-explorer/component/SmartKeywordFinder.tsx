@@ -21,6 +21,14 @@ import { KeywordServicesFetch } from "@/app/services/keyword_services/keyword-se
 import { useMutation } from "@tanstack/react-query";
 import PlainButton from "@/app/component/PlainButton";
 import { AiOutlineProduct } from "react-icons/ai";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 const tabsFilter = [
   { name: "All keywords" },
@@ -324,77 +332,77 @@ const seedKeyword = smartKeywordIdea?.project?.crawlings[0]?.crawlingData[0]?.da
           )} */}
         </div>
         <div className="overflow-x-auto w-full">
-          <table className="w-full table-fixed">
-            <thead className="bg-[#F9FAFB] w-full">
-              <tr className=" h-[44px] text-xs text-[#475467]  font-medium w-full overflow-x-auto">
+          <Table className="w-full table-fixed">
+            <TableHeader className="bg-[#F9FAFB] w-full">
+              <TableRow className=" h-[44px] text-xs text-[#475467]  font-medium w-full overflow-x-auto">
                 {/* <th className="w-10 text-left">
                   <MdOutlineIndeterminateCheckBox className="text-lg text-[#175CD3] rounded-md" />
                 </th> */}
-                <th className="text-left p-2 min-w-[400px]"> Keywords</th>
-                <th className="min-w-[200px]">
+                <TableHead className="text-left min-w-[300px]"> Keywords</TableHead>
+                <TableHead className="">
                   <span className="flex items-center gap-1 p-2">
                     Volume <MdArrowUpward />
                   </span>
-                </th>
-                <th className="w-[110px]">
+                </TableHead>
+                <TableHead className="">
                   {" "}
                   <span className="flex items-center gap-1 p-2">
                     {" "}
                     Backlinks <DetailButton title={""} />{" "}
                   </span>{" "}
-                </th>
-                <th className="w-[110px]">
+                </TableHead>
+                <TableHead className="">
                   {" "}
                   <span className="flex items-center gap-1 p-2">
                     {" "}
                     Competition <DetailButton title={""} />{" "}
                   </span>{" "}
-                </th>
-                <th className="">
+                </TableHead>
+                <TableHead className="">
                   <div className="flex items-center gap-1 p-2 ">
                     Competition level <DetailButton title={""} />
                   </div>{" "}
-                </th>
-                <th className="w-[110px]">
+                </TableHead>
+                <TableHead className="">
                   {" "}
                   <span className="flex items-center gap-1 p-2">
                     {" "}
                     CPC <DetailButton title={""} />{" "}
                   </span>{" "}
-                </th>
-                <th className="w-[110px]">
+                </TableHead>
+                <TableHead className="">
                   {" "}
                   <span className="flex items-center gap-1 p-2">
                     {" "}
                     Rank <DetailButton title={""} />{" "}
                   </span>{" "}
-                </th>
-                <th className="w-[170px]">
+                </TableHead>
+                <TableHead className="">
                   {" "}
                   <span className="flex items-center gap-1 p-2">
                     {" "}
                     SERP features <DetailButton title={""} />
                   </span>{" "}
-                </th>
-                <th className="w-[110px]">
+                </TableHead>
+                <TableHead className="">
                   {" "}
                   <span className="flex items-center gap-1 p-2">
                     {" "}
                     Update
                   </span>{" "}
-                </th>
-                <th className="w-14"> </th>
-              </tr>
-            </thead>
-            <tbody>
+                </TableHead>
+                <TableHead className=""> </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {isPending && (
-                <tr className="h-20 w-full ">
+                <TableRow className="h-20 w-full ">
                   <Loader />
-                </tr>
+                </TableRow>
               )}
 
               {isError && (
-                <tr className="h-20 w-full ">Something went wrong</tr>
+                <TableRow className="h-20 w-full ">Something went wrong</TableRow>
               )}
 
               {keywordData?.length === 0 && (
@@ -403,7 +411,7 @@ const seedKeyword = smartKeywordIdea?.project?.crawlings[0]?.crawlingData[0]?.da
               {smartKeywordDetail?.map((data: any, i: number) => {
                 // console.log("DD", data)
                 return (
-                  <tr className={`border-b ${i === smartKeywordDetail.length - 1 ? 'border-b-0' : ''}`}>
+                  <TableRow className={`border-b ${i === smartKeywordDetail.length - 1 ? 'border-b-0' : ''}`}>
                     {/* <td>
                       <input
                         type="checkbox"
@@ -412,15 +420,15 @@ const seedKeyword = smartKeywordIdea?.project?.crawlings[0]?.crawlingData[0]?.da
                         onChange={(e) => handleOnchangeKeyword(e, i)}
                       />
                     </td> */}
-                    <td className=" p-2">{data.keyword} </td>
+                    <TableCell className=" p-2">{data.keyword} </TableCell>
 
-                    <td className="rounded-full">
+                    <TableCell className="rounded-full">
                       <span className={``}>{data?.keyword_info?.search_volume ?? 0} </span>
-                    </td>
-                    <td className="rounded-full">
+                    </TableCell>
+                    <TableCell className="rounded-full">
                       <span className={``}>{data?.avg_backlinks_info?.backlinks ?? 0} </span>
-                    </td>
-                    <td className="  p-2  rounded-full">
+                    </TableCell>
+                    <TableCell className="  p-2  rounded-full">
                       <span
                         className={`p-1 w-2/3 rounded-3xl text-center flex items-center justify-center ${
                           data.keyword_info?.competition > 0.6
@@ -431,17 +439,17 @@ const seedKeyword = smartKeywordIdea?.project?.crawlings[0]?.crawlingData[0]?.da
                         <GoDotFill />
                         {data?.keyword_info?.competition ?? 0}
                       </span>
-                    </td>
-                    <td className="rounded-full p-2">
+                    </TableCell>
+                    <TableCell className="rounded-full p-2">
                       <span className={``}>{data?.keyword_info?.competition_level ?? ""}</span>
-                    </td>
-                    <td className="rounded-full p-2">
+                    </TableCell>
+                    <TableCell className="rounded-full p-2">
                       <span className={``}>{data?.keyword_info?.cpc ?? 0}</span>
-                    </td>
-                    <td className="rounded-full p-2">
+                    </TableCell>
+                    <TableCell className="rounded-full p-2">
                       <span className={``}>{data?.avg_backlinks_info?.rank ?? 0}</span>
-                    </td>
-                    <td className="rounded-full p-2">
+                    </TableCell>
+                    <TableCell className="rounded-full p-2">
                       <span className={`flex items-center gap-2 text-sm`}>
                         {data.serp_info.serp_item_types.includes("link") && <FaLink />}
                         {data.serp_info.serp_item_types.includes("image") && <CiImageOn />}
@@ -452,13 +460,13 @@ const seedKeyword = smartKeywordIdea?.project?.crawlings[0]?.crawlingData[0]?.da
                         {data.serp_info.serp_item_types.includes("popular_products") && <AiOutlineProduct />}
                       </span>
 
-                    </td>
-                    <td className="rounded-full p-2 ">
+                    </TableCell>
+                    <TableCell className="rounded-full p-2 ">
                       <span className={``}>
                         {moment(data?.search_intent_info?.last_updated_time).fromNow()}
                        
                       </span>
-                    </td>
+                    </TableCell>
                     {/* <td className=" ">
                       <span
                         onClick={() => ""}
@@ -467,11 +475,11 @@ const seedKeyword = smartKeywordIdea?.project?.crawlings[0]?.crawlingData[0]?.da
                         <FiRefreshCw />
                       </span>
                     </td> */}
-                  </tr>
+                  </TableRow>
                 );
               })}
-            </tbody>
-          </table>
+            </TableBody>
+          </Table>
         </div>
       </section>
     </main>
