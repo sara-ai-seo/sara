@@ -3,8 +3,9 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import { handleUnauthorized } from "./handleUnauthorized";
 
+const base_url = process.env.NEXT_PUBLIC_BASE_URL;
 const ApiCall = axios.create({
-  baseURL: "https://staging-api.webmaxi.net/api",
+  baseURL: base_url,
   // baseURL: process.env.NEXT_BASE_URL,
   // timeout: 10000
 });

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // const apiBaseUrl = 'https://api.webmaxi.net/api/auth';
-const apiBaseUrl = "https://staging-api.webmaxi.net/api/";
+const apiBaseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
 const ApiCalls = axios.create({
   baseURL: apiBaseUrl,
