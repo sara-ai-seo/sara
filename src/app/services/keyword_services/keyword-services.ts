@@ -10,7 +10,7 @@ export class KeywordServicesFetch {
       return response.data;
     } catch (error: any) {
       console.error("Error:", error.response.data.message);
-      throw new Error(`Failed to crawl, ${error.response.data.message}`);
+      throw new Error(`Failed to crawl, ${error?.response?.data?.message ?? ""}`);
     }
   }
 
@@ -19,7 +19,7 @@ export class KeywordServicesFetch {
       const response = await ApiCall.get(`/user/crawler/keyword/${id}`)
       return response.data;
     } catch (error:any) {
-      console.error("Error:", error.response.data.message);
+      console.error("Error:", error?.response?.data?.message);
       throw new Error(`Failed to fetch keyword analysis data, ${error.response.data.message}`);
     }
   }
@@ -32,7 +32,7 @@ export class KeywordServicesFetch {
       return result.map((res) => res.data);
     } catch (error: any) {
       console.error("Error:", error);
-      throw new Error(`Failed to fetch Smart Keyword Finder data, ${error.response.data.message}`);
+      throw new Error(`Failed to fetch Smart Keyword Finder data, ${error?.response?.data?.message ?? ""}`);
     }
   }
   async keywordIdeas(id: number){
@@ -41,7 +41,7 @@ export class KeywordServicesFetch {
     return response.data
   }
   catch(error: any){
-    throw new Error(`Error fetching keyword suggestions: ${error.response.data.message}`)
+    throw new Error(`Error fetching keyword suggestions: ${error?.response?.data?.message} ?? ""`)
   }
   }
 }
