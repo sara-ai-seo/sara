@@ -75,11 +75,12 @@ export default function KeywordAnalysis({ addNew }: { addNew: () => void }) {
     "#6B5B95",
   ];
 
-  const curr: GoogleSearchVolume = (currentData ?? [])?.find((item: any) => item.tab === "googleSearchVolume")?.data
+  const googleSearchVolume: GoogleSearchVolume[] = (currentData ?? [])?.find((item: any) => item.tab === "googleSearchVolume")?.data
   const currGlobal: GlobalSearchVolume[] = (currentData ?? [])?.find((item: any) => item.tab === "globalSearchVolume")?.data
   const keywordIdeas: any = (currentData ?? [])?.find((item: any) => item.tab === "keywordIdeas")?.data as KeywordIdea
   // console.log("@",  (currentData ?? [])?.find((item: any) => item.tab === "googleSearchVolume"))
-  console.log("@", keywordIdeas )
+  // console.log("@", googleSearchVolume && (googleSearchVolume[0]?.competition_index))
+  // console.log("#", keywordIdeas)
 
   function Detail() {
     return (
@@ -103,7 +104,8 @@ export default function KeywordAnalysis({ addNew }: { addNew: () => void }) {
             <span className="flex items-center gap-3 text-base">
               <p className={` font-medium text-[#101828] `}>Last updated: </p>
               <p className="font-normal"> 
-                {moment((currentData ?? [])?.find((item: any) => item?.tab === "googleSearchVolume").updatedAt).fromNow() ?? ""}
+                {/* {moment((currentData ?? [])?.find((item: any) => item?.tab === "googleSearchVolume").updatedAt).fromNow() ?? ""} */}
+                {moment(currentData[0]?.updatedAt).fromNow() ?? ""}
 
                 </p>
             </span>
@@ -117,7 +119,8 @@ export default function KeywordAnalysis({ addNew }: { addNew: () => void }) {
             />
 
             <div className="grid md:grid-cols-1 min-[475px]:grid-cols-2 grid-cols-1 min-[475px]: gap-10">
-              <ProgressiveCircleReusable value={(currentData ?? [])?.find((item: any) => item.tab === "googleSearchVolume")?.data?.competition_index ?? 0} title={currentData?.competition ?? ""} />
+              {/* <ProgressiveCircleReusable value={(currentData ?? [])?.find((item: any) => item.tab === "googleSearchVolume")?.data?.competition_index ?? 0} title={currentData?.competition ?? ""} /> */}
+              <ProgressiveCircleReusable value={googleSearchVolume[0]?.competition_index ?? 0} title={currentData?.competition ?? ""} />
             </div>
           </div>
           <div className="rounded-md md:grid-cols-1 min-[500px]:grid-cols-2 grid-cols-1 col-span-2 grid gap-6">
@@ -129,18 +132,18 @@ export default function KeywordAnalysis({ addNew }: { addNew: () => void }) {
                 <CardDescription> </CardDescription>
               </CardHeader>
               <CardContent className={`flex gap-3 items-center ${
-                curr.high_top_of_page_bid < 2 ? "text-red-500" 
-                : curr.high_top_of_page_bid < 5 && curr.high_top_of_page_bid > 2 ? "text-yellow-500"
+                googleSearchVolume[0]?.high_top_of_page_bid < 2 ? "text-red-500" 
+                : googleSearchVolume[0]?.high_top_of_page_bid < 5 && googleSearchVolume[0]?.high_top_of_page_bid > 2 ? "text-yellow-500"
                 : "text-green-500"
               }`}>
                 <h2 className={`text-2xl ${
-                  curr.high_top_of_page_bid < 2 ? "text-red-500" 
-                  : curr.high_top_of_page_bid < 5 && curr.high_top_of_page_bid > 2 ? "text-yellow-500"
+                  googleSearchVolume[0]?.high_top_of_page_bid < 2 ? "text-red-500" 
+                  : googleSearchVolume[0]?.high_top_of_page_bid < 5 && googleSearchVolume[0]?.high_top_of_page_bid > 2 ? "text-yellow-500"
                   : "text-green-500"
                 }}`
                 }
                   > 
-                  {curr.high_top_of_page_bid} </h2>
+                  {googleSearchVolume[0]?.high_top_of_page_bid} </h2>
               </CardContent>
               <CardFooter>
               </CardFooter>
@@ -154,13 +157,13 @@ export default function KeywordAnalysis({ addNew }: { addNew: () => void }) {
                 <CardDescription> </CardDescription>
               </CardHeader>
               <CardContent className={`flex gap-3 items-center ${
-                curr.cpc < 2 ? "text-green-500" 
-                : curr.cpc < 5 && curr.cpc > 2 ? "text-yellow-500"
+                googleSearchVolume[0]?.cpc < 2 ? "text-green-500" 
+                : googleSearchVolume[0]?.cpc < 5 && googleSearchVolume[0]?.cpc > 2 ? "text-yellow-500"
                 : "text-red-500"
               } `}>
                 <h2 className={`text-2xl text-green-500}`}
                   > 
-                  {curr.cpc} </h2>
+                  {googleSearchVolume[0]?.cpc} </h2>
               </CardContent>
               <CardFooter>
               </CardFooter>
@@ -175,14 +178,14 @@ export default function KeywordAnalysis({ addNew }: { addNew: () => void }) {
               className={`flex lg:flex-row md:flex-col min-[500px]:flex-row flex-col w-full gap-3`}
             >
               <div className="xl:w-full  lg:w-2/3 w-full">
-                <CustomDoughnutChart labels={currGlobal.map((item:GlobalSearchVolume) => item.country_iso_code )} label={"Countries"} data={currGlobal.map((item:GlobalSearchVolume) => item.search_volume )} backgroundColor={colors} borderColor={colors} borderWidth={0} />
+                <CustomDoughnutChart labels={currGlobal?.map((item:GlobalSearchVolume, i) => item.country_iso_code ) ?? []} label={"Countries"} data={currGlobal?.map((item:GlobalSearchVolume) => item.search_volume ) ?? []} backgroundColor={colors} borderColor={colors} borderWidth={0} />
               </div>
 
               <div className="flex justify-center flex-col w-full">
                 {
-                  currGlobal.map((country: GlobalSearchVolume, i:number) => {
+                  currGlobal?.map((country: GlobalSearchVolume, i:number) => {
                     return (
-                      <p className="flex gap-2 items-center">
+                      <p className="flex gap-2 items-center" key={i}>
                   <GoDotFill className={``} style={{color: colors[i]}} /> {country.country_iso_code}
                 </p>
                     )
@@ -223,7 +226,7 @@ export default function KeywordAnalysis({ addNew }: { addNew: () => void }) {
                         return (
                           <TableRow key={i} className="w-full">
                             <TableCell className="p-4 w-full"> {item.keyword}</TableCell>
-                            <TableCell className="p-4 text-left "> {item.volume}</TableCell>
+                            <TableCell className="p-4 text-left "> {item?.search_volume}</TableCell>
                           </TableRow>
                         )
                       })
@@ -342,29 +345,30 @@ export default function KeywordAnalysis({ addNew }: { addNew: () => void }) {
     const google = item.find((fig: CrawlingData) => fig.tab === "googleSearchVolume")?.data ?? {} as GoogleSearchVolume
     const bing = item.find((fig: CrawlingData) => fig.tab === "bingSearchVolume")?.data ?? {} as BingSearchVolumeData
     
+    // console.log("@",item)
     // Skip rendering if no google data is available
-    if (!google?.keyword) return null;
+    if (!google[0]?.keyword) return null;
 
     return (
       <TableRow key={i} className="w-full">
         <TableCell className="">
           <span className="flex items-center gap-2 ">
-            {google.keyword}
+            {google[0]?.keyword}
             <AiOutlineExpandAlt
               onClick={() => {
                 setDetail(true);
-                setKeyword(google?.keyword);
-                setCurrentData(item)
+                setKeyword(google[0]?.keyword);
+                setCurrentData(item);
               }}
               className="bg-[#EFF8FF] p-0.5 text-[#1570EF] cursor-pointer rounded text-2xl"
             />
           </span>
         </TableCell>
-        <TableCell className=""> {google.cpc ?? '-'} </TableCell>
-        <TableCell className=""> {google.search_volume ?? '-'} </TableCell>
-        <TableCell className=""> {google.competition ?? '-'} </TableCell>
-        <TableCell className=""> {google.competition_index ?? '-'} </TableCell>
-        <TableCell className=""> {google.location_code ?? '-'} </TableCell>
+        <TableCell className=""> {google[0]?.cpc ?? '-'} </TableCell>
+        <TableCell className=""> {google[0]?.search_volume ?? '-'} </TableCell>
+        <TableCell className=""> {google[0]?.competition ?? '-'} </TableCell>
+        <TableCell className=""> {google[0]?.competition_index ?? '-'} </TableCell>
+        <TableCell className=""> {google[0]?.location_code ?? '-'} </TableCell>
       </TableRow>
     )
   })

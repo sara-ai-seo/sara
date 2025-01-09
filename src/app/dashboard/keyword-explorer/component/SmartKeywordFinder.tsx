@@ -21,6 +21,8 @@ import { KeywordServicesFetch } from "@/app/services/keyword_services/keyword-se
 import { useMutation } from "@tanstack/react-query";
 import PlainButton from "@/app/component/PlainButton";
 import { AiOutlineProduct } from "react-icons/ai";
+import { IoMdArrowRoundBack } from "react-icons/io";
+
 import {
   Table,
   TableBody,
@@ -29,6 +31,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import Button from "../../components/ui/Button";
 
 const tabsFilter = [
   { name: "All keywords" },
@@ -76,9 +79,8 @@ export function SelectorDropdown({
                 <Menu.Item key={prop}>
                   {({ active }) => (
                     <button
-                      className={`${
-                        active ? "bg-primary text-white" : "text-gray-900"
-                      } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                      className={`${active ? "bg-primary text-white" : "text-gray-900"
+                        } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                       onClick={setSelected}
                     >
                       {prop}
@@ -94,16 +96,17 @@ export function SelectorDropdown({
   );
 }
 
-export default function SmartKeywordFinder({addNew} : {addNew: ()=> void}) {
+export default function SmartKeywordFinder({ addNew }: { addNew: () => void }) {
   const [keyword, setKeyword] = useState("");
   const [keywordData, setKeywordData] = useState<any[]>([]);
-  // console.log(keywordData);
   const [keywordLength, setKeywordLength] = useState<any[]>([]);
   const [keywordCategory, setKeywordCategory] = useState("All keywords");
   const [selected, setSelected] = useState("Volume");
   const [isCopy, setIsCopy] = useState(false);
   const [smartKeyword, setSmartKeyword] = useState<any | null>(null);
   const [smartKeywordDetail, setSmartKeywordDetail] = useState<[] | null>(null);
+  const [showDetail, setShowDetail] = useState(false);
+  const [currentKeywordDetail, setCurrentKeywordDetail] = useState<any | null>(null);
 
   const { id } = CurrentProperty();
   const KeywordService = new KeywordServicesFetch();
@@ -119,58 +122,26 @@ export default function SmartKeywordFinder({addNew} : {addNew: ()=> void}) {
   // })
 
   // summary table data
-const ret = smartKeywordIdea?.project?.crawlings?.map((item: any) => item.crawlingData[0])
-const retu = smartKeywordIdea?.project?.crawlings.flatMap((crawlingData: any)=> crawlingData )
-
-
-
-const dataItems = retu?.flatMap((item: { crawlingData: any[]; }) => item.crawlingData.flatMap(data => {
- if(data.tab === "tasks"){
-const id =  data.data.flatMap((res:any) => res.id)
-const detail = data.data.flatMap((res:any) => res.result[0].items)
-return data.data
- } else {
-  return []
- }
-
-}))
-
-const smart = smartKeywordIdea?.project?.crawlings[0]?.crawlingData[0]
-const smartDetail = smartKeywordIdea?.project?.crawlings[0]?.crawlingData[0]?.data[0]?.result[0]?.items?.map((item:any) => item)
-const seedKeyword = smartKeywordIdea?.project?.crawlings[0]?.crawlingData[0]?.data[0]?.data?.keywords[0]
+  const ret = smartKeywordIdea?.project?.crawlings?.map((item: any) => item.crawlingData)
+  const retu = smartKeywordIdea?.project?.crawlings.flatMap((crawlingData: any) => crawlingData?.data?.value)
 
 
 
 
-// console.log("ITEMS", smartKeywordDetail);
+  const smart = smartKeywordIdea?.project?.crawlings[0]?.crawlingData[0]
+  const smartDetail = smartKeywordIdea?.project?.crawlings[0]?.crawlingData[0]?.data[0]?.result[0]?.items?.map((item: any) => item)
 
-  // console.log("IDEA", returned);
 
   const data: any[] =
-  smartKeywordIdea?.[0]?.project?.crawlings?.[0]?.crawlingData?.[0]?.data
-  ?.tasks?.[0]?.result;
+    smartKeywordIdea?.[0]?.project?.crawlings?.[0]?.crawlingData?.[0]?.data
+      ?.tasks?.[0]?.result;
 
 
-  const totalVolume = (smartKeywordDetail ?? []).reduce((acc: number, current: any) => {
+  const totalVolume = (currentKeywordDetail ?? []).reduce((acc: number, current: any) => {
     return Number(acc + current.keyword_info.search_volume);
   }, 0);
 
-  const handleOnchangeKeyword = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    i: number
-  ) => {
-    setKeywordLength((prev) => {
-      const newArray: any = [...prev];
 
-      if (e.target.checked) {
-        newArray[i] = i;
-      } else {
-        newArray[i] = null;
-      }
-
-      return newArray;
-    });
-  };
   const validItemsCount = keywordLength.filter((item) => item !== null);
 
   const handleCopy = async () => {
@@ -194,43 +165,56 @@ const seedKeyword = smartKeywordIdea?.project?.crawlings[0]?.crawlingData[0]?.da
     }
   };
 
-  const handleOnchangeKeywordSearch = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const searchTerm = e.target.value.toLowerCase();
-    setKeyword(searchTerm);
-
-    if (searchTerm.length > 0) {
-      const filteredData = keywordData.filter((item: any) => {
-        const keyword = item.keyword.toLowerCase();
-        return keyword.includes(searchTerm);
-      });
-
-      setKeywordData(filteredData.length > 0 ? filteredData : data);
-    } else {
-      setKeywordData(data);
-    }
-  };
-
-  useEffect(() => {
-    setKeywordData(dataItems);
-    
-  }, [dataItems]);
   useEffect(() => {
     setSmartKeyword(smart);
     setSmartKeywordDetail(smartDetail);
 
-  }, [smart, smartKeyword, smartKeywordDetail]);
+  }, []);
+
+  function SeedKeywords() {
+    return (
+      <div className="flex flex-wrap gap-2">
+        {retu?.map((item: any, index: number) => (
+          <div
+            key={index}
+            className="flex items-center gap-2 p-2 rounded-lg shadow-sm border hover:bg-gray-100 cursor-pointer"
+            style={{ width: 'fit-content' }} 
+            onClick={() => {
+              setShowDetail(true);
+              setKeyword(item);
+              setCurrentKeywordDetail(ret[index][0]?.data[0]?.result[0]?.items.slice(0,50));
+              // currentKeyword[0]?.data[0]?.result[0]?.items.slice(0,50)
+            }}
+          >
+            <span>{item}</span>
+          </div>
+        ))}
+      </div>
+    )
+  }
 
   return (
     <main className="py-10 grid gap-8 w-fit">
       <section className="flex min-[500px]:flex-row flex-col min-[500px]:items-center gap-2 justify-between w-full">
+        <div className="flex items-center gap-2 flex-wrap">
+        {
+            showDetail && <Button variant="text" onClick={()=> setShowDetail(false)} className="flex items-center gap-2">
+              <IoMdArrowRoundBack />
+              <span className="text-sm">Back</span>
+            </Button>
+          }
+
         <h1 className=" text-2xl text-black font-semibold">
-          Keyword: <span className=" font-normal">{seedKeyword} </span>
+           {
+            showDetail ?  <span> Keyword: <span className=" font-normal"> {keyword} </span> </span> 
+            :
+            <span className=" font-normal"> Searched Keywords </span>
+           }
         </h1>
+          </div>
         <span>
-              <PlainButton title={"Add keyword"} icon={<FaPlus />} handleClick={addNew} />
-          </span>
+          <PlainButton title={"Add keyword"} icon={<FaPlus />} handleClick={addNew} />
+        </span>
         {/* <div className="flex relative rounded-md sm:w-[320px] ">
           <input
             type="search"
@@ -242,246 +226,67 @@ const seedKeyword = smartKeywordIdea?.project?.crawlings[0]?.crawlingData[0]?.da
           
         </div> */}
       </section>
-      {/* <section className="flex xl:flex-row flex-col xl:items-center gap-3 xl:justify-between w-full">
-        <div className="flex items-center gap-2 flex-wrap">
-          {tabsFilter.map((item, index) => (
-            <button
-              key={index}
-              title={item.name}
-              className={`flex items-center border shadow rounded-md p-4 py-2 gap-2 hover:bg-[#EFF8FF] ${
-                keywordCategory === item.name
-                  ? "bg-[#EFF8FF] border-none "
-                  : "bg-[#FFF]"
-              }`}
-              onClick={() => setKeywordCategory(item.name)}
-            >
-              {item.name}
-            </button>
-          ))}
-        </div>
-        <div className="flex min-[375px]:flex-row flex-col min-[375px]:items-center gap-4">
-          <SelectorDropdown
-            items={["Volume", "Quantity", "Awareness"]}
-            selected={selected}
-            setSelected={() => setSelected}
-          />
-          <SelectorDropdown
-            items={["KD", "Quantity", "Awareness"]}
-            selected={"KD"}
-            setSelected={() => setSelected}
-          />
-          <SelectorDropdown
-            items={["KD", "Quantity", "Awareness"]}
-            selected={"SERP features"}
-            setSelected={() => setSelected}
-          />
-        </div>
-      </section> */}
-      <section className="overflow-x-auto rounded-md w-full border shadow-sm p-6 ">
+    
+      {showDetail ? <section className="overflow-x-auto rounded-md w-full border shadow-sm p-6 ">
         <div className="flex items-center gap-3 mb-3">
-          <>
-            {/* {validItemsCount.length > 0 ? (
+          
+            
+            <>
               <p className="text-[#101828] font-medium min-[375px]:text-lg text-sm">
-                {validItemsCount.length} selected keywords
+                {currentKeywordDetail?.length ?? 0} keywords
               </p>
-            ) : (
-              <>
-                <p className="text-[#101828] font-medium min-[375px]:text-lg text-sm">
-                  {dataItems?.length ?? 0} keywords
-                </p>
-                <p className="text-[#344054] font-medium text-xs px-3 p-2 rounded-2xl bg-[#F2F4F7] ">
-                  {abbreviateNumber(totalVolume)} total volume{" "}
-                </p>
-              </>
-            )} */}
-             <>
-                <p className="text-[#101828] font-medium min-[375px]:text-lg text-sm">
-                  {keywordData?.length ?? 0} keywords
-                </p>
-                <p className="text-[#344054] font-medium text-xs px-3 p-2 rounded-2xl bg-[#F2F4F7] ">
-                  {abbreviateNumber(totalVolume)} total volume{" "}
-                </p>
-              </>
-          </>
+              <p className="text-[#344054] font-medium text-xs px-3 p-2 rounded-2xl bg-[#F2F4F7] ">
+                {abbreviateNumber(totalVolume)} total volume{" "}
+              </p>
+            </>
+          
 
-          {/* {validItemsCount.length > 0 && (
-            <div className="flex items-center gap-3 ml-auto">
-              <button
-                type="button"
-                className="text-[#175CD3] text-sm"
-                onClick={() => setKeywordLength([])}
-              >
-                unselect all
-              </button>
-              <button
-                onClick={handleCopy}
-                type="button"
-                className="bg-[#EFF8FF] text-sm gap-1 rounded-md inline-flex items-center py-1 px-2"
-              >
-                <LuCopy />
-                {isCopy ? "Copied" : "Copy"}
-              </button>
-              <button
-                type="button"
-                className="text-sm gap-1 rounded-md inline-flex items-center py-1 px-2 border"
-              >
-                <GrUpdate />
-                Update
-              </button>
-            </div>
-          )} */}
+        
         </div>
         <div className="overflow-x-auto w-full">
-          <Table className="w-full table-fixed">
-            <TableHeader className="bg-[#F9FAFB] w-full">
-              <TableRow className=" h-[44px] text-xs text-[#475467]  font-medium w-full overflow-x-auto">
-                {/* <th className="w-10 text-left">
-                  <MdOutlineIndeterminateCheckBox className="text-lg text-[#175CD3] rounded-md" />
-                </th> */}
-                <TableHead className="text-left min-w-[300px]"> Keywords</TableHead>
-                <TableHead className="">
-                  <span className="flex items-center gap-1 p-2">
-                    Volume <MdArrowUpward />
-                  </span>
-                </TableHead>
-                <TableHead className="">
-                  {" "}
-                  <span className="flex items-center gap-1 p-2">
-                    {" "}
-                    Backlinks <DetailButton title={""} />{" "}
-                  </span>{" "}
-                </TableHead>
-                <TableHead className="">
-                  {" "}
-                  <span className="flex items-center gap-1 p-2">
-                    {" "}
-                    Competition <DetailButton title={""} />{" "}
-                  </span>{" "}
-                </TableHead>
-                <TableHead className="">
-                  <div className="flex items-center gap-1 p-2 ">
-                    Competition level <DetailButton title={""} />
-                  </div>{" "}
-                </TableHead>
-                <TableHead className="">
-                  {" "}
-                  <span className="flex items-center gap-1 p-2">
-                    {" "}
-                    CPC <DetailButton title={""} />{" "}
-                  </span>{" "}
-                </TableHead>
-                <TableHead className="">
-                  {" "}
-                  <span className="flex items-center gap-1 p-2">
-                    {" "}
-                    Rank <DetailButton title={""} />{" "}
-                  </span>{" "}
-                </TableHead>
-                <TableHead className="">
-                  {" "}
-                  <span className="flex items-center gap-1 p-2">
-                    {" "}
-                    SERP features <DetailButton title={""} />
-                  </span>{" "}
-                </TableHead>
-                <TableHead className="">
-                  {" "}
-                  <span className="flex items-center gap-1 p-2">
-                    {" "}
-                    Update
-                  </span>{" "}
-                </TableHead>
-                <TableHead className=""> </TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {isPending && (
-                <TableRow className="h-20 w-full ">
-                  <Loader />
-                </TableRow>
-              )}
-
-              {isError && (
-                <TableRow className="h-20 w-full ">Something went wrong</TableRow>
-              )}
-
-              {keywordData?.length === 0 && (
-                <div className="h-20 w-full text-nowrap">No data</div>
-              )}
-              {smartKeywordDetail?.map((data: any, i: number) => {
-                // console.log("DD", data)
-                return (
-                  <TableRow className={`border-b ${i === smartKeywordDetail.length - 1 ? 'border-b-0' : ''}`}>
-                    {/* <td>
-                      <input
-                        type="checkbox"
-                        checked={keywordLength.includes(i)}
-                        className=""
-                        onChange={(e) => handleOnchangeKeyword(e, i)}
-                      />
-                    </td> */}
-                    <TableCell className=" p-2">{data.keyword} </TableCell>
-
-                    <TableCell className="rounded-full">
-                      <span className={``}>{data?.keyword_info?.search_volume ?? 0} </span>
-                    </TableCell>
-                    <TableCell className="rounded-full">
-                      <span className={``}>{data?.avg_backlinks_info?.backlinks ?? 0} </span>
-                    </TableCell>
-                    <TableCell className="  p-2  rounded-full">
-                      <span
-                        className={`p-1 w-2/3 rounded-3xl text-center flex items-center justify-center ${
-                          data.keyword_info?.competition > 0.6
-                            ? "bg-[#F6FEF9] text-[#12B76A]"
-                            : "bg-[#FFFAEB] text-[#B54708] "
-                        }`}
-                      >
-                        <GoDotFill />
-                        {data?.keyword_info?.competition ?? 0}
-                      </span>
-                    </TableCell>
-                    <TableCell className="rounded-full p-2">
-                      <span className={``}>{data?.keyword_info?.competition_level ?? ""}</span>
-                    </TableCell>
-                    <TableCell className="rounded-full p-2">
-                      <span className={``}>{data?.keyword_info?.cpc ?? 0}</span>
-                    </TableCell>
-                    <TableCell className="rounded-full p-2">
-                      <span className={``}>{data?.avg_backlinks_info?.rank ?? 0}</span>
-                    </TableCell>
-                    <TableCell className="rounded-full p-2">
-                      <span className={`flex items-center gap-2 text-sm`}>
-                        {data.serp_info.serp_item_types.includes("link") && <FaLink />}
-                        {data.serp_info.serp_item_types.includes("image") && <CiImageOn />}
-                        {data.serp_info.serp_item_types.includes("shop") && <IoCartOutline />}
-                        {data.serp_info.serp_item_types.includes("video") && <FaVideo />}
-                        {data.serp_info.serp_item_types.includes("people_also_ask") && <FaQuestion />}
-                        {data.serp_info.serp_item_types.includes("related_searches") && <CiSearch />}
-                        {data.serp_info.serp_item_types.includes("popular_products") && <AiOutlineProduct />}
-                      </span>
-
-                    </TableCell>
-                    <TableCell className="rounded-full p-2 ">
-                      <span className={``}>
-                        {moment(data?.search_intent_info?.last_updated_time).fromNow()}
-                       
-                      </span>
-                    </TableCell>
-                    {/* <td className=" ">
-                      <span
-                        onClick={() => ""}
-                        className={`border flex p-3 items-center justify-center rounded-lg cursor-pointer text-primary `}
-                      >
-                        <FiRefreshCw />
-                      </span>
-                    </td> */}
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </div>
-      </section>
+       <Table className="w-full table-auto border-collapse"> 
+         <TableHeader className="bg-[#F9FAFB] w-full sticky top-0"> 
+           <TableRow className="h-[44px] text-xs text-[#475467] font-medium w-full">
+             {/* ... Table Headers ... */}
+             <TableHead className="text-left whitespace-nowrap min-w-[200px]">Keywords</TableHead> {/* whitespace-nowrap and min-w */}
+             <TableHead className="whitespace-nowrap">Volume</TableHead> {/* whitespace-nowrap */}
+             <TableHead className="whitespace-nowrap">Backlinks</TableHead>
+             <TableHead className="whitespace-nowrap">Competition</TableHead>
+             <TableHead className="whitespace-nowrap">Competition level</TableHead>
+             <TableHead className="whitespace-nowrap">CPC</TableHead>
+             <TableHead className="whitespace-nowrap">Rank</TableHead>
+             <TableHead className="whitespace-nowrap">Keyword Difficulty</TableHead>
+             <TableHead className="whitespace-nowrap">Update</TableHead>
+           </TableRow>
+         </TableHeader>
+         <TableBody>
+           {/* ... Table Rows ... */}
+           {currentKeywordDetail?.map((data: any, i: number) => (
+             <TableRow className={`border-b ${i === currentKeywordDetail?.length - 1 ? 'border-b-0' : ''}`} key={i}>
+               <TableCell className="p-2 whitespace-nowrap">{data.keyword}</TableCell> {/* whitespace-nowrap */}
+               <TableCell className="rounded-full whitespace-nowrap">{data?.keyword_info?.search_volume ?? 0}</TableCell>
+               <TableCell className="rounded-full whitespace-nowrap">{data?.avg_backlinks_info?.backlinks ?? 0}</TableCell>
+               <TableCell className="p-2 rounded-full whitespace-nowrap">
+                 <span className={`p-1 w-2/3 rounded-3xl text-center flex items-center justify-center 
+                 ${data.keyword_info?.competition_level === "HIGH" ? "bg-[#F6FEF9] text-[#12B76A]" :
+                  data?.keyword_info?.competition_level === "MEDIUM" ? "bg-[#FFFAEB] text-[#79efb8]" : "bg-[#FFFAEB] text-[#B54708]"}`}>
+                  {/* :"bg-[#FFFAEB] text-[#B54708]"}`}> */}
+                   <GoDotFill />
+                   {data?.keyword_info?.competition ?? 0}
+                 </span>
+               </TableCell>
+               <TableCell className="rounded-full whitespace-nowrap">{data?.keyword_info?.competition_level ?? ""}</TableCell>
+               <TableCell className="rounded-full whitespace-nowrap">{data?.keyword_info?.cpc ?? 0}</TableCell>
+               <TableCell className="rounded-full whitespace-nowrap">{data?.avg_backlinks_info?.rank ?? 0}</TableCell>
+               <TableCell className="rounded-full whitespace-nowrap">{data?.keyword_properties?.keyword_difficulty}</TableCell>
+               <TableCell className="rounded-full whitespace-nowrap">{moment(data?.search_intent_info?.last_updated_time).fromNow()}</TableCell>
+             </TableRow>
+           ))}
+         </TableBody>
+       </Table>
+     </div>
+      </section> 
+      : <SeedKeywords />}
     </main>
   );
 }

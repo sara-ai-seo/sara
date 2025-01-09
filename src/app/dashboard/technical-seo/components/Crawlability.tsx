@@ -133,8 +133,13 @@ export default function Crawlability() {
   const categories = Object.keys(indexibilitData1 || []);
   const categoriesNumber = Object.values(indexibilitData1 || []);
 
+  // const nonIndexablePages =
+  //   crawlbilityAndIndexibiltyResult[0]?.data.items.slice(0, 5);
   const nonIndexablePages =
-    crawlbilityAndIndexibiltyResult[0]?.data.items.slice(0, 5);
+    crawlbilityAndIndexibiltyResult[0]?.data.items;
+
+
+    console.log("@",nonIndexablePages);
 
   const nonIndexablePagesData = nonIndexablePages?.map(
     (page: any) => page.reason
