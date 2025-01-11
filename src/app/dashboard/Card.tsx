@@ -16,6 +16,23 @@ interface Props {
   isError?: boolean
 }
 
+
+function formatNumber(number: any) {
+  number = parseFloat(number);
+
+  if (number === 0) {
+      return 0;
+  }
+  const numStr = Math.abs(number).toString();
+
+  if (numStr.length < 2) {
+      return number;
+  }
+
+  const firstTwo = parseInt(numStr.slice(0, 2), 10);
+  return number < 0 ? -firstTwo : firstTwo;
+}
+
 export default function Card({
   title,
   style,
@@ -85,7 +102,7 @@ export default function Card({
                 style={{ display: "flex", alignItems: "center", gap: 2 }}
               >
                 <FaArrowUp className={arrowPosition} />{" "}
-                {typeof percent === "number" ? percent.toFixed(1) : percent}%
+                {typeof percent === "number" ? formatNumber(percent) : percent}%
               </span>
               <span className="text-gray-600 font-medium">vs last update</span>
             </p>

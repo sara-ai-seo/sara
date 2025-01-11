@@ -178,11 +178,11 @@ export default function SmartKeywordFinder({ addNew }: { addNew: () => void }) {
           <div
             key={index}
             className="flex items-center gap-2 p-2 rounded-lg shadow-sm border hover:bg-gray-100 cursor-pointer"
-            style={{ width: 'fit-content' }} 
+            style={{ width: 'fit-content' }}
             onClick={() => {
               setShowDetail(true);
               setKeyword(item);
-              setCurrentKeywordDetail(ret[index][0]?.data[0]?.result[0]?.items.slice(0,50));
+              setCurrentKeywordDetail(ret[index][0]?.data[0]?.result[0]?.items.slice(0, 50));
               // currentKeyword[0]?.data[0]?.result[0]?.items.slice(0,50)
             }}
           >
@@ -195,23 +195,23 @@ export default function SmartKeywordFinder({ addNew }: { addNew: () => void }) {
 
   return (
     <main className="py-10 grid gap-8 w-fit">
-      <section className="flex min-[500px]:flex-row flex-col min-[500px]:items-center gap-2 justify-between w-full">
-        <div className="flex items-center gap-2 flex-wrap">
-        {
-            showDetail && <Button variant="text" onClick={()=> setShowDetail(false)} className="flex items-center gap-2">
+      <section className="flex md:min-[700px]:flex-row lg:md:min-[1200px]:flex-row flex-col min-[500px]:items-center gap-2 justify-between w-full">
+        <div className="flex items-center gap-2 flex-wrap ">
+          {
+            showDetail && <Button variant="text" onClick={() => setShowDetail(false)} className="flex items-center gap-2">
               <IoMdArrowRoundBack />
               <span className="text-sm">Back</span>
             </Button>
           }
 
-        <h1 className=" text-2xl text-black font-semibold">
-           {
-            showDetail ?  <span> Keyword: <span className=" font-normal"> {keyword} </span> </span> 
-            :
-            <span className=" font-normal"> Searched Keywords </span>
-           }
-        </h1>
-          </div>
+          <h1 className=" text-2xl text-black font-semibold">
+            {
+              showDetail ? <span> Keyword: <span className=" font-normal"> {keyword} </span> </span>
+                :
+                <span className=" font-normal"> Searched Keywords </span>
+            }
+          </h1>
+        </div>
         <span>
           <PlainButton title={"Add keyword"} icon={<FaPlus />} handleClick={addNew} />
         </span>
@@ -226,67 +226,67 @@ export default function SmartKeywordFinder({ addNew }: { addNew: () => void }) {
           
         </div> */}
       </section>
-    
+
       {showDetail ? <section className="overflow-x-auto rounded-md w-full border shadow-sm p-6 ">
         <div className="flex items-center gap-3 mb-3">
-          
-            
-            <>
-              <p className="text-[#101828] font-medium min-[375px]:text-lg text-sm">
-                {currentKeywordDetail?.length ?? 0} keywords
-              </p>
-              <p className="text-[#344054] font-medium text-xs px-3 p-2 rounded-2xl bg-[#F2F4F7] ">
-                {abbreviateNumber(totalVolume)} total volume{" "}
-              </p>
-            </>
-          
 
-        
+
+          <>
+            <p className="text-[#101828] font-medium min-[375px]:text-lg text-sm">
+              {currentKeywordDetail?.length ?? 0} keywords
+            </p>
+            <p className="text-[#344054] font-medium text-xs px-3 p-2 rounded-2xl bg-[#F2F4F7] ">
+              {abbreviateNumber(totalVolume)} total volume{" "}
+            </p>
+          </>
+
+
+
         </div>
         <div className="overflow-x-auto w-full">
-       <Table className="w-full table-auto border-collapse"> 
-         <TableHeader className="bg-[#F9FAFB] w-full sticky top-0"> 
-           <TableRow className="h-[44px] text-xs text-[#475467] font-medium w-full">
-             {/* ... Table Headers ... */}
-             <TableHead className="text-left whitespace-nowrap min-w-[200px]">Keywords</TableHead> {/* whitespace-nowrap and min-w */}
-             <TableHead className="whitespace-nowrap">Volume</TableHead> {/* whitespace-nowrap */}
-             <TableHead className="whitespace-nowrap">Backlinks</TableHead>
-             <TableHead className="whitespace-nowrap">Competition</TableHead>
-             <TableHead className="whitespace-nowrap">Competition level</TableHead>
-             <TableHead className="whitespace-nowrap">CPC</TableHead>
-             <TableHead className="whitespace-nowrap">Rank</TableHead>
-             <TableHead className="whitespace-nowrap">Keyword Difficulty</TableHead>
-             <TableHead className="whitespace-nowrap">Update</TableHead>
-           </TableRow>
-         </TableHeader>
-         <TableBody>
-           {/* ... Table Rows ... */}
-           {currentKeywordDetail?.map((data: any, i: number) => (
-             <TableRow className={`border-b ${i === currentKeywordDetail?.length - 1 ? 'border-b-0' : ''}`} key={i}>
-               <TableCell className="p-2 whitespace-nowrap">{data.keyword}</TableCell> {/* whitespace-nowrap */}
-               <TableCell className="rounded-full whitespace-nowrap">{data?.keyword_info?.search_volume ?? 0}</TableCell>
-               <TableCell className="rounded-full whitespace-nowrap">{data?.avg_backlinks_info?.backlinks ?? 0}</TableCell>
-               <TableCell className="p-2 rounded-full whitespace-nowrap">
-                 <span className={`p-1 w-2/3 rounded-3xl text-center flex items-center justify-center 
+          <Table className="w-full table-auto border-collapse">
+            <TableHeader className="bg-[#F9FAFB] w-full sticky top-0">
+              <TableRow className="h-[44px] text-xs text-[#475467] font-medium w-full">
+                {/* ... Table Headers ... */}
+                <TableHead className="text-left whitespace-nowrap min-w-[200px]">Keywords</TableHead> {/* whitespace-nowrap and min-w */}
+                <TableHead className="whitespace-nowrap">Volume</TableHead> {/* whitespace-nowrap */}
+                <TableHead className="whitespace-nowrap">Backlinks</TableHead>
+                <TableHead className="whitespace-nowrap">Competition</TableHead>
+                <TableHead className="whitespace-nowrap">Competition level</TableHead>
+                <TableHead className="whitespace-nowrap">CPC</TableHead>
+                <TableHead className="whitespace-nowrap">Rank</TableHead>
+                <TableHead className="whitespace-nowrap">Keyword Difficulty</TableHead>
+                <TableHead className="whitespace-nowrap">Update</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {/* ... Table Rows ... */}
+              {currentKeywordDetail?.map((data: any, i: number) => (
+                <TableRow className={`border-b ${i === currentKeywordDetail?.length - 1 ? 'border-b-0' : ''}`} key={i}>
+                  <TableCell className="p-2 whitespace-nowrap">{data.keyword}</TableCell> {/* whitespace-nowrap */}
+                  <TableCell className="rounded-full whitespace-nowrap">{data?.keyword_info?.search_volume ?? 0}</TableCell>
+                  <TableCell className="rounded-full whitespace-nowrap">{data?.avg_backlinks_info?.backlinks ?? 0}</TableCell>
+                  <TableCell className="p-2 rounded-full whitespace-nowrap">
+                    <span className={`p-1 w-2/3 rounded-3xl text-center flex items-center justify-center 
                  ${data.keyword_info?.competition_level === "HIGH" ? "bg-[#F6FEF9] text-[#12B76A]" :
-                  data?.keyword_info?.competition_level === "MEDIUM" ? "bg-[#FFFAEB] text-[#79efb8]" : "bg-[#FFFAEB] text-[#B54708]"}`}>
-                  {/* :"bg-[#FFFAEB] text-[#B54708]"}`}> */}
-                   <GoDotFill />
-                   {data?.keyword_info?.competition ?? 0}
-                 </span>
-               </TableCell>
-               <TableCell className="rounded-full whitespace-nowrap">{data?.keyword_info?.competition_level ?? ""}</TableCell>
-               <TableCell className="rounded-full whitespace-nowrap">{data?.keyword_info?.cpc ?? 0}</TableCell>
-               <TableCell className="rounded-full whitespace-nowrap">{data?.avg_backlinks_info?.rank ?? 0}</TableCell>
-               <TableCell className="rounded-full whitespace-nowrap">{data?.keyword_properties?.keyword_difficulty}</TableCell>
-               <TableCell className="rounded-full whitespace-nowrap">{moment(data?.search_intent_info?.last_updated_time).fromNow()}</TableCell>
-             </TableRow>
-           ))}
-         </TableBody>
-       </Table>
-     </div>
-      </section> 
-      : <SeedKeywords />}
+                        data?.keyword_info?.competition_level === "MEDIUM" ? "bg-[#FFFAEB] text-[#79efb8]" : "bg-[#FFFAEB] text-[#B54708]"}`}>
+                      {/* :"bg-[#FFFAEB] text-[#B54708]"}`}> */}
+                      <GoDotFill />
+                      {data?.keyword_info?.competition ?? 0}
+                    </span>
+                  </TableCell>
+                  <TableCell className="rounded-full whitespace-nowrap">{data?.keyword_info?.competition_level ?? ""}</TableCell>
+                  <TableCell className="rounded-full whitespace-nowrap">{data?.keyword_info?.cpc ?? 0}</TableCell>
+                  <TableCell className="rounded-full whitespace-nowrap">{data?.avg_backlinks_info?.rank ?? 0}</TableCell>
+                  <TableCell className="rounded-full whitespace-nowrap">{data?.keyword_properties?.keyword_difficulty}</TableCell>
+                  <TableCell className="rounded-full whitespace-nowrap">{moment(data?.search_intent_info?.last_updated_time).fromNow()}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      </section>
+        : <SeedKeywords />}
     </main>
   );
 }

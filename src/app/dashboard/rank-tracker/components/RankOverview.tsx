@@ -15,6 +15,7 @@ import moment from "moment";
 import { ShortenNumber } from "@/app/utils/ShortenedNumber";
 import { CurrentProperty } from "@/app/utils/currentProperty";
 import Loader from "@/app/component/Loader";
+import { arrowStyleTwo, getClassTwo } from "@/helper";
 
 interface Props {
   se: string;
@@ -85,6 +86,26 @@ export default function RankOverview({ se, type }: Props) {
 
     return featuredSnippet;
   }
+
+  function estimatedPaidTrafficCost() {
+    const ptc = OverviewData?.project?.crawlings?.flatMap((crawling:any) =>
+      crawling.crawlingData?.slice(0,5)?.flatMap((item:any) => item.data.google.estimated_paid_traffic_cost)
+    );
+    return ptc;
+  }
+
+  function newRankingData(){
+    const nrd = OverviewData?.project?.crawlings?.flatMap((crawling:any) =>
+      crawling.crawlingData?.slice(0,5)?.flatMap((item:any) => item.data.google.new_ranking_elements)
+    );
+    return nrd;
+  }
+  const estimatedPTC = estimatedPaidTrafficCost();
+  const newRanking = newRankingData();
+
+  
+
+
   function getNewrankingData() {
     const newRankingData = [];
     const crawlings = OverviewData?.project?.crawlings || [];
@@ -200,9 +221,9 @@ export default function RankOverview({ se, type }: Props) {
 
   const getClass = (value: number) => {
     return value > 0
-      ? "bg-green-200"
+      ? "bg-green-200 text-green-400"
       : value < 0
-      ? "bg-red-400"
+      ? "bg-red-200 text-red-400"
       : "bg-gray-200";
   };
   const arrowStyle = (value: number) => {
@@ -455,7 +476,6 @@ export default function RankOverview({ se, type }: Props) {
     ],
   };
 
-  // console.log("CHECK", data);
 
   return isPending ? (
     <div className="h-20 w-full flex justify-center items-center">
@@ -468,28 +488,22 @@ export default function RankOverview({ se, type }: Props) {
         <Card
           isLoading={isPending}
           isError={isError}
-          title={"Featured Snippet"}
+          title={"Paid Traffic Cost"}
           amount={
-            ShortenNumber(specificroute?.featured_snippet?.toFixed(2)) ?? 0
+            ShortenNumber(specificroute?.estimated_paid_traffic_cost?.toFixed(2)) ?? 0
           }
           style={
-            prevspecificroute?.featured_snippet === 0 ||
-            prevspecificroute?.featured_snippet == undefined
-              ? "text-gray-500"
-              : prevspecificroute?.featured_snippet ??
-                0 === specificroute?.featured_snippet
-              ? "text-gray-500"
-              : specificroute?.featured_snippet >
-                  prevspecificroute?.featured_snippet || 0
-              ? "text-green-500"
-              : "text-red-500"
+            
+              `${getClassTwo(estimatedPTC[1], estimatedPTC[0])} `
+            
           }
           // percent={se === "google" ? gfs_percentage : bfs_percentage}
           percent={calculatePercentageDifference(
-            prevspecificroute?.featured_snippet ?? 0,
-            specificroute?.featured_snippet ?? 0
+            prevspecificroute?.estimated_paid_traffic_cost ?? 0,
+            specificroute?.estimated_paid_traffic_cost ?? 0
           )}
-          chart={<LineChart pageData={getFeaturedSnippetData()} />}
+          arrowPosition={arrowStyleTwo( estimatedPTC[1], estimatedPTC[0])}
+          chart={<LineChart pageData={estimatedPaidTrafficCost()} />}
         />
         <Card
           title={"New Ranking Element"}
@@ -498,20 +512,12 @@ export default function RankOverview({ se, type }: Props) {
             specificroute?.new_ranking_elements?.toFixed(2)
           )}
           style={
-            prevspecificroute?.new_ranking_elements === 0 ||
-            prevspecificroute?.new_ranking_elements == undefined
-              ? "text-gray-500"
-              : prevspecificroute?.new_ranking_elements ??
-                0 === specificroute?.new_ranking_elements
-              ? "text-gray-500"
-              : specificroute?.new_ranking_elements >
-                  prevspecificroute?.new_ranking_elements || 0
-              ? "text-green-500"
-              : "text-red-500"
+            `${getClassTwo(newRanking[1], newRanking[0])} `
           }
+          arrowPosition={arrowStyleTwo(newRanking[1], newRanking[0])}
           percent={calculatePercentageDifference(
-            prevspecificroute?.new_ranking_elements,
-            prevspecificroute?.new_ranking_elements
+            newRanking[1],
+            newRanking[0]
           )}
           chart={<LineChart pageData={getNewrankingData()} />}
         />
@@ -550,11 +556,12 @@ export default function RankOverview({ se, type }: Props) {
                 <tr className=" border-b">
                   <td className=" p-2 ">2 - 3</td>
                   <td className=" p-2 ">
-                    {positions["2 - 3"]?.toFixed(2) ?? 0}{" "}
+                    {/* {positions["2 - 3"]?.toFixed(2) ?? 0}{" "} */}
+                    { ShortenNumber(positions["2 - 3"]) }
                   </td>
                   <td className="  p-2 rounded-full">
                     <span
-                      className={`p-2 rounded-full flex items-center gap-1
+                      className={`p-2 rounded-full flex items-center gap-1 text-sm
                       ${getClass(positionDifference?.["2 - 3"])}
                       `}
                     >
@@ -563,18 +570,22 @@ export default function RankOverview({ se, type }: Props) {
                         ${arrowStyle(positionDifference?.["2 - 3"])}
                       `}
                       />
-                      {positionDifference?.["2 - 3"]?.toFixed(2)}{" "}
+                      {/* {positionDifference?.["2 - 3"]?.toFixed(2)}{" "} */}
+                      { ShortenNumber(positionDifference?.["2 - 3"]) }
                     </span>
                   </td>
                 </tr>
                 <tr className=" border-b">
                   <td className=" p-2 ">4 - 10</td>
                   <td className=" p-2 ">
-                    {positions["4 - 10"]?.toFixed(2) ?? 0}{" "}
+                    {
+                      ShortenNumber(positions["4 - 10"])
+                    }
+                    {/* {positions["4 - 10"]?.toFixed(2) ?? 0} */}
                   </td>
                   <td className="  p-2 rounded-full">
                     <span
-                      className={`p-2 rounded-full flex items-center gap-1
+                      className={`p-2 rounded-full flex items-center gap-1 text-sm
                       ${getClass(positionDifference?.["4 - 10"])}
                       `}
                     >
@@ -583,7 +594,8 @@ export default function RankOverview({ se, type }: Props) {
                         ${arrowStyle(positionDifference?.["4 - 10"])}
                       `}
                       />
-                      {positionDifference?.["4 - 10"]?.toFixed(2)}{" "}
+                      {/* {positionDifference?.["4 - 10"]?.toFixed(2)} */}
+                      { ShortenNumber(positionDifference?.["4 - 10"]) }
                     </span>
                   </td>
                 </tr>
@@ -592,11 +604,12 @@ export default function RankOverview({ se, type }: Props) {
                   <td className="w-1/3 p-2 ">11 - 20</td>
                   <td className="w-1/3 p-2 ">
                     {" "}
-                    {positions["11 - 20"]?.toFixed(2)}{" "}
+                    {/* {positions["11 - 20"]?.toFixed(2)} */}
+                    { ShortenNumber(positions["11 - 20"]) }
                   </td>
                   <td className="  p-2 rounded-full">
                     <span
-                      className={`p-2 rounded-full flex items-center gap-1
+                      className={`p-2 rounded-full flex items-center gap-1 text-sm
                       ${getClass(positionDifference?.["11 - 20"])}
                       `}
                     >
@@ -605,18 +618,20 @@ export default function RankOverview({ se, type }: Props) {
                         ${arrowStyle(positionDifference?.["4 - 10"])}
                       `}
                       />
-                      {positionDifference?.["11 - 20"]?.toFixed(2) ?? 0}{" "}
+                      {/* {positionDifference?.["11 - 20"]?.toFixed(2) ?? 0}{" "} */}
+                      { ShortenNumber(positionDifference?.["11 - 20"]) }
                     </span>
                   </td>
                 </tr>
                 <tr className="">
                   <td className="w-1/3 p-2 ">21 - 30</td>
                   <td className="w-1/3 p-2 ">
-                    {positions["21 - 30"]?.toFixed(2)}{" "}
+                    {/* {positions["21 - 30"]?.toFixed(2)}{" "} */}
+                    { ShortenNumber(positions["21 - 30"]) }
                   </td>
                   <td className="  p-2 rounded-full">
                     <span
-                      className={`p-2 rounded-full flex items-center gap-1
+                      className={`p-2 rounded-full flex items-center gap-1 text-sm
                       ${getClass(positionDifference?.["21 - 30"])}
                       `}
                     >
@@ -625,16 +640,20 @@ export default function RankOverview({ se, type }: Props) {
                         ${arrowStyle(positionDifference?.["21 - 30"])}
                       `}
                       />
-                      {positionDifference?.["21 - 30"]?.toFixed(2) ?? 0}{" "}
+                      {/* {positionDifference?.["21 - 30"]?.toFixed(2) ?? 0}{" "} */}
+                      { ShortenNumber(positionDifference?.["21 - 30"]) }
                     </span>
                   </td>
                 </tr>
                 <tr className="">
                   <td className="w-1/3 p-2 ">Above 41</td>
-                  <td className="w-1/3 p-2 "> {positions["41 above"]} </td>
+                  <td className="w-1/3 p-2 "> 
+                  {/* {positions["41 above"]}  */}
+                  { ShortenNumber(positions["41 above"]) }
+                  </td>
                   <td className="  p-2 rounded-full">
                     <span
-                      className={`p-2 rounded-full flex items-center gap-1
+                      className={`p-2 rounded-full flex items-center gap-1 text-sm
                       ${getClass(positionDifference?.["41 above"])}
                       `}
                     >
@@ -643,7 +662,8 @@ export default function RankOverview({ se, type }: Props) {
                         ${arrowStyle(positionDifference?.["41 above"])}
                       `}
                       />
-                      {positionDifference?.["41 above"]?.toFixed(2) ?? 0}{" "}
+                      {/* {positionDifference?.["41 above"]?.toFixed(2) ?? 0}{" "} */}
+                      { ShortenNumber(positionDifference?.["41 above"]) }
                     </span>
                   </td>
                 </tr>

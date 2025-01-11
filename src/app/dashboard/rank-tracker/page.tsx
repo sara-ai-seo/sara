@@ -26,13 +26,15 @@ import SearchEnginePick from "@/app/dashboard/rank-tracker/components/SearchEngi
 import { handleDownloadAsImage } from "@/app/utils/downloadFileAsImage";
 import toast from "react-hot-toast";
 import ProgressBarPercent from "@/app/component/ProgressBarPercent";
+import { useMutation } from "@tanstack/react-query";
+import ApiCall from "@/app/utils/apicalls/axiosInterceptor";
 // import PageDistributions from './components/PageDistributions'
 
 export default function page() {
   // const [mobile, setMobile] = useState(false);
   // const [detail, setDetail] = useState([])
   const [progress, setProgress] = useState(0);
-  console.log(progress);
+  // console.log(progress);
   const [se, setSe] = useState("google");
   const [type, setType] = useState({
     name: "Organic",
@@ -45,6 +47,7 @@ export default function page() {
     // { title: "Page distributions", content: <PageDistributions /> }
   ];
   const id = CurrentProperty();
+  const User = useSelector((state: RootState) => state.user);
 
   const {
     isError,
@@ -65,7 +68,30 @@ export default function page() {
     isError: mutateError,
     isPaused: mutatePaused,
     isPending: mutatePending,
-  } = useRankMutation(id.id, setProgress);
+  } = useRankMutation(id.id, (progress) => setProgress(progress));
+
+
+
+      const { mutate, isError: MutateError, isPending: MutatePending } = useMutation({
+        mutationFn: async () => {
+          await ApiCall.post(`/user/crawler/rank-tracking/${id.id}`,
+            [
+              {
+                target: trimDomain(id.domain),
+                location_code: User.user.location.code,
+              },
+            ]
+          )
+        },
+        onSuccess: () => {
+          toast.success("Rankings re-tracked successfully!");
+        },
+        onError: () => {
+          toast.error("Failed to re-track rankings!");
+        },
+        
+      })
+   
 
   // const project = CurrentProperty();
   const handleEngineChange = (engine: React.SetStateAction<string>) =>
@@ -104,20 +130,8 @@ export default function page() {
             ) : (
               <Button
                 className=""
-                loading={mutatePending}
-                onClick={() => {
-                  RankMutate(
-                    {
-                      target: trimDomain(id.domain) as string,
-                      location_code: 2840,
-                    },
-                    {
-                      onSuccess: () => {
-                        toast.success("Rankings re-tracked successfully");
-                      },
-                    }
-                  );
-                }}
+                loading={MutatePending}
+                onClick={()=> mutate()}
               >
                 Re-track rankings
               </Button>
@@ -184,11 +198,10 @@ export default function page() {
                   <Tab as={Fragment}>
                     {({ selected }) => (
                       <p
-                        className={` cursor-pointer p-2 active:outline-none text-sm font-semibold border-t-0 border-l-0 border-r-0 active:border-r-none ${
-                          selected
+                        className={` cursor-pointer p-2 active:outline-none text-sm font-semibold border-t-0 border-l-0 border-r-0 active:border-r-none ${selected
                             ? "text-primary border-b-2 border-primary"
                             : " text-[#667085] active:border-none"
-                        }`}
+                          }`}
                       >
                         {tab.title}
                       </p>
