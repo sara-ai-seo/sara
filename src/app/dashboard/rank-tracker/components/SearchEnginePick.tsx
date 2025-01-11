@@ -13,7 +13,7 @@ interface Engines {
 
 export const engines = [
   { name: "Google", icon: <FcGoogle />, value: "google" },
-  { name: "Bing", icon: <BsBing />, value: "bing" },
+  // { name: "Bing", icon: <BsBing />, value: "bing" },
 ];
 
 interface SearchEnginePickProps {

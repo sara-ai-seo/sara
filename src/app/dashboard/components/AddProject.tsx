@@ -43,6 +43,29 @@ export default function AddProject() {
   const User = useSelector((state: RootState) => state.user.user);
 
   // console.log("PROPERTY",property)
+
+  const { mutate: RankMutate } = useMutation({
+    mutationFn: async () => {
+      await ApiCall.post(`/user/crawler/rank-tracking/${property.id}`,
+        [
+          {
+            target: trimDomain(property.domain),
+            location_code: User.location.code,
+          },
+        ]
+      )
+    },
+    onSuccess: () => {
+      toast.success("Rankings re-tracked successfully!");
+    },
+    onError: () => {
+      toast.error("Failed to re-track rankings!");
+    },
+    
+  })
+
+  // console.log("@", property.id,trimDomain(property.domain), User.location.code  )
+
   const mutate = useMutation({
     mutationFn: async (domain: string) => {
       try {
@@ -71,11 +94,12 @@ export default function AddProject() {
         id: data.project.id,
         domain: data.project.domain,
       });
-      rankMutation.mutateAsync({
-        id: data.project.id,
-        target: data.project.domain,
-        location_code: 2840,
-      });
+      // rankMutation.mutateAsync({
+      //   id: data.project.id,
+      //   target: data.project.domain,
+      //   location_code: User.location.code,
+      // });
+      RankMutate()
 
       dispatch(setActiveProperty(inputUrl));
       dispatch(setActivePropertyObj(data.project));
