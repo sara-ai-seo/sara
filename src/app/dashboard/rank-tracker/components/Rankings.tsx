@@ -18,6 +18,7 @@ import { RiExpandUpDownFill } from "react-icons/ri";
 import AddKeywordModal from "./AddKeywordModal";
 import { CurrentProperty } from "@/app/utils/currentProperty";
 import Loader from "@/app/component/Loader";
+import { getClassTwo } from "@/helper";
 
 interface Props {
   se: string;
@@ -236,13 +237,16 @@ export default function Rankings() {
                                   : ""
                               }`}
                             >
-                              <FaArrowUp />{" "}
-                              {se == "google"
+                              <FaArrowUp />
+                              
+                            </span>
+                            <span className={`text-xs ${getClassTwo(gpastRank, data.rank)}`}>
+                            {se == "google"
                                 ? data.rank !== gpastRank &&
                                   (data.rank - gpastRank).toFixed(2)
                                 : data.rank !== bpastRank &&
                                   (data.rank - bpastRank).toFixed(2)}
-                            </span>{" "}
+                          </span>
                           </span>
                         </td>
                         <td className="  p-2 rounded-full">
@@ -279,7 +283,7 @@ export default function Rankings() {
                         </td>
                         <td className="p-2 rounded-full max-w-[200px] overflow-x-auto whitespace-nowrap">
                           <span className="text-blue-500 cursor-pointer inline-block">
-                            {data.url}{" "}
+                            {data.url}
                           </span>
                         </td>
                       </tr>
@@ -289,36 +293,6 @@ export default function Rankings() {
               </tbody>
             </table>
           </div>
-          {/* <section className="w-full flex justify-between items-center py-4 px-4 ">
-              <button
-                type="button"
-                className="border rounded-md p-2 px-4 sm:text-lg font-semibold flex items-center gap-2 hover:bg-gray-200"
-              >
-                <MdOutlineArrowForward className="sm:text-2xl text-lg rotate-180" />{" "}
-                Previous
-              </button>
-              <div className="flex gap-2">
-                <button
-                  type="button"
-                  className="hover:bg-green-50  rounded-md p-2 px-4 "
-                >
-                  1
-                </button>
-                <button
-                  type="button"
-                  className="hover:bg-green-50  rounded-md p-2 px-4 "
-                >
-                  2
-                </button>
-              </div>
-              <button
-                type="button"
-                className="border rounded-md p-2 px-4 sm:text-lg font-semibold flex items-center gap-2 hover:bg-gray-200"
-              >
-                Next
-                <MdOutlineArrowForward className="sm:text-2xl text-lg" />
-              </button>
-            </section> */}
         </div>
       </main>
     </>
