@@ -19,63 +19,32 @@ import AddKeywordModal from "./AddKeywordModal";
 import { CurrentProperty } from "@/app/utils/currentProperty";
 import Loader from "@/app/component/Loader";
 import { getClassTwo } from "@/helper";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { ShortenNumber } from "@/app/utils/ShortenedNumber";
+
+import { GiGraduateCap } from "react-icons/gi";
+import { FcQuestions } from "react-icons/fc";
+import { BsTwitterX } from "react-icons/bs";
+import { MdYoutubeSearchedFor } from "react-icons/md";
+import { IoIosStar } from "react-icons/io";
+import { GiPerspectiveDiceSixFacesRandom } from "react-icons/gi";
+import { LuCrown } from "react-icons/lu";
+import { FaRegImages } from "react-icons/fa";
+
+
+
 
 interface Props {
   se: string;
 }
 
-// const mocked = [
-//   {
-//     keyword: "When we price goods",
-//     position: 20,
-//     increase: true,
-//     volume: 40,
-//     serp: ["link", "image", "shop"],
-//     kd: 20,
-//     traffic: 35,
-//     url: "www.ogene.com",
-//   },
-//   {
-//     keyword: "When we price goods",
-//     position: 30,
-//     increase: true,
-//     volume: 30,
-//     serp: ["link", "video", "shop"],
-//     kd: 20,
-//     traffic: 35,
-//     url: "www.ogene.com",
-//   },
-//   {
-//     keyword: "When we price goods",
-//     position: 34,
-//     increase: true,
-//     volume: 28,
-//     serp: ["location", "image", "shop"],
-//     kd: 20,
-//     traffic: 35,
-//     url: "www.ogene.com",
-//   },
-//   {
-//     keyword: "When we price goods",
-//     position: 43,
-//     increase: true,
-//     volume: 43,
-//     serp: ["link", "image", "shop", "location", "video"],
-//     kd: 20,
-//     traffic: 35,
-//     url: "www.ogene.com",
-//   },
-//   {
-//     keyword: "When we price goods",
-//     position: 10,
-//     increase: true,
-//     volume: 90,
-//     serp: ["link", "image", "shop", "video"],
-//     kd: 20,
-//     traffic: 35,
-//     url: "www.ogene.com",
-//   },
-// ];
 export default function Rankings() {
   const [se, setSe] = useState("google");
   const [add, setAdd] = useState(false);
@@ -110,6 +79,18 @@ export default function Rankings() {
 
   // console.log("RANKING", route?.bing)
 
+  const featureSnippet = [
+    { icon: < GiGraduateCap />, description: "knowledge_graph" },
+    { icon: < FcQuestions />, description: "people_also_ask" },
+    { icon: < BsTwitterX />, description: "twitter" },
+    { icon: < MdYoutubeSearchedFor />, description: "related_searches" },
+    { icon: < IoIosStar />, description: "google_reviews" },
+    { icon: < GiPerspectiveDiceSixFacesRandom />, description: "perspectives" },
+    { icon: < LuCrown />, description: "organic" },
+    { icon: < FaRegImages />, description: "images" },
+
+  ]
+
   return isPending ? (
     <div className="h-20 w-full flex justify-center items-center">
       <Loader />
@@ -139,19 +120,19 @@ export default function Rankings() {
             </span> */}
           </div>
           <div className="overflow-x-auto w-full">
-            <table className="py-4 overflow-x-auto  w-full ">
-              <thead className=" bg-[#EAECF0] h-12">
-                <tr className="rounded-md items-center">
-                  <th className="font-medium text-xs text-[#475467] min-w-[360px]  text-left p-2">
+            <Table className="py-4 overflow-x-auto  w-full ">
+              <TableHeader className=" bg-[#EAECF0] h-12">
+                <TableRow className="rounded-md items-center">
+                  <TableHead className="font-medium text-xs text-[#475467] min-w-[200px]  text-left p-2">
                     Keyword
-                  </th>
-                  <th className="font-medium text-xs text-[#475467]  text-left p-2 flex items-center gap-2 mt-2">
+                  </TableHead>
+                  <TableHead className="font-medium text-xs text-[#475467]  text-left p-2 flex items-center gap-2 mt-2">
                     <span className={`flex items-center gap-1 text-xs`}>
                       {" "}
                       Position <RiExpandUpDownFill />
                     </span>
-                  </th>
-                  <th className="font-medium text-xs text-[#475467]   text-left p-2 ">
+                  </TableHead>
+                  <TableHead className="font-medium text-xs text-[#475467]   text-left p-2 ">
                     <span className={`flex items-center gap-1 text-xs`}>
                       {" "}
                       Volume{" "}
@@ -161,8 +142,41 @@ export default function Rankings() {
                       </button>{" "}
                       <RiExpandUpDownFill />{" "}
                     </span>
-                  </th>
-                  <th className="font-medium text-xs text-[#475467]  min-w-[240px] text-left p-2 ">
+                  </TableHead>
+                  <TableHead className="font-medium text-xs text-[#475467] whitespace-nowrap   text-left p-2 ">
+                    <span className={`flex items-center gap-1 text-xs `}>
+                      {" "}
+                      Referring Pages{" "}
+                      <button title="The volume of ...">
+                        {" "}
+                        <GoQuestion />
+                      </button>{" "}
+                      <RiExpandUpDownFill />{" "}
+                    </span>
+                  </TableHead>
+                  <TableHead className="font-medium text-xs text-[#475467]   text-left p-2 ">
+                    <span className={`flex items-center gap-1 text-xs`}>
+                      {" "}
+                      Backlinks
+                      <button title="The volume of ...">
+                        {" "}
+                        <GoQuestion />
+                      </button>{" "}
+                      <RiExpandUpDownFill />{" "}
+                    </span>
+                  </TableHead>
+                  <TableHead className="font-medium text-xs text-[#475467] whitespace-nowrap   text-left p-2 ">
+                    <span className={`flex items-center gap-1 text-xs`}>
+                      {" "}
+                      Do-follow
+                      <button title="The volume of ...">
+                        {" "}
+                        <GoQuestion />
+                      </button>{" "}
+                      <RiExpandUpDownFill />{" "}
+                    </span>
+                  </TableHead>
+                  <TableHead className="font-medium text-xs text-[#475467] whitespace-nowrap text-left p-2 ">
                     <span className={`flex items-center gap-1 text-xs`}>
                       {" "}
                       SERP features{" "}
@@ -172,8 +186,8 @@ export default function Rankings() {
                       </button>{" "}
                       <RiExpandUpDownFill />{" "}
                     </span>
-                  </th>
-                  <th className="font-medium text-xs text-[#475467]   text-left p-2 ">
+                  </TableHead>
+                  <TableHead className="font-medium text-xs text-[#475467]   text-left p-2 ">
                     <span className={`flex items-center gap-1 text-xs`}>
                       {" "}
                       KD{" "}
@@ -182,8 +196,8 @@ export default function Rankings() {
                         <GoQuestion />
                       </button>{" "}
                     </span>
-                  </th>
-                  <th className="font-medium text-xs text-[#475467]   text-left p-2 ">
+                  </TableHead>
+                  <TableHead className="font-medium text-xs text-[#475467]   text-left p-2 ">
                     <span className={`flex items-center gap-1 text-xs`}>
                       {" "}
                       CPC
@@ -192,13 +206,13 @@ export default function Rankings() {
                         <GoQuestion />
                       </button>{" "}
                     </span>
-                  </th>
-                  <th className="font-medium text-xs text-[#475467]   text-left p-2 ">
+                  </TableHead>
+                  <TableHead className="font-medium text-xs text-[#475467]   text-left p-2 ">
                     URL{" "}
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="text-xs">
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody className="text-xs">
                 {(se == "google" ? google ?? [] : bing ?? []).map(
                   (data: any, index: number) => {
                     // const gpastRank = previousRouteGoogle[index]?.rank ?? 0
@@ -215,83 +229,90 @@ export default function Rankings() {
                         : 0;
 
                     return (
-                      <tr className=" border-b">
-                        <td className=" p-2 ">{data.keyword} </td>
-                        <td className=" p-2 ">
+                      <TableRow className=" border-b">
+                        <TableCell className=" p-2 ">{data.keyword} </TableCell>
+                        <TableCell className=" p-2 ">
                           <span
                             className={`flex items-center text-xs p-1 gap-1`}
                           >
-                            {data.rank.toFixed(2)}
+                            {ShortenNumber(data?.rank)}
                             <span
-                              className={` py-0.5 px-2 rounded-full flex items-center gap-1 ${
-                                se == "google" && data.rank > gpastRank
+                              className={` py-0.5 px-2 rounded-full flex items-center gap-1 ${se == "google" && data.rank > gpastRank
                                   ? "bg-green-100 text-green-500"
                                   : data.rank < gpastRank
-                                  ? " bg-red-100 text-red-300 rotate-180"
-                                  : ""
-                              } ${
-                                se == "bing" && data.rank > bpastRank
+                                    ? " bg-red-100 text-red-300 rotate-180"
+                                    : ""
+                                } ${se == "bing" && data.rank > bpastRank
                                   ? "bg-green-100 text-green-500"
                                   : data.rank < bpastRank
-                                  ? " bg-red-100 text-red-300"
-                                  : ""
-                              }`}
+                                    ? " bg-red-100 text-red-300"
+                                    : ""
+                                }`}
                             >
                               <FaArrowUp />
-                              
+
                             </span>
                             <span className={`text-xs ${getClassTwo(gpastRank, data.rank)}`}>
-                            {se == "google"
+                              {se == "google"
                                 ? data.rank !== gpastRank &&
-                                  (data.rank - gpastRank).toFixed(2)
+                                (data.rank - gpastRank).toFixed(2)
                                 : data.rank !== bpastRank &&
-                                  (data.rank - bpastRank).toFixed(2)}
+                                (data.rank - bpastRank).toFixed(2)}
+                            </span>
                           </span>
-                          </span>
-                        </td>
-                        <td className="  p-2 rounded-full">
-                          <span className={``}>{data.search_volume} </span>{" "}
-                        </td>
-                        <td className="  p-2 rounded-full">
+                        </TableCell>
+                        <TableCell className="  p-2 rounded-full">
+                          <span className={``}>{ShortenNumber(data.search_volume)} </span>{" "}
+                        </TableCell>
+                        <TableCell className="  p-2 rounded-full">
+                          <span className={``}>{ShortenNumber(data.referring_pages)} </span>
+                        </TableCell>
+                        <TableCell className="  p-2 rounded-full">
+                          <span className={``}>{ShortenNumber(data.backlinks)} </span>
+                        </TableCell>
+                        <TableCell className="  p-2 rounded-full">
+                          <span className={``}>{ShortenNumber(data.dofollow)} </span>
+                        </TableCell>
+                        <TableCell className="  p-2 rounded-full">
                           <span className={`flex items-center gap-2 text-sm`}>
-                            {data.serp_item_types.includes("link") && (
-                              <FaLink />
-                            )}
-                            {data.serp_item_types.includes("images") && (
-                              <CiImageOn />
-                            )}
-                            {data.serp_item_types.includes("shop") && (
-                              <IoCartOutline />
-                            )}
-                            {data.serp_item_types.includes("video") && (
-                              <FaVideo />
-                            )}
-                            {data.serp_item_types.includes(
-                              "people_also_ask"
-                            ) && <FaQuestion />}
-                          </span>{" "}
-                        </td>
-                        <td className="  p-2 rounded-full">
-                          <span className={``}>
-                            {data.keyword_difficulty}%{" "}
-                          </span>{" "}
-                        </td>
-                        <td className="  p-2 rounded-full">
-                          <span className={``}>
-                            {data.cpc?.toFixed(2) ?? 0}
+
+
+                            {
+                              featureSnippet.map((item, i) => {
+                                return (
+
+                                  data.serp_item_types.includes(item.description) && (
+                                    <button title={item.description} className={`text-blue-300 font-semibold text-lg`}>
+                                      {item.icon}
+                                    </button>
+                                  )
+                                )
+                              })
+                            }
+
                           </span>
-                        </td>
-                        <td className="p-2 rounded-full max-w-[200px] overflow-x-auto whitespace-nowrap">
+                        </TableCell>
+                        <TableCell className="  p-2 rounded-full">
+                          <span className={``}>
+                            {ShortenNumber(data.keyword_difficulty)}%
+                          </span>{" "}
+                        </TableCell>
+                        <TableCell className="  p-2 rounded-full">
+                          <span className={``}>
+                            {ShortenNumber(data.cpc)}
+                          </span>
+                        </TableCell>
+                        <TableCell className="p-2 rounded-full max-w-[200px] overflow-x-auto whitespace-nowrap">
                           <span className="text-blue-500 cursor-pointer inline-block">
                             {data.url}
                           </span>
-                        </td>
-                      </tr>
+                        </TableCell>
+                      </TableRow>
                     );
                   }
                 )}
-              </tbody>
-            </table>
+              </TableBody>
+            </Table>
           </div>
         </div>
       </main>
