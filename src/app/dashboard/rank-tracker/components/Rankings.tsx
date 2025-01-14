@@ -28,6 +28,15 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { ShortenNumber } from "@/app/utils/ShortenedNumber";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 import { GiGraduateCap } from "react-icons/gi";
 import { FcQuestions } from "react-icons/fc";
@@ -37,6 +46,8 @@ import { IoIosStar } from "react-icons/io";
 import { GiPerspectiveDiceSixFacesRandom } from "react-icons/gi";
 import { LuCrown } from "react-icons/lu";
 import { FaRegImages } from "react-icons/fa";
+import { countries } from "@/app/component/data/countries";
+
 
 
 
@@ -48,8 +59,29 @@ interface Props {
 export default function Rankings() {
   const [se, setSe] = useState("google");
   const [add, setAdd] = useState(false);
+  const [locationCode, setLocationCode] = useState<number[]>([])
+  const [current, setCurrent] = useState<any[]>([])
 
   const property = CurrentProperty();
+
+
+  const locations = countries.filter((item: any) => locationCode.includes(item.location_code));
+
+  const handleChange = (selectedValue: string) => {
+    const selectedCountry = locations.find(
+      (country) => country.location_name === selectedValue
+    );
+    console.log("#", selectedCountry); // Logs the selected country
+    if (selectedCountry) {
+      const matchingItems = google.filter(
+        (item: any) => item.location_code === selectedCountry.location_code
+      );
+      setCurrent(matchingItems); // Updates current with matching items
+    } else {
+      setCurrent([]); // Sets current to null if no match is found
+    }
+  };
+
 
   const {
     isError,
@@ -77,7 +109,9 @@ export default function Rankings() {
       ? route.google.map((item: any) => item)
       : [];
 
-  // console.log("RANKING", route?.bing)
+
+  console.log("CURRENT", current)
+
 
   const featureSnippet = [
     { icon: < GiGraduateCap />, description: "knowledge_graph" },
@@ -107,17 +141,70 @@ export default function Rankings() {
         <div className="grid h-full w-full border rounded-md ">
           <div className="flex w-full items-center justify-between p-6">
             <p className={` font-medium text-[#101828] text-lg`}>
-              {" "}
-              {se == "google" ? google?.length ?? 0 : bing?.length ?? 0}{" "}
+              
+              {current.length > 0 ? current.length : se == "google" ? google?.length ?? 0 : bing?.length ?? 0}{" "}
               keywords{" "}
             </p>
-            {/* <span>
-              <PlainButton
-                title={"Add keyword"}
-                icon={<FaPlus />}
-                handleClick={() => setAdd(true)}
-              />
-            </span> */}
+            <span>
+              {/* <Select 
+              >
+                <SelectTrigger className="w-[180px]"
+                onChange={(e: any)=> {
+                  console.log("$", e.target.value)
+                  handleChange(e.target.value)
+                }}
+                >
+                  <SelectValue placeholder="Filter by location" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Countries</SelectLabel>
+                    {
+
+                      locations.map((country, i) => (
+                        <SelectItem key={i} value={country.location_name}
+                          onChange={(e) => handleChange((e.target as HTMLSelectElement).value)}
+                        >
+                          {country.location_name}
+                        </SelectItem>
+                      ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select> */}
+
+<Select onValueChange={(value) => handleChange(value)}>
+  <SelectTrigger className="w-[180px]">
+    <SelectValue placeholder="Select a country" />
+  </SelectTrigger>
+  <SelectContent>
+    <SelectGroup>
+      <SelectLabel>Countries</SelectLabel>
+      {locations.map((country, i) => (
+        <SelectItem key={i} value={country.location_name}>
+          {country.location_name}
+        </SelectItem>
+      ))}
+    </SelectGroup>
+  </SelectContent>
+</Select>
+
+
+              {/* <select
+                id="country-select"
+                onChange={(e) => handleChange(e.target.value)}
+                defaultValue="" // Sets default value to prompt user selection
+                className="border rounded-lg p-2"
+              >
+                <option value="" disabled>
+                  Select a country
+                </option>
+                {locations.map((country, i) => (
+                  <option key={i} value={country.location_name}>
+                    {country.location_name}
+                  </option>
+                ))}
+              </select> */}
+            </span>
           </div>
           <div className="overflow-x-auto w-full">
             <Table className="py-4 overflow-x-auto  w-full ">
@@ -213,10 +300,9 @@ export default function Rankings() {
                 </TableRow>
               </TableHeader>
               <TableBody className="text-xs">
-                {(se == "google" ? google ?? [] : bing ?? []).map(
+                { 
+                ( ( current.length > 0 ? current : se == "google" ? google ?? [] : bing ?? []).map(
                   (data: any, index: number) => {
-                    // const gpastRank = previousRouteGoogle[index]?.rank ?? 0
-                    // const bpastRank = previousRouteBing[index]?.rank ?? 0
 
                     const gpastRank =
                       previousRouteGoogle && previousRouteGoogle[index]
@@ -227,6 +313,10 @@ export default function Rankings() {
                       previousRouteBing && previousRouteBing[index]
                         ? previousRouteBing[index].rank
                         : 0;
+                    // !options.includes(data?.location_code) && options.push(data?.location_code)
+                    if (data?.location_code && !locationCode.includes(data.location_code)) {
+                      locationCode.push(data.location_code);
+                    }
 
                     return (
                       <TableRow className=" border-b">
@@ -238,10 +328,10 @@ export default function Rankings() {
                             {ShortenNumber(data?.rank)}
                             <span
                               className={` py-0.5 px-2 rounded-full flex items-center gap-1 ${se == "google" && data.rank > gpastRank
-                                  ? "bg-green-100 text-green-500"
-                                  : data.rank < gpastRank
-                                    ? " bg-red-100 text-red-300 rotate-180"
-                                    : ""
+                                ? "bg-green-100 text-green-500"
+                                : data.rank < gpastRank
+                                  ? " bg-red-100 text-red-300 rotate-180"
+                                  : ""
                                 } ${se == "bing" && data.rank > bpastRank
                                   ? "bg-green-100 text-green-500"
                                   : data.rank < bpastRank
@@ -282,7 +372,7 @@ export default function Rankings() {
                                 return (
 
                                   data.serp_item_types.includes(item.description) && (
-                                    <button title={item.description} className={`text-blue-300 font-semibold text-lg`}>
+                                    <button key={i} title={item.description} className={`text-blue-300 font-semibold text-lg`}>
                                       {item.icon}
                                     </button>
                                   )
@@ -310,7 +400,8 @@ export default function Rankings() {
                       </TableRow>
                     );
                   }
-                )}
+                ))
+                }
               </TableBody>
             </Table>
           </div>

@@ -195,16 +195,16 @@ export default function LinkBuildingOpportunities() {
                         </TableCell>
                         <TableCell> {item?.domain_rank ?? ""} </TableCell>
                         <TableCell className=""> {
-                          item.emails.map((email: string) => email)
+                          (item?.emails ?? []).map((email: string) => email)
                         } </TableCell>
                         <TableCell className=""> {
-                          item.phone_numbers.map((email: string) => email)
+                          (item?.phone_numbers ?? []).map((email: string) => email)
                         } </TableCell>
                         <TableCell> {
                           moment(item?.last_visited).fromNow()
                         }  </TableCell>
                         <TableCell>
-                          {item.social_graph_urls && item.social_graph_urls.map((social: string) => {
+                          {(item?.social_graph_urls ?? []).map((social: string) => {
                             social.includes("facebook") && <MdFacebook />
                             social.includes("instagram") && <FaInstagram />
                             social.includes("twitter") && <FaXTwitter />
