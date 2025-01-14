@@ -19,18 +19,18 @@ export function ShortenNumber(number: number | undefined): string {
         return "";
     }
 
-    const isNegative = number < 0; // Check if the number is negative
-    const absNumber = Math.abs(number); // Get the absolute value
+    const isNegative = number < 0;
+    const absNumber = Math.abs(number);
 
     let shortenedNumber: string;
 
     if (absNumber >= 1000000) {
-        shortenedNumber = (absNumber / 1000000).toFixed(1) + 'M';
+        shortenedNumber = parseFloat((absNumber / 1000000).toFixed(2)).toString() + 'M';
     } else if (absNumber >= 1000) {
-        shortenedNumber = (absNumber / 1000).toFixed(1) + 'K';
+        shortenedNumber = parseFloat((absNumber / 1000).toFixed(2)).toString() + 'K';
     } else {
-        shortenedNumber = absNumber.toString();
+        shortenedNumber = parseFloat(absNumber.toFixed(2)).toString();
     }
 
-    return isNegative ? "-" + shortenedNumber : shortenedNumber; 
+    return isNegative ? "-" + shortenedNumber : shortenedNumber;
 }

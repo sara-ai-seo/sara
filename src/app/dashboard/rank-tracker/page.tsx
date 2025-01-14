@@ -77,8 +77,7 @@ export default function page() {
           await ApiCall.post(`/user/crawler/rank-tracking/${id.id}`,
             [
               {
-                target: trimDomain(id.domain),
-                location_code: User.user.location.code,
+                target: trimDomain(id.domain)
               },
             ]
           )
