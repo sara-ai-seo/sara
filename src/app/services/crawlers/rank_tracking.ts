@@ -17,7 +17,7 @@ export const useRankTrackingOverview = (tab: string, id: number) => {
   // const id = useSelector((state: RootState) => state.property.activePropertyObj);
 
   const { isError, isSuccess, isPending, data } = useQuery({
-    queryKey: ["ranktracker_overview", id],
+    queryKey: [`rank-${tab}`, id],
     queryFn: async () => {
       const result = await ApiCall.get(
         `/user/crawler/rank-tracking/by-tab/${id}?tab=${tab}`

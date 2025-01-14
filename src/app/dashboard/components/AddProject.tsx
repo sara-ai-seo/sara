@@ -49,8 +49,7 @@ export default function AddProject() {
       await ApiCall.post(`/user/crawler/rank-tracking/${property.id}`,
         [
           {
-            target: trimDomain(property.domain),
-            location_code: User.location.code,
+            target: trimDomain(property.domain)
           },
         ]
       )
