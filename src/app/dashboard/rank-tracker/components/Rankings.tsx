@@ -1,7 +1,7 @@
 import AutoModal from "@/app/component/modals/AutoModal";
 import PlainButton from "@/app/component/PlainButton";
 import { useRankTrackingOverview } from "@/app/services/crawlers/rank_tracking";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { CiImageOn, CiSquareQuestion } from "react-icons/ci";
 import {
   FaArrowDown,
@@ -82,6 +82,11 @@ export default function Rankings() {
     }
   };
 
+  
+  useEffect(()=> {
+    setCurrent(current);
+  }, [current])
+
 
   const {
     isError,
@@ -148,7 +153,7 @@ export default function Rankings() {
             <span>
               
 
-{/* <Select onValueChange={(value) => handleChange(value)}>
+<Select onValueChange={(value) => handleChange(value)}>
   <SelectTrigger className="w-[180px]">
     <SelectValue placeholder="Select a country" />
   </SelectTrigger>
@@ -162,10 +167,10 @@ export default function Rankings() {
       ))}
     </SelectGroup>
   </SelectContent>
-</Select> */}
+</Select>
 
 
-              <select
+              {/* <select
                 id="country-select"
                 onChange={(e) => handleChange(e.target.value)}
                 defaultValue="" // Sets default value to prompt user selection
@@ -179,7 +184,7 @@ export default function Rankings() {
                     {country.location_name}
                   </option>
                 ))}
-              </select>
+              </select> */}
             </span>
           </div>
           <div className="overflow-x-auto w-full">
