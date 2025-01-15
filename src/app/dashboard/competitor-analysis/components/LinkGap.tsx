@@ -28,9 +28,10 @@ export default function LinkGap() {
   //   }
   // })
   const {data: linkGap, isPending, isError} = linkGapData();
-  const linkData= linkGap?.project?.crawlings[0]?.crawlingData[0]?.data?.items
+  const linkData= linkGap?.project?.crawlings[0]?.crawlingData[0]?.data.tasks[0].result[0].items
 
-  // console.log("DATA", linkGap.project.crawlings[0].crawlingData[0].data.items)
+
+  // console.log("DATA", linkData)
 
   return (
     <section className={`grid col-span-1 lg:col-span-3 gap-6 mt-6 mb-20
