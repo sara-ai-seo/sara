@@ -1,19 +1,10 @@
 import AutoModal from "@/app/component/modals/AutoModal";
-import PlainButton from "@/app/component/PlainButton";
 import { useRankTrackingOverview } from "@/app/services/crawlers/rank_tracking";
 import React, { useState, useEffect } from "react";
-import { CiImageOn, CiSquareQuestion } from "react-icons/ci";
 import {
-  FaArrowDown,
   FaArrowUp,
-  FaLink,
-  FaPlus,
-  FaQuestion,
-  FaVideo,
 } from "react-icons/fa6";
 import { GoQuestion } from "react-icons/go";
-import { IoCartOutline } from "react-icons/io5";
-import { MdOutlineArrowForward } from "react-icons/md";
 import { RiExpandUpDownFill } from "react-icons/ri";
 import AddKeywordModal from "./AddKeywordModal";
 import { CurrentProperty } from "@/app/utils/currentProperty";
@@ -38,12 +29,11 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 
-import { GiGraduateCap } from "react-icons/gi";
+import { GiGraduateCap, GiPerspectiveDiceSixFacesRandom } from "react-icons/gi";
 import { FcQuestions } from "react-icons/fc";
 import { BsTwitterX } from "react-icons/bs";
 import { MdYoutubeSearchedFor } from "react-icons/md";
 import { IoIosStar } from "react-icons/io";
-import { GiPerspectiveDiceSixFacesRandom } from "react-icons/gi";
 import { LuCrown } from "react-icons/lu";
 import { FaRegImages } from "react-icons/fa";
 import { countries } from "@/app/component/data/countries";
@@ -68,6 +58,7 @@ export default function Rankings() {
   const locations = countries.filter((item: any) => locationCode.includes(item.location_code));
 
   const handleChange = (selectedValue: string) => {
+   
     const selectedCountry = locations.find(
       (country) => country.location_name === selectedValue
     );
@@ -82,10 +73,11 @@ export default function Rankings() {
     }
   };
 
+  console.log("LOC CODE", locationCode)
   
-  useEffect(()=> {
-    setCurrent(current);
-  }, [current])
+  // useEffect(()=> {
+  //   setCurrent(current);
+  // }, [locations])
 
 
   const {
@@ -115,7 +107,12 @@ export default function Rankings() {
       : [];
 
 
-  // console.log("CURRENT", current)
+  console.log("LOC", locations)
+  // console.log("COUNTRIES", countries)
+  console.log("CURRENT", current)
+  console.log("BING", bing)
+  console.log("GOOGLE", google)
+
 
 
   const featureSnippet = [
@@ -296,7 +293,8 @@ export default function Rankings() {
                         : 0;
                     // !options.includes(data?.location_code) && options.push(data?.location_code)
                     if (data?.location_code && !locationCode.includes(data.location_code)) {
-                      locationCode.push(data.location_code);
+                      // locationCode.push(data.location_code);
+                      setLocationCode([...locationCode, data.location_code])
                     }
 
                     return (
