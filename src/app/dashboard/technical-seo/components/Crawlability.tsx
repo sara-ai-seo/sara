@@ -139,7 +139,7 @@ export default function Crawlability() {
     crawlbilityAndIndexibiltyResult[0]?.data.items;
 
 
-    console.log("@",nonIndexablePages);
+    // console.log("@",nonIndexablePages);
 
   const nonIndexablePagesData = nonIndexablePages?.map(
     (page: any) => page.reason
@@ -263,7 +263,7 @@ export default function Crawlability() {
           </div>
         </div>
 
-        <div className="w-full grid col-span-2 h-full  md:h-[348px] border rounded-md p-6">
+        {/* <div className="w-full grid col-span-2 h-full  md:h-[348px] border rounded-md p-6">
           <Title
             title="Page crawl depth"
             info={
@@ -278,7 +278,7 @@ export default function Crawlability() {
               xAxisLabel="Number of clicks"
             />
           </div>
-        </div>
+        </div> */}
       </section>
     </main>
   );

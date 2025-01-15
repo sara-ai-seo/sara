@@ -71,7 +71,7 @@ export default function Rankings() {
     const selectedCountry = locations.find(
       (country) => country.location_name === selectedValue
     );
-    console.log("#", selectedCountry); // Logs the selected country
+    // console.log("#", selectedCountry); // Logs the selected country
     if (selectedCountry) {
       const matchingItems = google.filter(
         (item: any) => item.location_code === selectedCountry.location_code
@@ -110,7 +110,7 @@ export default function Rankings() {
       : [];
 
 
-  console.log("CURRENT", current)
+  // console.log("CURRENT", current)
 
 
   const featureSnippet = [
@@ -146,33 +146,9 @@ export default function Rankings() {
               keywords{" "}
             </p>
             <span>
-              {/* <Select 
-              >
-                <SelectTrigger className="w-[180px]"
-                onChange={(e: any)=> {
-                  console.log("$", e.target.value)
-                  handleChange(e.target.value)
-                }}
-                >
-                  <SelectValue placeholder="Filter by location" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>Countries</SelectLabel>
-                    {
+              
 
-                      locations.map((country, i) => (
-                        <SelectItem key={i} value={country.location_name}
-                          onChange={(e) => handleChange((e.target as HTMLSelectElement).value)}
-                        >
-                          {country.location_name}
-                        </SelectItem>
-                      ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select> */}
-
-<Select onValueChange={(value) => handleChange(value)}>
+{/* <Select onValueChange={(value) => handleChange(value)}>
   <SelectTrigger className="w-[180px]">
     <SelectValue placeholder="Select a country" />
   </SelectTrigger>
@@ -186,10 +162,10 @@ export default function Rankings() {
       ))}
     </SelectGroup>
   </SelectContent>
-</Select>
+</Select> */}
 
 
-              {/* <select
+              <select
                 id="country-select"
                 onChange={(e) => handleChange(e.target.value)}
                 defaultValue="" // Sets default value to prompt user selection
@@ -203,7 +179,7 @@ export default function Rankings() {
                     {country.location_name}
                   </option>
                 ))}
-              </select> */}
+              </select>
             </span>
           </div>
           <div className="overflow-x-auto w-full">
