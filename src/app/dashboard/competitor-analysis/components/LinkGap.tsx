@@ -11,6 +11,14 @@ import { useState } from "react";
 import { BsArrowDown, BsArrowUp } from "react-icons/bs";
 import { FaRegCircleQuestion } from "react-icons/fa6";
 import {  linkGapData } from "./competitorAnalysis";
+import {
+  Table,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+  TableBody
+} from "@/components/ui/table"
 
 
 interface Props {
@@ -28,9 +36,10 @@ export default function LinkGap() {
   //   }
   // })
   const {data: linkGap, isPending, isError} = linkGapData();
-  const linkData= linkGap?.project?.crawlings[0]?.crawlingData[0]?.data?.items
+  const linkData= linkGap?.project?.crawlings[0]?.crawlingData[0]?.data.tasks[0].result[0].items
 
-  // console.log("DATA", linkGap.project.crawlings[0].crawlingData[0].data.items)
+
+  // console.log("DATA", linkData)
 
   return (
     <section className={`grid col-span-1 lg:col-span-3 gap-6 mt-6 mb-20
@@ -49,44 +58,44 @@ export default function LinkGap() {
             throw new Error("Function not implemented.");
           }} /> */}
         </div>
-        <table className="w-full">
-          <thead className="w-full bg-[#EAECF0] text-left">
-            <tr className="text-[#475467] font-normal text-xs">
-              <th className="p-4">
+        <Table className="w-full">
+          <TableHeader className="w-full bg-[#EAECF0] text-left">
+            <TableRow className="text-[#475467] font-normal text-xs">
+              <TableHead className="p-4">
                 Reffering domains
-              </th>
-              <th className="p-4">
+              </TableHead>
+              <TableHead className="p-4">
                   <p> Rank Position</p>
-              </th>
-              <th className="p-4">
+              </TableHead>
+              <TableHead className="p-4">
                 <span className={`flex gap-1 items-center `}>
                   <p> Intersections</p>
                   <button className="" title="Here..."> <FaRegCircleQuestion /></button>
                 </span>
-              </th>
+              </TableHead>
 
-            </tr>
+            </TableRow>
 
-          </thead>
-          <tbody>
+          </TableHeader>
+          <TableBody>
             {
               linkData?.map((item: Props, index:number) => {
                 return (
-                  <tr className={`${index === linkData.length - 1 ? '' : 'border-b'} text-left hover:bg-blue-100`} key={index}>
-                    <td className="p-4 text-primary">
+                  <TableRow className={`${index === linkData.length - 1 ? '' : 'border-b'} text-left hover:bg-blue-100`} key={index}>
+                    <TableCell className="p-4 text-primary">
                         <p> {item?.target} </p>
-                    </td>
-                    <td className=" p-4">{item?.rank} </td>
-                    <td className="p-4">
+                    </TableCell>
+                    <TableCell className=" p-4">{item?.rank} </TableCell>
+                    <TableCell className="p-4">
                       {item?.intersections}
-                    </td>
+                    </TableCell>
                     
-                  </tr>
+                  </TableRow>
                 )
               })
             }
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </div>
     </section>
   )
