@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import Logo from "../../../../../public/footer/logo.svg";
+// import Logo from "";
 import { useState } from "react";
 import { currentYear } from "@/app/utils/currenYear";
 import Image from "next/image";
@@ -12,7 +12,7 @@ export default function TempFooter() {
     <div className="grid px-4 py-12 bg-darkPrimary text-white w-full justify-items-center">
       <div className="flex flex-col items-center justify-center gap-6">
         {/* <Logo /> */}
-        <Image src={Logo} alt="Logo" />
+        <Image src={`/footer/footerlogo.svg`} height={24} alt="Logo" width={145} />
         <span className=""> Your website’s success starts with us!</span>
       </div>
       <div className="flex items-center justify-center gap-8 mt-8 flex-wrap">

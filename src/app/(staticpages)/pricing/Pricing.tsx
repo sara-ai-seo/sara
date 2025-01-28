@@ -4,6 +4,7 @@ import Image from 'next/image'
 import React, { useState } from 'react'
 import { faqdata, pricingdata, annualPricingData } from './data'
 import { PaymentBody, ReusableModal } from './component/paymentBody'
+import Button from '@/app/dashboard/components/ui/Button'
 
 
 interface Plan {
@@ -132,7 +133,11 @@ export default function PricingComponent() {
 
             </div>
             <div className='justify-start flex'>
-              <ButtonFilled title='Get in touch' handleClick={() => alert("Coming soon")} />
+
+              {/* <ButtonFilled title='Get in touch' handleClick={() => alert("Coming soon")} /> */}
+              <a href="/contact">
+                <Button > Get in touch </Button>
+              </a>
             </div>
           </div>
 
@@ -145,13 +150,22 @@ export default function PricingComponent() {
               <p className='text-[#101828] text-xl font-normal'> Everything you need to track, manage and boost your site’s SEO.</p>
             </div>
             <div className='flex items-center gap-3'>
-              <div > <ButtonOutlined title={'Learn more'} handleClick={function (): void {
+              <div > 
+                {/* <ButtonOutlined title={'Learn more'} handleClick={function (): void {
                 throw new Error('Function not implemented.')
-              }} /> </div>
+              }} />  */}
+              <a href="/faq">
+                  <Button variant='secondary'> Learn more </Button>
+              </a>
+              
+              </div>
               <div>
-                <ButtonFilled title={'Get started'} handleClick={function (): void {
+                {/* <ButtonFilled title={'Get started'} handleClick={function (): void {
                   throw new Error('Function not implemented.')
-                }} />
+                }} /> */}
+                <a href="/signup">
+                  <Button > Get started </Button>
+                </a>
               </div>
             </div>
           </div>

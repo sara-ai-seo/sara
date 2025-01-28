@@ -63,19 +63,19 @@ export default function Nav() {
       title: "Rank tracker",
       description: `Discover strategic keywords for your industry and target audience.`,
       file: "/rank.png",
-      link: "/rank-tracker",
+      link: "/dashboard/rank-tracker",
     },
     {
       title: "Smart keyword explorer",
       description: `Discover strategic keywords for your industry and target audience.`,
       file: "/keyword.png",
-      link: "/keyword",
+      link: "/dashboard/keyword-explorer",
     },
     {
       title: "Optimization recommendations",
       description: `Customized recommendations for your website based on your SEO audit.`,
       file: "/optimize.png",
-      link: "/optimize",
+      link: "/",
     },
     {
       title: "Semantic content analysis",
@@ -87,13 +87,13 @@ export default function Nav() {
       title: "Competitor analysis",
       description: `Compare your SEO metrics with competitors and gain insights.`,
       file: "/competitor.png",
-      link: "/keyword",
+      link: "/dashboard/competitor-analysis",
     },
     {
       title: "Link building",
       description: `Explore potential websites for building valuable backlinks.`,
       file: "/link.png",
-      link: "/keyword",
+      link: "/dashboard/link-building",
     },
   ];
 
@@ -167,8 +167,8 @@ export default function Nav() {
           </Transition>
         </Menu>
 
-        <Menu>
-          <MenuButton className="hidden lg:inline-flex items-center gap-1 rounded-md  font-semibold  shadow-inner shadow-white/10 focus:outline-none ">
+        <Menu >
+          <MenuButton disabled className="hidden lg:inline-flex items-center gap-1 rounded-md  font-semibold  shadow-inner shadow-white/10 focus:outline-none ">
             Resources
             <MenuButton className="data-[active]:transform data-[active]:rotate-180">
               <IoIosArrowDown />
