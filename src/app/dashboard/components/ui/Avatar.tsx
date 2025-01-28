@@ -1,13 +1,15 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface AvatarImgProps {
-  url: string;
+  name: string;
 }
-export function AvatarImg({ url }: AvatarImgProps) {
+export function AvatarImg({ name }: AvatarImgProps) {
   return (
     <Avatar>
-      <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-      <AvatarFallback>CN</AvatarFallback>
+      {/* <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" /> */}
+      <AvatarFallback>
+        {name}
+      </AvatarFallback>
     </Avatar>
   );
 }

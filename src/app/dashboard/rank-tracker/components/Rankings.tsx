@@ -62,7 +62,6 @@ export default function Rankings() {
     const selectedCountry = locations.find(
       (country) => country.location_name === selectedValue
     );
-    // console.log("#", selectedCountry); // Logs the selected country
     if (selectedCountry) {
       const matchingItems = google.filter(
         (item: any) => item.location_code === selectedCountry.location_code
@@ -72,12 +71,6 @@ export default function Rankings() {
       setCurrent([]); // Sets current to null if no match is found
     }
   };
-
-  console.log("LOC CODE", locationCode)
-  
-  // useEffect(()=> {
-  //   setCurrent(current);
-  // }, [locations])
 
 
   const {
@@ -105,13 +98,6 @@ export default function Rankings() {
     route?.google && Array.isArray(route.google)
       ? route.google.map((item: any) => item)
       : [];
-
-
-  console.log("LOC", locations)
-  // console.log("COUNTRIES", countries)
-  console.log("CURRENT", current)
-  console.log("BING", bing)
-  console.log("GOOGLE", google)
 
 
 

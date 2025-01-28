@@ -34,6 +34,9 @@ export function AccountAvatarDropDown() {
     return null;
   }
 
+  const name = user?.name?.split(" ").map(word => word?.[0]?.toUpperCase()).join("");
+console.log("@", name)
+
   function logout() {
     sessionStorage.removeItem("user");
     dispatch(
@@ -53,7 +56,7 @@ export function AccountAvatarDropDown() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <button className="rounded-full w-fit h-fit cursor-pointer">
-          <AvatarImg url="" />
+          <AvatarImg name={name} />
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56 mt-1 -translate-x-8">
