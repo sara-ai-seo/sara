@@ -6,6 +6,8 @@ import { FeatureCard, WhyUseWemaxiCard } from "../landingpage/Homecomponents";
 import PlainButton from "../PlainButton";
 import FAQComponent from "./faq/FAQComponent";
 import TempFooter from "./footer/TempFooter";
+import EXPLORE from "../../../../public/home/explore.png";
+import Button from "@/app/dashboard/components/ui/Button";
 
 export default function HomePage() {
   return (
@@ -30,13 +32,14 @@ export default function HomePage() {
             </p>
           </div>
           <Link href={`/signup`} className=" max-w-[400px]">
-            <FilledButton title="Get started for free" />
+            {/* <FilledButton title="Get started for free" /> */}
+            <Button > Get started for free </Button>
           </Link>
         </div>
 
         <div className="flex h-full w-full ">
           <Image
-            src={`/bghome.png`}
+            src={`/home/bghome.png`}
             alt="Home page image"
             width={1280}
             height={10}
@@ -61,7 +64,7 @@ export default function HomePage() {
           Discover a suite of intelligent features designed to propel your
           website to new heights.
         </p>
-        <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5 px-4 mt-10 gap-10 justify-start items-start md:gap-14 lg:gap-20 2lg:gap-32">
+        {/* <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5 px-4 mt-10 gap-10 justify-start items-start md:gap-14 lg:gap-20 2lg:gap-32">
           <FeatureCard
             className=""
             title="AI-Powered Audits for Precise Insights and Prioritized Actions"
@@ -92,9 +95,51 @@ export default function HomePage() {
             description="Get personalized recommendations based on your website's unique needs, allowing for a customized and efficient optimization journey."
             icon="/feature-marked.png"
           />
+          
+        </div> */}
+         <div className="w-full px-4 mt-10">
+      {/* First row of 3 items */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 md:gap-14 lg:gap-20">
+        <FeatureCard
+          title="AI-Powered Audits for Precise Insights"
+          description="Our AI algorithms analyze every aspect of your website."
+          icon={`/home/featured/aipowered.svg`}
+        />
+        <FeatureCard
+          title="Smart Keyword Research"
+          description="Uncover hidden gems with our AI-driven keyword research tool."
+          icon="/home/featured/smartkeyword.svg"
+        />
+        <FeatureCard
+          title="Competitor Analysis"
+          description="Understand the strategies that work for your competitors."
+          icon="/home/featured/competitoranalysis.svg"
+        />
+      </div>
+      
+      {/* Second row of 2 items - centered */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-10 md:gap-14 lg:gap-20 mt-10 md:mt-14 lg:mt-20">
+        <div className="col-span-1 sm:col-span-2 lg:col-span-2 lg:flex lg:justify-center lg:gap-20">
+          <div className="mb-10 sm:mb-0 lg:w-1/3">
+            <FeatureCard
+              title="Track Rankings"
+              description="Track your website's performance in real-time."
+              icon="/home/featured/trackranking.svg"
+            />
+          </div>
+          <div className="lg:w-1/3">
+            <FeatureCard
+              title="Actionable Recommendations"
+              description="Get personalized recommendations for your website."
+              icon="/home/featured/actionablerecommendation.svg"
+            />
+          </div>
         </div>
+      </div>
+    </div>
         <a href="#faq" className=" pt-16">
-          <FilledButton title="Learn more" />
+          {/* <FilledButton title="Learn more" /> */}
+          <Button > Learn more </Button>
         </a>
       </section>
 
@@ -186,11 +231,16 @@ export default function HomePage() {
           </div>
           <div className="pt-10 flex flex-col md:flex-row gap-2 items-center w-full ">
             <a href="/pricing" className=" w-full lg:w-1/3">
-              <PlainButton title="Learn more" />
+              <Button variant="secondary">
+              Learn more
+              </Button> 
             </a>
             <a href="/signup" className="w-full min-[1440px]:w-fit">
               {" "}
-              <FilledButton title="Unlock your website's potential now!" />
+              {/* <FilledButton title="Unlock your website's potential now!" /> */}
+              <Button variant="primary">
+              Unlock your website's potential now!
+              </Button>
             </a>
           </div>
         </div>
@@ -203,7 +253,7 @@ export default function HomePage() {
           // }}
         >
           <Image
-            src={`/home/small-dashboard.png`}
+            src={EXPLORE}
             alt="Dashboard"
             width={1200}
             height={682}
