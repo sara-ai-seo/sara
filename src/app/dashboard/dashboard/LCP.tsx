@@ -2,6 +2,7 @@ import { calculatePercentageDifference } from "@/lib/DateFormater"
 import Card from "../Card"
 import { arrowStyle, getClass } from "@/helper"
 import { LineChart } from "../technical-seo/components/LineChart"
+import { ShortenNumber } from "@/app/utils/ShortenedNumber"
 
 interface LCPProps {
     amount: number,
@@ -18,7 +19,7 @@ export const LCP: React.FC<LCPProps> = ({
     return (
         <div>
             <Card title={"LCP"}
-                amount={amount}
+                amount={ShortenNumber(amount)}
                 style={getClass(difference)}
                 percent={calculatePercentageDifference(previous, amount)}
                 chart={<LineChart pageData={chartData} />}

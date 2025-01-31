@@ -33,7 +33,7 @@ export default function ReUsableHTTPStatusCode({
         },
       },
     },
-    cutout: 80,
+    // cutout: 80,
   };
   const statusCodeDescriptions = {
     "4xx": "Client Error",
@@ -44,9 +44,8 @@ export default function ReUsableHTTPStatusCode({
 
   const statusData = item;
 
-  // Create the formatted labels by iterating over each key-value pair in the statusData object:
   const labelsWithCounts = Object.entries(statusData).map(([key, value]) => {
-    // Use the description from the `statusCodeDescriptions` object, or fall back to the key itself if no description is available
+
     const description = `${
       statusCodeDescriptions[key as StatusCodeKey]
     } - ${key}`;
@@ -54,12 +53,16 @@ export default function ReUsableHTTPStatusCode({
     return `${description}(${value})`;
   });
 
+  const allValuesZero = Object.values(statusData).every((value) => value === 0);
+  // const allValuesZero = Object.values([23,3,4,5,4]).every((value) => value === 0);
+
   const data = {
     labels: labelsWithCounts,
     datasets: [
       {
-        data: Object.values(statusData),
-        backgroundColor: [
+        data: allValuesZero ? [1] : Object.values(statusData),
+        // data: [23,4,54,3,2],
+        backgroundColor: allValuesZero ? ["#EED"]: [
           "#A6F4C5",
           "#12B76A",
           "#FDB022",
