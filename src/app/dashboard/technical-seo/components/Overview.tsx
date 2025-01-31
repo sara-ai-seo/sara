@@ -193,7 +193,7 @@ export default function Overview({ onViewAllIssues }: OverviewProps) {
       overviewResult.length > 0 ? overviewResult[0]?.maxCrawlPages : null!,
   };
 
-  console.log(overviewResult[0]);
+  // console.log(overviewResult[0]);
   const LcpLabel = [
     String(LcpAnalysis?.poor),
 

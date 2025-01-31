@@ -32,6 +32,7 @@ import {
   chartData,
   CustomPieChart,
 } from "../component/charts/piechart";
+import { ShortenNumber } from "../utils/ShortenedNumber";
 
 export default function Dashboard() {
   const exportIcon = (
@@ -84,8 +85,8 @@ export default function Dashboard() {
   }
 
   const siteHealthScore = {
-    score: data.techSeo.current.siteHealth,
-    previous: data.techSeo.differences.siteHealthDifference,
+    score: Number(ShortenNumber(data.techSeo.current.siteHealth)),
+    previous: Number(ShortenNumber(data.techSeo.differences.siteHealthDifference)),
   };
   const dataLabel = Array.isArray(data?.newvslost)
     ? data?.newvslost.map((item) => moment(item.updatedAt).format("Do MMM,YY"))
@@ -136,12 +137,12 @@ export default function Dashboard() {
               </Button>{" "}
             </span>
             <span>
-              <Button
+              {/* <Button
                 className="bg-primary  text-white min-[375px]:text-base text-sm hover:bg-primary outline-2 hover:outline-2 hover:outline-offset-2 p-2 rounded-md"
                 onClick={() => router.push("/dashboard/optimization-plans")}
               >
                 View recommendations
-              </Button>
+              </Button> */}
             </span>
           </div>
         </div>

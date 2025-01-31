@@ -94,11 +94,11 @@ export default function Layout({ children }: Props) {
       icon: <IoIosLink />,
       link: "/dashboard/link-building",
     },
-    {
-      title: "Optimization plans",
-      icon: <FiCheckSquare />,
-      link: "/dashboard/optimization-plans",
-    },
+    // {
+    //   title: "Optimization plans",
+    //   icon: <FiCheckSquare />,
+    //   link: "/dashboard/optimization-plans",
+    // },
   ];
 
   const othermenu = [
