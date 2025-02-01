@@ -19,6 +19,11 @@ import {
 } from "@/redux/features/propertySlice";
 import { useQuery } from "@tanstack/react-query";
 import ApiCall from "../utils/apicalls/axiosInterceptor";
+import { MdOutlineDeleteOutline } from "react-icons/md";
+import DeleteProject from "./modals/DeleteProject";
+import toast from "react-hot-toast";
+// import { useMutation, useQueryClient } from 'react-query';
+
 
 export default function DropdownMenu() {
   const property = useSelector(
@@ -33,6 +38,8 @@ export default function DropdownMenu() {
   );
   const dispatch = useDispatch();
   const [isClient, setIsClient] = useState(false);
+
+  // const queryClient = useQueryClient();
 
   // console.log("activeProperty",activeProperty)
 
@@ -52,6 +59,58 @@ export default function DropdownMenu() {
   // if (!isClient) {
   //   return null;
   // }
+
+  async function handleProjectDelete(id:number){
+    try {
+      const project = await ApiCall.delete(`/user/project/${id}`);
+      if(project.status === 200){
+        toast.success("Reset link sent", {
+          position: "top-right",
+        })
+      }
+    }
+    catch (error) {
+      if (error instanceof Error && (error as any).response) {
+        console.error("Error:", (error as any).response.data.message);
+        toast.error("Failed to delete project", {
+          position: "top-right",
+        });
+      } else {
+        console.error("Error:", error);
+        toast.error("Failed to delete project", {
+          position: "top-right",
+        });
+      }
+    }
+  }
+
+
+  // const deleteProjectMutation = useMutation(
+  //   async (id: number) => {
+  //     const response = await ApiCall.delete(`/user/project/${id}`);
+  //     return response;
+  //   },
+  //   {
+  //     onSuccess: (data: { status: number; }) => {
+  //       if (data.status === 200) {
+  //         toast.success('Project deleted successfully!', { position: 'top-right' });
+  //         // Invalidate any relevant queries (e.g., user projects)
+  //         queryClient.invalidateQueries(['userProjects']); // Replace with your query key(s)
+  //       }
+  //     },
+  //     onError: (error: any) => {
+  //       if (error instanceof Error && (error as any).response) {
+  //         console.error('Error:', (error as any).response.data.message);
+  //         toast.error((error as any).response.data.message, { position: 'top-right' });
+  //       } else {
+  //         console.error('Error:', error);
+  //         toast.error('An unexpected error occurred.', { position: 'top-right' });
+  //       }
+  //     },
+  //   }
+  // );
+  
+
   return (
     <div className="text-right">
       <Menu
@@ -88,14 +147,28 @@ export default function DropdownMenu() {
                 return (
                   <MenuItem key={prop.domain ?? ""}>
                     {({ active }) => (
+                      //  <div className="flex p-2">
                       <button
-                        className={`${
-                          active ? "bg-primary text-white" : "text-gray-900"
-                        } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                        className={`${active ? "bg-primary text-white" : "text-gray-900"
+                          } group flex w-full items-center rounded-md px-2 py-2 text-sm justify-between`}
                         onClick={() => dispatch(setActivePropertyObj(prop))}
                       >
-                        {prop.domain}
+
+                        <span className="">{prop.domain}</span>
+                        <span className="flex group cursor-pointer text-gray-500  items-center rounded-full p-2 hover:bg-gray-200 group-hover:text-gray-400 justify-self-end"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            // alert(prop.domain)
+                          }}
+                          title={`Delete`}
+                        >
+
+                          <DeleteProject projectId={prop.id} handleDelete={() => handleProjectDelete(prop.id)} project={prop.domain} />
+                        </span>
                       </button>
+
+                      //  </div>
+
                     )}
                   </MenuItem>
                 );
