@@ -6,7 +6,7 @@ import {
   Transition,
   MenuButton,
 } from "@headlessui/react";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useState } from "react";
 import { IoChevronDownOutline } from "react-icons/io5";
 import { RootState } from "../store";
 import { useSelector } from "react-redux";
@@ -16,54 +16,72 @@ import {
   activePropertyType,
   setActiveProperty,
   setActivePropertyObj,
+  setAllProperty,
 } from "@/redux/features/propertySlice";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import ApiCall from "../utils/apicalls/axiosInterceptor";
+import { MdOutlineDeleteOutline } from "react-icons/md";
+import DeleteProject from "./modals/DeleteProject";
+import toast from "react-hot-toast";
 
 export default function DropdownMenu() {
   const property = useSelector(
     (state: RootState) => state.property.allProperty
   );
-
-  const activeProperty = useSelector(
-    (state: RootState) => state.property.activeProperty
-  );
   const activePropertyObj = useSelector(
     (state: RootState) => state.property.activePropertyObj
   );
   const dispatch = useDispatch();
-  const [isClient, setIsClient] = useState(false);
-
-  // console.log("activeProperty",activeProperty)
+  const queryClient = useQueryClient();
 
   const { data, isError, isPending, isSuccess } = useQuery({
     queryKey: ["all_property"],
     queryFn: async () => {
-      return ApiCall.get(`/user/project`);
+      const response = await ApiCall.get(`/user/project`);
+      dispatch(setAllProperty(response.data.projects));
+      return response;
     },
+    // Add these options to ensure proper updates
+    refetchOnWindowFocus: false,
+    staleTime: 0,
   });
 
-  // console.log("DATA:",data?.data.projects)
+  async function handleProjectDelete(id: number) {
+    try {
+      const project = await ApiCall.delete(`/user/project/${id}`);
+      if (project.status === 204) {
+        // If the deleted project was active, reset it
+        if (activePropertyObj.id === id) {
+          dispatch(setActivePropertyObj({}));
+        }
+  
+        // Fetch the updated data immediately
+        const updatedData = await ApiCall.get(`/user/project`);
+        dispatch(setAllProperty(updatedData.data.projects));
+  
+        // Invalidate the query to ensure cache is updated
+        await queryClient.invalidateQueries({ queryKey: ["all_property"] });
+  
+        toast.success("Project deleted successfully", {
+          position: "top-right",
+        });
+      }
+    } catch (error) {
+      // ... error handling remains the same
+    }
+  }
 
-  // useEffect(() => {
-  //   setIsClient(true);
-  // }, []);
-
-  // if (!isClient) {
-  //   return null;
-  // }
   return (
     <div className="text-right">
       <Menu
         as="div"
-        className=" xl:min-w-[300px] lg:w-[200px] min-[375px]:w-[300px] w-[250px] relative inline-block text-left"
+        className="xl:min-w-[300px] lg:w-[200px] min-[375px]:w-[300px] w-[250px] relative inline-block text-left"
       >
         <MenuButton className="inline-flex w-full justify-between rounded-lg text-black p-3 text-sm font-medium border focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75">
-          {/* { property && property.activeProperty?.length < 1 ? "Domain name" : property.activeProperty} */}
           {(data?.data?.projects?.length ?? []) > 0 ? (
             activePropertyObj.domain
           ) : (
-            <p className="text-gray-600"> {`Domain name`} </p>
+            <p className="text-gray-600">{`Domain name`}</p>
           )}
 
           <IoChevronDownOutline
@@ -82,24 +100,34 @@ export default function DropdownMenu() {
           leaveTo="transform opacity-0 scale-95"
         >
           <MenuItems className="absolute z-50 right-0 mt-2 w-full origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none">
-            <span className="px-1 py-1 ">
-              {/* {JSON.stringify(property)} */}
-              {property.map((prop: activePropertyType) => {
-                return (
-                  <MenuItem key={prop.domain ?? ""}>
-                    {({ active }) => (
-                      <button
-                        className={`${
-                          active ? "bg-primary text-white" : "text-gray-900"
-                        } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                        onClick={() => dispatch(setActivePropertyObj(prop))}
+            <span className="px-1 py-1">
+              {property.map((prop: activePropertyType) => (
+                <MenuItem key={prop.domain ?? ""}>
+                  {({ active }) => (
+                    <button
+                      className={`${
+                        active ? "bg-primary text-white" : "text-gray-900"
+                      } group flex w-full items-center rounded-md px-2 py-2 text-sm justify-between`}
+                      onClick={() => dispatch(setActivePropertyObj(prop))}
+                    >
+                      <span className="">{prop.domain}</span>
+                      <span
+                        className="flex group cursor-pointer text-gray-500 items-center rounded-full p-2 hover:bg-gray-200 group-hover:text-gray-400 justify-self-end"
+                        onClick={(e) => {
+                          e.preventDefault();
+                        }}
+                        title={`Delete`}
                       >
-                        {prop.domain}
-                      </button>
-                    )}
-                  </MenuItem>
-                );
-              })}
+                        <DeleteProject
+                          projectId={prop.id}
+                          handleDelete={() => handleProjectDelete(prop.id)}
+                          project={prop.domain}
+                        />
+                      </span>
+                    </button>
+                  )}
+                </MenuItem>
+              ))}
             </span>
           </MenuItems>
         </Transition>
