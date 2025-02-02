@@ -36,7 +36,7 @@ function DeleteProject({
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={() => handleDelete(projectId)}>Continue</AlertDialogAction>
+                    <AlertDialogAction onClick={() => handleDelete(projectId)} className="bg-primary text-white hover:border-primary hover:bg-white hover:text-primary hover:border">Continue</AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>
