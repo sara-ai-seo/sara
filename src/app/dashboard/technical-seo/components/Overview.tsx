@@ -505,7 +505,7 @@ export default function Overview({ onViewAllIssues }: OverviewProps) {
                 </thead>
                 <tbody>
                   {issues &&
-                    issues.map((issue) => {
+                    issues.slice(0,5).map((issue) => {
                       return (
                         <tr className=" p-2 font-medium" key={issue.title}>
                           <td className="border text-xs text-[#475467] p-2 border-[#c0c2c5] ">

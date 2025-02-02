@@ -110,9 +110,7 @@ export default function AddProject() {
   });
 
   const handleSubmit = () => {
-    const pattern =
-      /^(https?|ftp):\/\/(www\.)?[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})+(:[0-9]{1,5})?(\/.*)?$|^(www\.)[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})+(:[0-9]{1,5})?(\/.*)?$/;
-
+    const pattern = /^(?:(?:https?:\/\/)?(?:www\.)?|www\.)?[a-zA-Z0-9-]+(?:\.[a-zA-Z]{2,})+(?::[0-9]{1,5})?(?:\/.*)?$/;
     if (!pattern.test(inputUrl)) {
       setErr({ status: true, msg: "Enter a valid url" });
       return;
