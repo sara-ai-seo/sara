@@ -1,12 +1,12 @@
 import { z } from "zod";
 
 export const contactFormSchema = z.object({
-  first_name: z
+  firstname: z
     .string()
     .min(2, "First name must be at least 2 characters long"),
-  last_name: z.string().min(2, "Last name must be at least 2 characters long"),
+  lastname: z.string().min(2, "Last name must be at least 2 characters long"),
   email: z.string().min(1).email("Invalid email address"),
-  phone_number: z.object({
+  phonenumber: z.object({
     country_code: z
       .string()
       .min(1)
