@@ -10,19 +10,33 @@ import {
   contactFormSchemaType,
 } from "@/app/zod-schema/contactFormSchema";
 import toast from "react-hot-toast";
+import { useMutation } from "@tanstack/react-query";
+import homeService from "@/services/home";
+
 
 export default function ContactForm() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<contactFormSchemaType>({
     resolver: zodResolver(contactFormSchema),
   });
 
+  const {mutate, isPending} = useMutation({
+    mutationFn: homeService.sendFeedback,
+    onSuccess: () => {
+      toast.success("contact form submtted");
+      reset();
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    }
+  })
+
   const handleSubmitContact: SubmitHandler<contactFormSchemaType> = (data) => {
-    console.log(data);
-    toast.success("contact form submtted");
+    mutate(data)
   };
   return (
     <form
@@ -40,12 +54,12 @@ export default function ContactForm() {
           <input
             type="text"
             id="first_name"
-            {...register("first_name")}
+            {...register("firstname")}
             placeholder="First name"
             className="border border-gray-300 rounded-md p-2 outline-none"
           />
-          {errors.first_name && (
-            <small className="text-red-400">{errors.first_name.message}</small>
+          {errors.firstname && (
+            <small className="text-red-400">{errors.firstname.message}</small>
           )}
         </div>
 
@@ -59,12 +73,12 @@ export default function ContactForm() {
           <input
             type="text"
             id="last_name"
-            {...register("last_name")}
+            {...register("lastname")}
             placeholder="Last name"
             className="border border-gray-300 rounded-md p-2 outline-none"
           />
-          {errors.last_name && (
-            <small className="text-red-400">{errors.last_name.message}</small>
+          {errors.lastname && (
+            <small className="text-red-400">{errors.lastname.message}</small>
           )}
         </div>
       </div>
@@ -96,7 +110,7 @@ export default function ContactForm() {
         <div className="w-full inline-flex items-center">
           <select
             id="phone_number"
-            {...register("phone_number.country_code")}
+            {...register("phonenumber.country_code")}
             className="w-16 border-l border-y rounded-l-md p-[9px] outline-none"
           >
             <Suspense fallback={<div className="text-sm">Loading...</div>}>
@@ -111,14 +125,14 @@ export default function ContactForm() {
           <input
             type="tel"
             id="phone_number"
-            {...register("phone_number.number")}
+            {...register("phonenumber.number")}
             placeholder="+1 (555) 000-0000"
             className="border-y border-r border-gray-300 rounded-r-md p-2 w-full outline-none"
           />
         </div>
 
-        {errors.phone_number && (
-          <small className="text-red-400">{errors.phone_number.message}</small>
+        {errors.phonenumber && (
+          <small className="text-red-400">{errors.phonenumber.message}</small>
         )}
       </div>
 
@@ -156,8 +170,10 @@ export default function ContactForm() {
           </small>
         )}
       </div>
-      <button type="submit" className="text-white bg-[#1570EF] p-3 rounded-md">
-        Send message
+      <button type="submit" disabled={isPending}  className="text-white bg-[#1570EF] p-3 rounded-md">
+        {
+          isPending? "Submitting..." : "Send message"
+        }
       </button>
     </form>
   );
