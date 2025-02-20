@@ -107,12 +107,12 @@ export default function Layout({ children }: Props) {
       icon: <FiMessageSquare />,
       link: "/dashboard/feedback",
     },
-    {
-      title: "Support",
-      icon: <HiOutlineSupport />,
-      link: "/dashboard/support",
-    },
-    { title: "Support", icon: <CiSettings />, link: "/dashboard/settings" },
+    // {
+    //   title: "Support",
+    //   icon: <HiOutlineSupport />,
+    //   link: "/dashboard/support",
+    // },
+    { title: "Settings", icon: <CiSettings />, link: "/dashboard/settings" },
   ];
 
   const pathname = usePathname();

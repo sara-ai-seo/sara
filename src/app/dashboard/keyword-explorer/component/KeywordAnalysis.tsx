@@ -50,8 +50,6 @@ export default function KeywordAnalysis({ addNew }: { addNew: () => void }) {
 
   const currentProperty = CurrentProperty();
 
-  
-
   const { keywordAnalysisData, isPending, isSuccess, isError } =
     useKeywordAnalysisData(currentProperty.id);
 
@@ -77,7 +75,7 @@ export default function KeywordAnalysis({ addNew }: { addNew: () => void }) {
 
   const googleSearchVolume: GoogleSearchVolume[] = (currentData ?? [])?.find((item: any) => item.tab === "googleSearchVolume")?.data
   const currGlobal: GlobalSearchVolume[] = (currentData ?? [])?.find((item: any) => item.tab === "globalSearchVolume")?.data
-  const keywordIdeas: any = (currentData ?? [])?.find((item: any) => item.tab === "keywordIdeas")?.data as KeywordIdea
+  const keywordIdeas: any = (currentData ?? [])?.find((item: any) => item.tab === "keywordIdeas")?.data
   // console.log("@",  (currentData ?? [])?.find((item: any) => item.tab === "googleSearchVolume"))
   // console.log("@", googleSearchVolume && (googleSearchVolume[0]?.competition_index))
   // console.log("#", keywordIdeas)
@@ -298,6 +296,7 @@ export default function KeywordAnalysis({ addNew }: { addNew: () => void }) {
     );
   }
 
+  
 
 
   return (
@@ -341,11 +340,14 @@ export default function KeywordAnalysis({ addNew }: { addNew: () => void }) {
                 )}
 
 {
+
   keywordData?.map((item: any, i: number) => {
     const google = item.find((fig: CrawlingData) => fig.tab === "googleSearchVolume")?.data ?? {} as GoogleSearchVolume
     const bing = item.find((fig: CrawlingData) => fig.tab === "bingSearchVolume")?.data ?? {} as BingSearchVolumeData
+    const KD = item.find((fig: any) => fig.tab === "keywordIdeas")?.data[0]?.parent_keyword_difficulty
     
-    // console.log("@",item)
+    // const check = item?.find((x) => x.tab === "keywordIdeas")
+
     // Skip rendering if no google data is available
     if (!google[0]?.keyword) return null;
 
@@ -367,7 +369,8 @@ export default function KeywordAnalysis({ addNew }: { addNew: () => void }) {
         <TableCell className=""> {google[0]?.cpc ?? '-'} </TableCell>
         <TableCell className=""> {google[0]?.search_volume ?? '-'} </TableCell>
         <TableCell className=""> {google[0]?.competition ?? '-'} </TableCell>
-        <TableCell className=""> {google[0]?.competition_index ?? '-'} </TableCell>
+        {/* <TableCell className=""> {google[0]?.competition_index ?? '-'} </TableCell> */}
+        <TableCell className=""> {KD ? `${KD.toFixed(2) }%` :  "NA"} </TableCell>
         <TableCell className=""> {google[0]?.location_code ?? '-'} </TableCell>
       </TableRow>
     )
