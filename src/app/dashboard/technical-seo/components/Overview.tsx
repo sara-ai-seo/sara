@@ -34,6 +34,7 @@ import { CSVLink, CSVDownload } from "react-csv";
 import { forwardRef } from "react";
 import { Doughnut } from "react-chartjs-2";
 import DoughnutCenterLabel from "./(technicalseo)/DoughnutCenterLabel";
+import ShowDescription from "@/app/component/ShowDescription";
 // import { TechnicalSeoType } from "@/types/TechnicalSeoType";
 // import { useEffect } from "react";
 // import { removeTrailingSlash } from "@/app/utils/RemoveSlash";
@@ -319,7 +320,7 @@ export default function Overview({ onViewAllIssues }: OverviewProps) {
             <section className="w-full h-full col-span-3 md:h-[464px] border rounded-md p-6">
               <SubHead
                 title="Core web vitals"
-                info="These are a set of specific factors that Google considers important in assessing the user experience of a web page"
+                info="Key measurements that show your site’s speed, responsiveness, and visual stability."
               />
               <div className="grid w-full h-full items-center justify-between grid-col-1 lg:grid-cols-3 min-[540px]:grid-cols-2 py-6 overflow-y-auto">
                 {/* <EachItem title="Largest Contentful Paint (LCP)" data={LCPdata} poorPages={technicalSeoData.metrics.lcp.poor} needsImprovementPages={technicalSeoData.lcp.needsImprovement} goodPages={technicalSeoData.lcp.good} info={"Largest Contentful Paint (LCP) is a user-centric performance metric that measures the perceived loading speed of a web page. It specifically focuses on the time it takes for the largest content element, such as an image or a block of text, to render on the user's screen"} /> */}
@@ -330,7 +331,7 @@ export default function Overview({ onViewAllIssues }: OverviewProps) {
                   needsImprovementPages={LcpAnalysis?.needs_improvement || 0}
                   goodPages={LcpAnalysis?.good || 0}
                   info={
-                    "Largest Contentful Paint (LCP) is a user-centric performance metric that measures the perceived loading speed of a web page. It specifically focuses on the time it takes for the largest content element, such as an image or a block of text, to render on the user's screen"
+                    "How long it takes for the largest piece of content on your page to load"
                   }
                 />
                 <EachItem
@@ -342,7 +343,7 @@ export default function Overview({ onViewAllIssues }: OverviewProps) {
                   }
                   goodPages={FirstInputDelay?.good || 0}
                   info={
-                    "First Input Delay (FID) measures the time it takes for a webpage to respond to the first user interaction, reflecting its interactivity."
+                    "The time it takes for your site to start responding when a user first clicks or taps."
                   }
                 />
                 <EachItem
@@ -352,7 +353,7 @@ export default function Overview({ onViewAllIssues }: OverviewProps) {
                   needsImprovementPages={CLSAnalysis?.needs_improvement || 0}
                   goodPages={CLSAnalysis?.good || 0}
                   info={
-                    "This is a user-centric performance metric that quantifies the visual stability of a web page as it loads and interacts with the user"
+                    "Measures if elements on your page move around unexpectedly while loading."
                   }
                 />
               </div>
@@ -362,7 +363,7 @@ export default function Overview({ onViewAllIssues }: OverviewProps) {
             <div className=" p-2 md:p-4 col-span-1 h-[308px] justify-items-start rounded-md w-full border">
               <Title
                 title={"Crawl status"}
-                info="The status of the crawl result"
+                info="The status of the crawl result, showing crawled and uncrawled"
                 className="font-bold"
               />
               <div className="p-2 flex lg:flex-row flex-col w-full justify-between h-full">
@@ -400,7 +401,7 @@ export default function Overview({ onViewAllIssues }: OverviewProps) {
             <div className="grid p-2 md:p-4 col-span-1 h-[308px] justify-items-start  rounded-md w-full border ">
               <Title
                 title="HTTP status codes"
-                info="The returned code status that indicate what the response is"
+                info="Codes that tell you if a page loaded correctly (like 200 for success, 404 for not found)"
               />
               <div className="p-4 flex lg:flex-row flex-col gap-2 h-48 w-full">
                 <ReusableHTTPStatusCode item={overviewResult[0]?.status_code} />
@@ -409,7 +410,7 @@ export default function Overview({ onViewAllIssues }: OverviewProps) {
             <div className="grid p-2 md:p-4 col-span-1 h-[308px] justify-items-start rounded-md w-full border ">
               <Title
                 title="Site issues"
-                info="All issues associated with thw website"
+                info="Any problems or errors detected on your website."
               />
               <div className="p-4 lg:flex-row flex-col gap-2 h-48  w-full ">
                 <ActivityGuage
@@ -455,7 +456,7 @@ export default function Overview({ onViewAllIssues }: OverviewProps) {
                   className={`text-[#101828] gap-3 flex items-center font-semibold sm:text-lg`}
                 >
                   Top issues
-                  <RxQuestionMarkCircled className="text-gray-400" />
+                  <ShowDescription description="The most critical problems that need to be fixed first." />
                 </h1>
                 <div className="flex items-center gap-2 md:gap-4">
                   <div className="flex">

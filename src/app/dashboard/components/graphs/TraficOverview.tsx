@@ -113,7 +113,7 @@ export const TOverview: React.FC<TOverviewDto> = ({
           <div className="flex w-auto h-full items-start justify-between">
             <h1 className={`text-[#101828] flex items-center gap-4`}>
               Position Distribution(Organic)
-              <button title="Here is the summary of your website visitors">
+              <button title="A color-coded breakdown of where your site ranks in search results (e.g., positions 2-3, 4-20, 31-40, 41-50).">
                 <RxQuestionMarkCircled className="text-gray-600" />
               </button>
             </h1>

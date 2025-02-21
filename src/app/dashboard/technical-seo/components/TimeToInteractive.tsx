@@ -20,7 +20,7 @@ export  const TimeToInteractive: React.FC<Props>  = ({
   return (
     <Card
       title={title}
-      amount={`${ShortenNumber(score)}s`}
+      amount={`${ShortenNumber(score)}ms`}
       style={
         getClass(current - previous)
       }
@@ -29,6 +29,8 @@ export  const TimeToInteractive: React.FC<Props>  = ({
       arrowPosition={
         arrowStyle(current - previous)
       }
+      showDescription
+      description="The time it takes for the biggest visible element (like a main image or text block) on your page to load."
     />
   );
 }

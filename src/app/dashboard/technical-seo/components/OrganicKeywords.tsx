@@ -75,7 +75,7 @@ export default function OrganicKeywords() {
   return (
     <Card
       title={"Organic Keywords"}
-      amount={ShortenNumber(actualOrganicKeyword)}
+      amount={`${ShortenNumber(actualOrganicKeyword)}ms`}
       style={
         pageData.length === 1
           ? ""
@@ -96,6 +96,8 @@ export default function OrganicKeywords() {
           ? ""
           : "rotate-i80"
       }
+      showDescription
+      description="How long it takes for your website to be ready for you to click or interact."
     />
   );
 }

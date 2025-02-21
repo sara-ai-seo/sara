@@ -17,6 +17,7 @@ import {
 } from "@/types/technicalseo/technicalSeoTypes";
 import ReUsableHTTPStatusCode from "./(technicalseo)/ReusableHTTPStatusCode";
 import { useTechnicalSeoFetchData } from "@/app/services/technicalSeo/TechnicalSeoFetch";
+import ShowDescription from "@/app/component/ShowDescription";
 
 export default function Crawlability() {
   const [Err, setErr] = useState({
@@ -33,49 +34,11 @@ export default function Crawlability() {
   // const techSeo = useSelector((state: RootState) => state.technicalSeo);
   const { data, isLoading } = useTechnicalSeoFetchData();
 
-  // const overviewResult: OverviewDataType[] = techSeo.crawlings.flatMap(
-  //   (crawling: any) =>
-  //     crawling.crawlingData
-  //       .filter((data: any) => data.tab === "overview")
-  //       .map((overviewData: CrawlingDataOverview) => ({
-  //         pagesCrawled: overviewData.data.crawl_status.pages_crawled,
-  //         pagesInQueue: overviewData.data.crawl_status.pages_in_queue,
-  //         maxCrawlPages: overviewData.data.crawl_status.max_crawl_pages,
-  //       }))
-  // );
-
   // Loop through the crawlings array
   const crawlbilityAndIndexibiltyResult: CrawlingDataCrawlability[] =
     data?.crawlings?.flatMap((crawling: any) =>
       crawling.crawlingData.filter(isCrawlabilityData)
     ) ?? [];
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       setLoading(true);
-  //       const response = await ApiCall.get("/crawl/technical-seo", {
-  //         params: {
-  //           limit: 100,
-  //           platform: "desktop",
-  //           url: removeTrailingSlash(activeProperty),
-  //           page: "crawlability",
-  //         },
-  //       });
-  //       setCrawlabilityData(response.data);
-  //       // console.log(response.data);
-  //     } catch (error: any) {
-  //       setErr({
-  //         status: true,
-  //         message: error.message,
-  //       });
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, [activeProperty]);
 
   const crawled =
     crawlbilityAndIndexibiltyResult[0]?.data.crawled_detail.pages_crawled || 0;
@@ -167,7 +130,7 @@ export default function Crawlability() {
               className={`text-[#101828] gap-3 flex items-center font-semibold text-xl`}
             >
               Crawled pages
-              <RxQuestionMarkCircled />
+              <ShowDescription description="The number of pages that search engines have visited on your site." />
             </h1>
             <hr className="mt-2 w-full" />
           </div>
@@ -187,7 +150,7 @@ export default function Crawlability() {
           <Title
             title="Indexability"
             info={
-              "This is the ability of a page to be added to google crawl engine"
+              "Shows whether your pages can be added to search engine listings."
             }
           />
           <div className="grid w-full gap-4 justify-items-center  ">
@@ -233,7 +196,7 @@ export default function Crawlability() {
           <Title
             title="Pages not indexed by search engines"
             info={
-              "These are pages for one reason or the other that google cannot search at the moment"
+              "Pages that search engines haven’t added to their results."
             }
           />
           <div className=" h-full w-full ">
@@ -253,7 +216,7 @@ export default function Crawlability() {
           <Title
             title="HTTP status codes"
             info={
-              "HTTP status code is the informative response from the server based on requests on your website"
+              "Codes that explain how each page loaded (success, error, etc.)."
             }
           />
           <div className="grid w-full gap-4 justify-items-center ">

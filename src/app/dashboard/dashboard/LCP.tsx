@@ -19,11 +19,13 @@ export const LCP: React.FC<LCPProps> = ({
     return (
         <div>
             <Card title={"LCP"}
-                amount={ShortenNumber(amount)}
+                amount={`${ShortenNumber(amount)}ms`}
                 style={getClass(difference)}
                 percent={calculatePercentageDifference(previous, amount)}
                 chart={<LineChart pageData={chartData} />}
                 arrowPosition={arrowStyle(difference)}
+                showDescription
+                description="The time it takes for the biggest visible element (like a main image or text block) on your page to load."
             />
         </div>
     )

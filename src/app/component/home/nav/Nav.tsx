@@ -139,9 +139,9 @@ export default function Nav() {
               anchor={{ to: "top" }}
               className="w-[790px] translate-x-10 origin-top-right grid grid-cols-2 gap-5 bg-white p-8 shadow-md rounded-md font-normal border border-white/5  text-sm/6  transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0"
             >
-              {feature.map((item) => {
+              {feature.map((item, i) => {
                 return (
-                  <MenuItem>
+                  <MenuItem key={i}>
                     <div
                       className="flex z-50 h-full text-base p-2 cursor-pointer hover:bg-blue-200 hover:rounded-md items-start w-full gap-3"
                       onClick={() => router.push(`${item.link}`)}

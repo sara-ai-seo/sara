@@ -19,6 +19,7 @@ import { DataTable } from "@/components/ui/data-table";
 import { ExploreContentTableColumns } from "../../content-analysis/columns/content-analysis-column";
 import { exploreContentTableData } from "../../content-analysis/data/exploreContentTableData";
 import { sitePerformanceIssueColumns } from "../column/sitePerformanceIssueColumn";
+import ShowDescription from "@/app/component/ShowDescription";
 
 export default function SitePerformance() {
   const [isPerformanceIssue, setIsPerformanceIssue] = useState(false);
@@ -77,7 +78,7 @@ export default function SitePerformance() {
         <h5 className=" font-semibold text-base flex gap-4 items-center">
           {" "}
           Page load speed{" "}
-          <button title="Time it take for the page to completely be loaded">
+          <button title="How quickly a specific page displays all its content.">
             {" "}
             <RxQuestionMarkCircled />{" "}
           </button>{" "}
@@ -114,6 +115,8 @@ export default function SitePerformance() {
               style={""}
               percent={1}
               chart={undefined}
+              showDescription
+              description="The typical time it takes for your pages to fully load."
             />
             {CardClone}
           </div>
@@ -124,7 +127,7 @@ export default function SitePerformance() {
               className={`text-[#101828] gap-3 flex items-center font-semibold text-xl`}
             >
               Amount of Javascript and CSS
-              <button title={`JavaScript and CSS in the website`}>
+              <button title={`The volume of code (scripts and styles) on your site, which can affect loading speed`}>
                 {" "}
                 <RxQuestionMarkCircled />
               </button>
@@ -143,7 +146,7 @@ export default function SitePerformance() {
       <section className="flex flex-col w-3/4 border rounded-md p-6 mb-20">
         <div className="flex  justify-between w-full border-b pb-2">
           <h3 className="text-[#101828] text-xl font-semibold">
-            Site performance issues
+            Site performance issues <ShowDescription description="Issues that affect the performance of your site" />
           </h3>
           <button
             onClick={() => setIsPerformanceIssue(!isPerformanceIssue)}
