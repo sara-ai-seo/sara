@@ -2,7 +2,7 @@
 import PageTitle from "@/app/component/PageTitle";
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react'
 import { Fragment } from 'react';
-import Profile  from './Profile'; 
+import {Profile}  from './Profile'; 
 import Preferences from "./Preferences";
 import Security from "./Security";
 
@@ -15,7 +15,7 @@ export default function SettingsLayout() {
         { title: "Security", content: <Security /> }
     ]
     return (
-        <section className={`my-8 mx-4 lg:my-12 lg:mx-20 grid gap-4 lg:gap-8`}>
+        <section className={`my-4 mx-4 lg:my-8 lg:mx-20 grid gap-4 lg:gap-8`}>
             <PageTitle title="Settings" />
 
 
