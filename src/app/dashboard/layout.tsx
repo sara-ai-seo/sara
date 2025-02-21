@@ -283,18 +283,16 @@ export default function Layout({ children }: Props) {
               onClick={() => setFullWidth(!fullWidth)}
             >
               <RxDoubleArrowLeft
-                className={`${
-                  !fullWidth && "scale-x-[-1]"
-                } duration-300 transition-all ease-out`}
+                className={`${!fullWidth && "scale-x-[-1]"
+                  } duration-300 transition-all ease-out`}
               />
             </div>
 
             <div className="grid ">
               <Link href={`/`}>
                 <Image
-                  src={`${
-                    fullWidth ? "/home/white-logo.png" : "/home/mobile-logo.png"
-                  }`}
+                  src={`${fullWidth ? "/home/white-logo.png" : "/home/mobile-logo.png"
+                    }`}
                   className=" pt-2"
                   alt="Webmaxi Logo"
                   height={24}
@@ -309,9 +307,8 @@ export default function Layout({ children }: Props) {
                       key={menu.link}
                       onClick={(e) => handleRoutes(e, menu.link)}
                       href={`${menu.link}`}
-                      className={` ${
-                        isActive(menu.link) ? " text-white bg-[#1570EF]" : ""
-                      }  hover:text-white hover:scale-105 transition-all duration-300 ease-in-out p-2 rounded-md flex  text-[#84CAFF] items-center gap-2`}
+                      className={` ${isActive(menu.link) ? " text-white bg-[#1570EF]" : ""
+                        }  hover:text-white hover:scale-105 transition-all duration-300 ease-in-out p-2 rounded-md flex  text-[#84CAFF] items-center gap-2`}
                     >
                       {menu.icon}
                       {fullWidth && menu.title}
@@ -320,7 +317,7 @@ export default function Layout({ children }: Props) {
                 })}
               </div>
             </div>
-            <div className="grid gap-4">
+            {/* <div className="grid gap-4">
               {othermenu.map((menu) => {
                 return (
                   <a
@@ -330,6 +327,23 @@ export default function Layout({ children }: Props) {
                     className={`flex  ${
                       isActive(menu.link) ? " text-white bg-[#1570EF]" : ""
                     } hover:text-white hover:scale-105 transition-all duration-300 ease-in-out text-[#84CAFF] items-center gap-2`}
+                  >
+                    {menu.icon}
+                    {fullWidth && menu.title}
+                  </a>
+                );
+              })}
+            </div> */}
+
+            <div className="grid gap-2 mt-12">
+              {othermenu.map((menu) => {
+                return (
+                  <a
+                    key={menu.link}
+                    onClick={(e) => handleRoutes(e, menu.link)}
+                    href={`${menu.link}`}
+                    className={` ${isActive(menu.link) ? " text-white bg-[#1570EF]" : ""
+                      }  hover:text-white hover:scale-105 transition-all duration-300 ease-in-out p-2 rounded-md flex  text-[#84CAFF] items-center gap-2`}
                   >
                     {menu.icon}
                     {fullWidth && menu.title}
