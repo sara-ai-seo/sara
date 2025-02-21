@@ -9,6 +9,7 @@ import { RiExpandUpDownFill } from "react-icons/ri";
 import { TbPointFilled } from "react-icons/tb";
 import Button from "../../components/ui/Button";
 import { MdAdd } from "react-icons/md";
+import ShowDescription from "@/app/component/ShowDescription";
 
 
 export interface KeywordGapType {
@@ -68,38 +69,38 @@ export default function KeywordGap({
               <th className="pl-6 py-6">
                 <span className={`flex gap-2 items-center `}>
                   {/* <input type="checkbox" value={``} /> */}
-                  <p> Keywords</p>
+                  <p> Keywords <ShowDescription description="The search terms compared between your site and competitors." /> </p>
                 </span>
               </th>
               <th className=" py-6">
                 <span className={`flex gap-1 items-center `}>
-                  <p> Volume</p>
+                  <p> Volume <ShowDescription description="How many times these keywords are searched for." /> </p>
                   <RiExpandUpDownFill />
                 </span>
               </th>
               <th className=" py-6">
                 <span className={`flex gap-1 items-center `}>
-                  <p> KD</p>
-                  <button className="" title="Here...">
+                  <p> KD <ShowDescription description="A measure of how challenging it is to rank for these keywords." /> </p>
+                  {/* <button className="" title="Here...">
                     {" "}
                     <FaRegCircleQuestion />
-                  </button>
+                  </button> */}
                 </span>
               </th>
               <th className=" py-6">
                 <span className={`flex gap-1 items-center `}>
-                  <p> Competition</p>
-                  <button className="" title="Here...">
+                  <p> Competition <ShowDescription description="The level of difficulty and competition for these keywords." /> </p>
+                  {/* <button className="" title="Here...">
                     <FaRegCircleQuestion />
-                  </button>
+                  </button> */}
                 </span>
               </th>
               <th className=" py-6">
                 <span className={`flex gap-1 items-center `}>
-                  <p> Your rank</p>
-                  <button className="" title="Here...">
+                  <p> Your rank <ShowDescription description="Your current position in the search results for these keywords." /> </p>
+                  {/* <button className="" title="Here...">
                     <FaRegCircleQuestion />
-                  </button>
+                  </button> */}
                   <span className="hover:text-green-600 cursor-pointer transition-transform duration-300 hover:scale-1.5">
                     <RiExpandUpDownFill />
                   </span>
@@ -107,20 +108,20 @@ export default function KeywordGap({
               </th>
               <th className=" py-6">
                 <span className={`flex gap-1 items-center `}>
-                  <p> Domain 1</p>
-                  <button className="" title="Here...">
+                  <p> Domain 1 <ShowDescription description="One competitor’s website included in the analysis." /> </p>
+                  {/* <button className="" title="Here...">
                     {" "}
                     <FaRegCircleQuestion />
-                  </button>
+                  </button> */}
                 </span>
               </th>
               <th className=" py-6">
                 <span className={`flex gap-1 items-center `}>
-                  <p> Domain 2</p>
-                  <button className="" title="Here...">
+                  <p> Domain 2 <ShowDescription description="Another competitor’s website included in the analysis." /> </p>
+                  {/* <button className="" title="Here...">
                     {" "}
                     <FaRegCircleQuestion />
-                  </button>
+                  </button> */}
                 </span>
               </th>
               {/* <th className="pl-6 py-6">

@@ -4,6 +4,7 @@ import { RootState } from "../store";
 import { formatDate } from "@/lib/DateFormater";
 import { ShortenNumber } from "../utils/ShortenedNumber";
 import Loader from "../component/Loader";
+import ShowDescription from "../component/ShowDescription";
 
 interface Props {
   title: string;
@@ -13,7 +14,9 @@ interface Props {
   arrowPosition?: string;
   chart: React.ReactNode;
   isLoading?: boolean;
-  isError?: boolean
+  isError?: boolean;
+  showDescription?: boolean;
+  description?: string;
 }
 
 
@@ -41,7 +44,9 @@ export default function Card({
   chart,
   arrowPosition,
   isLoading,
-  isError
+  isError,
+  showDescription = false,
+  description,
 }: Props) {
   const { metrics, loading, error } = useSelector(
     (state: RootState) => state.performance
@@ -87,7 +92,7 @@ export default function Card({
         :
         <div className="">
         <div className="flex w-full justify-between items-center">
-          <h5 className=" font-semibold text-base">{title}</h5>
+          <h5 className=" font-semibold text-base items-center">{title} {showDescription && <ShowDescription description={description || ""} /> } </h5>
           <p className=" text-sm font-normal">{lastUpdated}</p>
         </div>
         <div className="grid">

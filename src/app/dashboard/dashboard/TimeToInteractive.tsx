@@ -35,11 +35,13 @@ export const TimeToInteractive: React.FC<TTIProps> = ({
     return (
         <div>
             <Card title={"Time to interactive"}
-                amount={amount}
+                amount={`${amount}ms`}
                 style={getClass(difference)}
                 percent={calculatePercentageDifference(previous, amount)}
                 chart={<LineChart pageData={chartData} />}
                 arrowPosition={arrowStyle(difference)}
+                showDescription
+                description="How long it takes for your website to be ready for you to click or interact."
             />
         </div>
     )

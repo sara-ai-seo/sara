@@ -187,7 +187,7 @@ export default function Rankings() {
                     <span className={`flex items-center gap-1 text-xs`}>
                       {" "}
                       Volume{" "}
-                      <button title="The volume of ...">
+                      <button title="How many times a keyword is searched in a given period.">
                         {" "}
                         <GoQuestion />
                       </button>{" "}
@@ -198,7 +198,7 @@ export default function Rankings() {
                     <span className={`flex items-center gap-1 text-xs `}>
                       {" "}
                       Referring Pages{" "}
-                      <button title="The volume of ...">
+                      <button title="Web pages that link back to your site.”">
                         {" "}
                         <GoQuestion />
                       </button>{" "}
@@ -209,7 +209,7 @@ export default function Rankings() {
                     <span className={`flex items-center gap-1 text-xs`}>
                       {" "}
                       Backlinks
-                      <button title="The volume of ...">
+                      <button title="Links from other websites pointing to your site.">
                         {" "}
                         <GoQuestion />
                       </button>{" "}
@@ -220,7 +220,7 @@ export default function Rankings() {
                     <span className={`flex items-center gap-1 text-xs`}>
                       {" "}
                       Do-follow
-                      <button title="The volume of ...">
+                      <button title="Backlinks that pass SEO value (ranking power) to your site.">
                         {" "}
                         <GoQuestion />
                       </button>{" "}
@@ -231,7 +231,7 @@ export default function Rankings() {
                     <span className={`flex items-center gap-1 text-xs`}>
                       {" "}
                       SERP features{" "}
-                      <button title="The volume of ...">
+                      <button title="Special search results (like snippets or maps) that appear in search engines.">
                         {" "}
                         <GoQuestion />
                       </button>{" "}
@@ -242,7 +242,7 @@ export default function Rankings() {
                     <span className={`flex items-center gap-1 text-xs`}>
                       {" "}
                       KD{" "}
-                      <button title="The volume of ...">
+                      <button title="A score indicating how hard it is to rank for a keyword.">
                         {" "}
                         <GoQuestion />
                       </button>{" "}
@@ -252,7 +252,7 @@ export default function Rankings() {
                     <span className={`flex items-center gap-1 text-xs`}>
                       {" "}
                       CPC
-                      <button title="The volume of ...">
+                      <button title="The average cost advertisers pay for each click on an ad.">
                         {" "}
                         <GoQuestion />
                       </button>{" "}

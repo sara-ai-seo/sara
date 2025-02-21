@@ -19,6 +19,7 @@ import {
   TableRow,
   TableBody
 } from "@/components/ui/table"
+import ShowDescription from "@/app/component/ShowDescription";
 
 
 interface Props {
@@ -62,15 +63,15 @@ export default function LinkGap() {
           <TableHeader className="w-full bg-[#EAECF0] text-left">
             <TableRow className="text-[#475467] font-normal text-xs">
               <TableHead className="p-4">
-                Reffering domains
+                Reffering domains <ShowDescription description="Websites that link to your competitors but not to you." />
               </TableHead>
               <TableHead className="p-4">
-                  <p> Rank Position</p>
+                  <p> Rank Position <ShowDescription description="The ranking position where these links or pages appear." /> </p>
               </TableHead>
               <TableHead className="p-4">
                 <span className={`flex gap-1 items-center `}>
-                  <p> Intersections</p>
-                  <button className="" title="Here..."> <FaRegCircleQuestion /></button>
+                  <p> Intersections <ShowDescription description="Common linking domains or pages shared among your competitors." /> </p>
+                  {/* <button className="" title="Here..."> <FaRegCircleQuestion /></button> */}
                 </span>
               </TableHead>
 
