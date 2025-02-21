@@ -48,6 +48,8 @@ export default function OrganicTrafficCard() {
       arrowPosition={
         percentageDiff < 0 ? "rotate-180" : ""
       }
+      showDescription
+      description="The number of visitors coming naturally from search engines."
     />
   );
 }

@@ -504,6 +504,8 @@ export default function RankOverview({ se, type }: Props) {
           )}
           arrowPosition={arrowStyleTwo( estimatedPTC[1], estimatedPTC[0])}
           chart={<LineChart pageData={estimatedPaidTrafficCost()} />}
+          showDescription
+          description="How much you’re spending on ads to bring in traffic."
         />
         <Card
           title={"New Ranking Element"}
@@ -520,6 +522,8 @@ export default function RankOverview({ se, type }: Props) {
             newRanking[0]
           )}
           chart={<LineChart pageData={getNewrankingData()} />}
+          showDescription
+          description="A recently identified change in your search rankings."
         />
       </section>
       <section className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 md:gap-8 gap-4">
@@ -528,7 +532,7 @@ export default function RankOverview({ se, type }: Props) {
         >
           <TitleWithoutUnderline
             title={"Keyword ranking "}
-            info={"Keyword ranking "}
+            info={"The position where your website appears for a specific search term"}
           />
           <div className="w-full rounded-xl border shadow-sm content-start justify-between ">
             <table className="py-4 w-full  table-fixed">
@@ -676,7 +680,7 @@ export default function RankOverview({ se, type }: Props) {
         >
           <TitleWithoutUnderline
             title={"Position distributions "}
-            info={"Position distributions"}
+            info={"A visual breakdown of your search rankings for both paid ads and natural results."}
           />
           <Line
             data={data as ChartData<"line", number[], string>}

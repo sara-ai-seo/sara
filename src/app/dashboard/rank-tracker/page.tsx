@@ -110,19 +110,7 @@ export default function page() {
         </div>
         <div className="flex items-center gap-4 w-full sm:justify-end">
           <div className="">
-            {/* <FilledButton
-              title={"Re-track rankings"}
-              loading={mutatePending}
-              className="sm:text-base text-sm min-[375px]:px-5 px-px  min-[375px]:h-full h-9"
-              handleClick={() => {
-                RankMutate({
-                  target: trimDomain(project.domain), 
-                  id: project.id, 
-                  location_code: 2840
-                })
-              }
-            }
-            /> */}
+           
 
             {mutatePending ? (
               <ProgressBarPercent progress={progress} />

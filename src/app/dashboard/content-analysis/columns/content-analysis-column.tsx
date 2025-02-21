@@ -24,10 +24,10 @@ export const ExploreContentTableColumns: ColumnDef<ExploreContentTableItemType>[
       accessorKey: "info",
       header: () => {
         return (
-          <Button variant="" className="inline-flex gap-1">
+          <button className="inline-flex gap-1">
             Page title, snippet, & info{" "}
-            <TitleWithoutUnderline title="" info={""} />
-          </Button>
+            <TitleWithoutUnderline title="" info={"The title and summary details of your page that show up in search results."} />
+          </button>
         );
       },
       cell: ({ row }) => {
@@ -88,7 +88,7 @@ export const ExploreContentTableColumns: ColumnDef<ExploreContentTableItemType>[
       accessorKey: "dr",
       header: () => (
         <button className="flex items-center gap-0.5">
-          DR <TitleWithoutUnderline title="" info={"Domain rank"} />
+          DR <TitleWithoutUnderline title="" info={"A score that shows how strong your website’s backlink profile is."} />
         </button>
       ),
     },
@@ -96,7 +96,7 @@ export const ExploreContentTableColumns: ColumnDef<ExploreContentTableItemType>[
       accessorKey: "ur",
       header: () => (
         <button className="flex items-center gap-0.5">
-          UR <TitleWithoutUnderline title="" info={"URL rank"} />
+          UR <TitleWithoutUnderline title="" info={"A score that indicates the strength of a specific page’s backlink profile."} />
         </button>
       ),
     },
@@ -104,7 +104,7 @@ export const ExploreContentTableColumns: ColumnDef<ExploreContentTableItemType>[
       accessorKey: "bss",
       header: () => (
         <button className="flex items-center gap-0.5">
-          BSS <TitleWithoutUnderline title="" info={"backlink spam score"} />
+          BSS <TitleWithoutUnderline title="" info={"A metric reflecting the social engagement or signals of your content."} />
         </button>
       ),
     },
@@ -127,7 +127,7 @@ export const ExploreContentTableColumns: ColumnDef<ExploreContentTableItemType>[
       accessorKey: "cqs",
       header: () => (
         <button className="flex items-center gap-0.5">
-          CQS <TitleWithoutUnderline title="" info={"content quality score"} />
+          CQS <TitleWithoutUnderline title="" info={"A score measuring how well your content meets quality standards."} />
         </button>
       ),
     },

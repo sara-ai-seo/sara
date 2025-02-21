@@ -52,7 +52,7 @@ export default function Overview({ OverviewData }: OverviewProps) {
           <div className="mt-6">
             <TitleWithoutUnderline
               title={"Aggregate rank"}
-              info={"Aggregate rank"}
+              info={"An overall score that combines different ranking factors."}
             />
           </div>
 
@@ -65,7 +65,7 @@ export default function Overview({ OverviewData }: OverviewProps) {
           <div className="mt-6">
             <TitleWithoutUnderline
               title={"Connotation types"}
-              info={"Connotation types"}
+              info={"Categories that describe the tone or style of the content."}
             />
 
             <div className="flex h-[200px] w-full mt-6 gap-2">
@@ -92,7 +92,7 @@ export default function Overview({ OverviewData }: OverviewProps) {
         <div className="mt-6">
           <TitleWithoutUnderline
             title={"Sentiment connotations"}
-            info={"Sentiment connotations"}
+            info={"The general tone or emotion (positive, neutral, negative) shown in the content."}
           />
         </div>
 
@@ -103,7 +103,7 @@ export default function Overview({ OverviewData }: OverviewProps) {
       {/* third grid */}
       <div className=" h-[480px] border rounded-md px-4">
         <div className="mt-6">
-          <TitleWithoutUnderline title={"Top domains"} info={"Top domains"} />
+          <TitleWithoutUnderline title={"Top domains"} info={"The leading websites that are influencing your content’s ranking."} />
         </div>
         <hr className="mt-4" />
         <div className="overflow-x-auto max-w-full mt-4">

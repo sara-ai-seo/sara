@@ -33,6 +33,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import ShowDescription from "@/app/component/ShowDescription";
 
 
 
@@ -318,12 +319,12 @@ export default function KeywordAnalysis({ addNew }: { addNew: () => void }) {
             <Table>
               <TableHeader className="w-full">
                 <TableRow className="w-full">
-                  <TableHead className="">Keyword</TableHead>
-                  <TableHead>CPC</TableHead>
-                  <TableHead>Search Volume</TableHead>
-                  <TableHead>Competition</TableHead>
-                  <TableHead className="">KD</TableHead>
-                  <TableHead className="">Location Code</TableHead>
+                  <TableHead className="">Keyword <ShowDescription description="The search term you’re analyzing" /> </TableHead>
+                  <TableHead>CPC <ShowDescription description="How much advertisers typically pay for a click when this keyword is used. "/> </TableHead>
+                  <TableHead>Search Volume <ShowDescription description="The number of times this keyword is searched over a period. "/> </TableHead>
+                  <TableHead>Competition <ShowDescription description="How many advertisers are bidding on this keyword. "/> </TableHead>
+                  <TableHead className="">KD <ShowDescription description="A score showing how tough it is to rank for this keyword. "/> </TableHead>
+                  <TableHead className="">Location Code <ShowDescription description="A code representing the geographic area for the search data. "/> </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody className="w-full">
