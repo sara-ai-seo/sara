@@ -10,6 +10,15 @@ const ApiCall = axios.create({
   // timeout: 10000
 });
 
+const FormDataApiCall = axios.create({
+  baseURL: base_url,
+  // timeout: 10000,
+  headers: {
+    "Content-Type": "multipart/form-data", 
+  }
+});
+
+
 // Function to get token from Redux store
 const getToken = (store: any) => {
   const token = store.getState().user.token;
@@ -32,7 +41,34 @@ export const configureApiCall = (store: any) => {
       return Promise.reject(error);
     }
   );
+
+  FormDataApiCall.interceptors.request.use(
+    (config) => {
+      const token = getToken(store);
+      if (token) {
+        config.headers["Authorization"] = `Bearer ${token}`;
+      }
+      return config;
+    },
+    (error) => {
+      return Promise.reject(error);
+    }
+  );
+
+
   ApiCall.interceptors.response.use(
+    (response) => {
+      return response;
+    },
+    (error) => {
+      if (error?.response?.status === 401) {
+        handleUnauthorized();
+      }
+      return Promise.reject(error);
+    }
+  );
+
+  FormDataApiCall.interceptors.response.use(
     (response) => {
       return response;
     },
@@ -46,3 +82,4 @@ export const configureApiCall = (store: any) => {
 };
 
 export default ApiCall;
+export { FormDataApiCall };

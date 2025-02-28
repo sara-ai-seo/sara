@@ -35,7 +35,7 @@ const rootReducer = combineReducers({
   nav: navSlice,
   performance: persistReducer(performancePersistConfig, performanceMetricSlice),
   property: persistReducer(propertyPersistConfig, propertySlice),
-  user: persistReducer(userPersistConfig, userSlice), // Persist userSlice
+  user: persistReducer(userPersistConfig, userSlice),
   technicalSeo: persistReducer(technicalSeoConfig, technicalSeoSlice),
   currentModal: modalstates,
   loading: loaderSlice,

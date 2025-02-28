@@ -35,7 +35,7 @@ export function AccountAvatarDropDown() {
   }
 
   const name = user?.name?.split(" ").map(word => word?.[0]?.toUpperCase()).join("");
-console.log("@", name)
+// console.log("@", name)
 
   function logout() {
     sessionStorage.removeItem("user");
