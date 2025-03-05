@@ -17,6 +17,7 @@ import { RootState } from "@/app/store";
 import { setUser } from "@/redux/features/userSlice";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export function AccountAvatarDropDown() {
@@ -35,7 +36,8 @@ export function AccountAvatarDropDown() {
   }
 
   const name = user?.name?.split(" ").map(word => word?.[0]?.toUpperCase()).join("");
-// console.log("@", name)
+  const url = user?.profile?.avatar;
+console.log("@", url)
 
   function logout() {
     sessionStorage.removeItem("user");
@@ -56,27 +58,30 @@ export function AccountAvatarDropDown() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <button className="rounded-full w-fit h-fit cursor-pointer">
-          <AvatarImg name={name} />
+          <AvatarImg name={name} url={url} />
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56 mt-1 -translate-x-8">
         {/* <DropdownMenuLabel>My Account</DropdownMenuLabel> */}
 
         <DropdownMenuGroup>
-          <DropdownMenuItem className="cursor-pointer">
+          {/* <DropdownMenuItem className="cursor-pointer">
             <User className="mr-2 h-4 w-4" />
             <span>View Profile</span>
-          </DropdownMenuItem>
+          </DropdownMenuItem> */}
           <DropdownMenuSeparator />
           <DropdownMenuItem className="cursor-pointer">
             <Settings className="mr-2 h-4 w-4" />
-            <span>Settings</span>
+            <Link href={`/dashboard/settings`} > <span>Settings</span></Link>
             {/* <DropdownMenuShortcut>⌘S</DropdownMenuShortcut> */}
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem className="cursor-pointer">
             <HiOutlineSupport className="mr-2 h-4 w-4" />
+            <Link href={`/dashboard/feedback`} > 
+
             <span>Support</span>
+            </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />

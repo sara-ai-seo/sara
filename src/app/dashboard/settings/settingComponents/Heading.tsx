@@ -29,7 +29,7 @@ export default function Heading({
                 <p className='text-sm text-gray-500 lg:whitespace-nowrap'>{description} </p>
             </div>
             <div className="flex gap-2 justify-end w-full">
-                <Button variant='secondary' onClick={handleCancel} >Cancel</Button>
+                <Button variant='secondary' type='reset' onClick={handleCancel} >Cancel</Button>
                 <Button type="submit" disabled={isLoading} > 
                     {
                         isLoading? "Submitting..." : "Save changes"

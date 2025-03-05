@@ -397,8 +397,8 @@ export default function Layout({ children }: Props) {
                   >
                     <BsLightningCharge /> Upgrade now
                   </Link>
-                  <RiSearchLine className="size-10 hover:bg-gray-200 rounded-md p-2 cursor-pointer" />
-                  <IoIosNotificationsOutline className="size-10 hover:bg-gray-200 rounded-md p-2 cursor-pointer" />
+                  {/* <RiSearchLine className="size-10 hover:bg-gray-200 rounded-md p-2 cursor-pointer" />
+                  <IoIosNotificationsOutline className="size-10 hover:bg-gray-200 rounded-md p-2 cursor-pointer" /> */}
                   {/* <PopoverComponent /> */}
                   <AccountAvatarDropDown />
                 </div>

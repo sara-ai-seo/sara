@@ -6,7 +6,7 @@ class SettingService {
     async updateProfile(data: any): Promise<any> {
         try{
 
-            const response = await FormDataApiCall.put('/user/setting', data);
+            const response = await ApiCall.put('/user/setting', data);
             return response;
         }
         catch(error){

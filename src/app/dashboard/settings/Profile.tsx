@@ -28,7 +28,7 @@ export const Profile = () => {
       name: user.name,
       email: user.email,
       phone: user.profile.phone || "",
-      image: undefined, // No default value for the image
+      image: undefined,
     },
   });
 
@@ -38,51 +38,60 @@ export const Profile = () => {
       toast.success("Profile updated successfully");
     },
     onError: (error) => {
+      console.log("ERROR", error)
       toast.error(error.message);
     },
   });
 
 
-  const onSubmit: SubmitHandler<userSettingFormSchemaType | any> = (data) => {
+  // const onSubmit: SubmitHandler<userSettingFormSchemaType | any> = (data) => {
+  //   const formData = new FormData();
+
+  //   const userData = {
+  //     name: data.name,
+  //     email: data.email,
+  //     phone: data.phone,
+  //     country_code: data.country_code
+  //   };
+
+  //   const imageFiles = data.image as unknown as FileList;
+  //   if (imageFiles && imageFiles.length > 0) {
+  //     const photoFile = imageFiles[0];
+  //     formData.append("photo", photoFile);
+  //   }
+  //   Object.entries(userData).forEach(([key, value]) => {
+  //     formData.append(key, value as string);
+  //   });
+
+  //   mutate(formData);
+  // };
+
+
+  const onSubmit: SubmitHandler<userSettingFormSchemaType> = (data) => {
     const formData = new FormData();
+
+    // Add user data fields
+    formData.append("name", data.name);
+    formData.append("email", data.email);
     
-    // Ensure field names match exactly what Postman uses
-    // formData.append("name", data.name);
-    // formData.append("email", data.email);
-    // if (data.phone) {
-    //   formData.append("phone", data.phone);
-    // }
-    // formData.append("country_code", data.country_code);
+    if (data.phone) {
+      formData.append("phone", data.phone);
+    }
     
-    // const photoFile = (data.image as unknown as FileList)?.[0];
-    // if (photoFile) {
-    //   formData.append("image", photoFile); 
-    // }
+    if (data.country_code) {
+      formData.append("country_code", data.country_code);
+    }
 
-const userData = {
-  name: data.name,
-  email: data.email,
-  phone: data.phone,
-  country_code: data.country_code
-};
+    // Handle image upload
+    const imageFiles = data.image as unknown as FileList;
+    console.log("@", imageFiles)
+    if (imageFiles && imageFiles.length > 0) {
+      const photoFile = imageFiles[0];
+      formData.append("image", photoFile);
+    }
 
-// Add the file to FormData
-// const formData = new FormData();
-const photoFile = (data.image as unknown as FileList)?.[0];
-if (photoFile) {
-  formData.append("photo", photoFile);
-}
-
-// Append each userData property to formData
-Object.entries(userData).forEach(([key, value]) => {
-  formData.append(key, value as string);
-});
-
-mutate(formData);
-    
-    // mutate(formData);
+    mutate(formData);
   };
-
 
   const handleCancel = () => {
     toast.error("Changes cancelled", {
@@ -198,9 +207,8 @@ mutate(formData);
                   </AvatarFallback>
                 </Avatar>
                 <div
-                  className={`flex-1 max-w-sm h-24 relative rounded-lg border-2 border-dashed transition-all duration-200 flex items-center justify-center ${
-                    false ? "border-blue-500 bg-blue-50" : "border-gray-300 hover:border-gray-400"
-                  }`}
+                  className={`flex-1 max-w-sm h-24 relative rounded-lg border-2 border-dashed transition-all duration-200 flex items-center justify-center ${false ? "border-blue-500 bg-blue-50" : "border-gray-300 hover:border-gray-400"
+                    }`}
                   onDragOver={handleDrag}
                   onDrop={handleDrop}
                 >
