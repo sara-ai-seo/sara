@@ -42,7 +42,7 @@ export function PopoverComponent() {
       {({ open }) => (
         <>
           <PopoverButton className="">
-            <span className="h-[40px] w-[40px] z-50 rounded-full border flex items-center justify-center ">
+            <span className="h-[44px] w-[44px] z-50 rounded-full border flex items-center justify-center ">
               {user && user?.name?.split(" ")[0]?.slice(0, 1).toUpperCase()}
               {user && user?.name?.split(" ")[1]?.slice(0, 1).toUpperCase()}
             </span>
