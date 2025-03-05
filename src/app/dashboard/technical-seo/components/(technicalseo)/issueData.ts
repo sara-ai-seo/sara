@@ -123,4 +123,202 @@ You can use redirect checker tools to analyze and simplify your redirects.
     `,
     "Get Help": `If you need assistance managing and optimizing your redirects, contact us for professional support! `,
   },
+  {
+    title: "Frame (is_frame)",
+    category: "Notices",
+    Description: `Frames can disrupt user experience and SEO by splitting content into separate sections, making it harder for search engines to index the page properly.`,
+    Importance: ``,
+    "How to Fix": `
+   Avoid using frames; replace them with modern HTML/CSS layouts.
+If frames are necessary, ensure they include proper <title> and <meta> tags for SEO.
+Get Help: Contact us for frame optimization.
+    `,
+    "Get Help": `If you need assistance managing and optimizing your redirects, contact us for professional support! `,
+  },
+  {
+    title: "Is_www (is_www)",
+    category: "Notices",
+    Description: `Using www or non-www inconsistently can confuse search engines and split your site’s authority between two versions.`,
+    Importance: ``,
+    "How to Fix": `Choose one version (www or non-www) and set up a 301 redirect to the preferred version.
+Update internal links and canonical tags to match the chosen version.`,
+    "Get Help": `Reach out for help with URL standardization.`,
+  },
+  {
+    title: "Is_https (is_https)",
+    category: "Notices",
+    Description: `HTTPS is essential for secure browsing and SEO. Sites without HTTPS may be flagged as insecure, hurting user trust and rankings.`,
+    Importance: ``,
+    "How to Fix": ` Install an SSL certificate on your server.
+  Update all internal links and resources to use HTTPS.
+  Set up 301 redirects from HTTP to HTTPS.`,
+    "Get Help": `Contact us for HTTPS migration support.`,
+  },
+  {
+    title: "Canonical (canonical)",
+    category: "",
+    Description: `Missing or incorrect canonical tags can lead to duplicate content issues, confusing search engines and diluting SEO efforts.`,
+    Importance: ``,
+    "How to Fix": `Add a canonical tag to each page: <link rel="canonical" href="https://example.com/page">.
+  Ensure the canonical URL points to the preferred version of the page.`,
+    "Get Help": `Get help with canonical tag implementation.`,
+  },
+  {
+    title: "No Image Alt Text (no_image_alt)",
+    category: "",
+    Description: `Missing alt text for images reduces accessibility for screen readers and misses an opportunity to improve SEO with descriptive keywords.`,
+    Importance: ``,
+    "How to Fix": `Add alt attributes to all images: <img src="image.jpg" alt="Descriptive Text">.
+Use concise, keyword-rich descriptions.`,
+    "Get Help": `Contact us for image SEO optimization.`,
+  },
+  {
+    title: "No Meta Description (no_description)",
+    category: "",
+    Description: `Missing meta descriptions reduce click-through rates in search results, as they provide a summary of your page’s content.`,
+    Importance: ``,
+    "How to Fix": `Add a meta description to each page: <meta name="description" content="Clear, engaging summary">.
+Keep descriptions under 160 characters and include target keywords.`,
+    "Get Help": `Reach out for meta description optimization.`,
+  },
+  {
+    title: "Title Too Short (title_too_short)",
+    category: "",
+    Description: `Short meta titles (under 30 characters) may not fully describe your page, reducing its appeal in search results.`,
+    Importance: ``,
+    "How to Fix": `Expand your meta title to 50-60 characters, including primary keywords.
+  Ensure the title is descriptive and engaging.`,
+    "Get Help": `Reach out for title optimization.`,
+  },
+ 
+  {
+    title: "Has HTML Doctype (has_html_doctype)",
+    category: "",
+    Description: `Missing or incorrect HTML doctype declarations can cause rendering issues and affect SEO.`,
+    Importance: ``,
+    "How to Fix": `Add the correct doctype declaration at the top of your HTML: <!DOCTYPE html>.
+  Validate your HTML using tools like the W3C Markup Validator.`,
+    "Get Help": `Get help with HTML validation.`,
+  },
+  {
+    title: "SEO-Friendly URL",
+    category: "",
+    Description: "URLs with complex structures or irrelevant characters are harder for users and search engines to understand, harming SEO.",
+    Importance: "",
+    "How to Fix": "Use short, descriptive URLs with target keywords (e.g., example.com/seo-tips).\nAvoid special characters, numbers, or unnecessary parameters.",
+    "Get Help": "Contact us for URL structure optimization."
+  },
+  {
+    title: "High Loading Time",
+    category: "",
+    Description: "Slow-loading pages frustrate users, increase bounce rates, and harm SEO rankings.",
+    Importance: "",
+    "How to Fix": "Optimize images and videos for faster loading.\nMinify CSS, JavaScript, and HTML files.\nUse a Content Delivery Network (CDN) to improve speed.",
+    "Get Help": "Reach out for performance optimization."
+  },
+  {
+    title: "Duplicate Meta Tags",
+    category: "",
+    Description: "Duplicate meta tags (e.g., titles or descriptions) confuse search engines and can lead to lower rankings.",
+    Importance: "",
+    "How to Fix": "Ensure each page has unique meta titles and descriptions.\nUse tools like Screaming Frog to identify duplicates.",
+    "Get Help": "Contact us for meta tag optimization."
+  },
+  {
+    title: "Low Character Count",
+    category: "",
+    Description: "Pages with insufficient text content (under 300 words) may struggle to rank, as search engines prioritize detailed, informative content.",
+    Importance: "",
+    "How to Fix": "Add more relevant, high-quality text content.\nAim for at least 500-700 words per page.",
+    "Get Help": "Get help improving content depth."
+  },
+  {
+    title: "Low Readability Rate",
+    category: "",
+    Description: "Poor readability (e.g., overly complex sentences) discourages users from engaging with your content and can harm SEO.",
+    Importance: "",
+    "How to Fix": "Use shorter sentences and paragraphs.\nBreak up text with subheadings, bullet points, and images.\nAim for a readability score of 60+ (Flesch-Kincaid).",
+    "Get Help": "Contact us for readability improvements."
+  },
+  {
+    title: "Deprecated HTML Tags",
+    category: "",
+    Description: "Using outdated HTML tags (e.g., <font> or <center>) can cause rendering issues and affect SEO.",
+    Importance: "",
+    "How to Fix": "Replace deprecated tags with modern HTML5 equivalents.\nValidate your HTML using tools like the W3C Markup Validator.",
+    "Get Help": "Reach out for HTML cleanup."
+  },
+  {
+    title: "Irrelevant Meta Keywords",
+    category: "",
+    Description: "Meta keywords are no longer used by search engines, and irrelevant ones can clutter your code.",
+    Importance: "",
+    "How to Fix": "Remove the <meta name='keywords'> tag entirely.\nFocus on optimizing meta titles, descriptions, and content instead.",
+    "Get Help": "Contact us for meta tag cleanup."
+  },
+  {
+    title: "Meta Charset Consistency",
+    category: "",
+    Description: "Missing or inconsistent charset declarations can cause encoding issues, affecting how your content is displayed.",
+    Importance: "",
+    "How to Fix": "Add a charset declaration to your <head> section: <meta charset='UTF-8'>.\nEnsure all pages use the same charset.",
+    "Get Help": "Get help with charset fixes."
+  },
+  {
+    title: "Has Render-Blocking Resources",
+    category: "",
+    Description: "Render-blocking resources (e.g., CSS/JS files) delay page rendering, increasing load times and harming user experience.",
+    Importance: "",
+    "How to Fix": "Use async or defer attributes for JavaScript files.\nInline critical CSS or load non-critical CSS asynchronously.",
+    "Get Help": "Contact us for resource optimization."
+  },
+  {
+    title: "HTTPS to HTTP Links",
+    category: "",
+    Description: "Linking from HTTPS pages to HTTP resources creates mixed content issues, reducing security and SEO performance.",
+    Importance: "",
+    "How to Fix": "Update all internal links and resources to use HTTPS.\nUse tools like Why No Padlock to identify mixed content.",
+    "Get Help": "Reach out for HTTPS link fixes."
+  },
+  {
+    title: "No Encoding Meta Tag",
+    category: "",
+    Description: "Missing encoding meta tags can cause character rendering issues, affecting user experience and SEO.",
+    Importance: "",
+    "How to Fix": "Add the encoding meta tag to your <head> section: <meta charset='UTF-8'>.\nEnsure all pages include this tag.",
+    "Get Help": "Contact us for encoding fixes."
+  },
+  {
+    title: "SEO-Friendly URL Dynamic Check",
+    category: "",
+    Description: "Dynamic URLs with parameters (e.g., ?id=123) are harder for users and search engines to understand, reducing SEO effectiveness.",
+    Importance: "",
+    "How to Fix": "Convert dynamic URLs to static, descriptive URLs (e.g., example.com/product-name).\nUse URL rewriting tools (e.g., mod_rewrite for Apache) to simplify dynamic URLs.",
+    "Get Help": "Contact us for dynamic URL optimization."
+  },
+  {
+    title: "SEO-Friendly URL Keywords Check",
+    category: "",
+    Description: "URLs without relevant keywords miss an opportunity to improve SEO and user understanding of the page’s content.",
+    Importance: "",
+    "How to Fix": "Include target keywords in your URLs (e.g., example.com/seo-tips).\nAvoid generic terms like page1 or id123.",
+    "Get Help": "Reach out for keyword-rich URL optimization."
+  },
+  {
+    title: "SEO-Friendly URL Characters Check",
+    category: "",
+    Description: "URLs with special characters, uppercase letters, or spaces are harder to read and can cause technical issues.",
+    Importance: "",
+    "How to Fix": "Use lowercase letters and hyphens to separate words (e.g., example.com/seo-best-practices).\nAvoid special characters, spaces, or underscores.",
+    "Get Help": "Contact us for URL character cleanup."
+  },
+  {
+    title: "SEO-Friendly URL Relative Length Check",
+    category: "",
+    Description: "Excessively long URLs are harder for users to read and share, and search engines may truncate them in results.",
+    Importance: "",
+    "How to Fix": "Keep URLs concise and under 60 characters.\nFocus on including only essential keywords and avoid unnecessary parameters.",
+    "Get Help": "Get help for URL length optimization."
+  }
+ 
 ];
