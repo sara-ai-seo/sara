@@ -33,7 +33,7 @@ export default function HomePage() {
           </div>
           <Link href={`/signup`} className=" max-w-[400px]">
             {/* <FilledButton title="Get started for free" /> */}
-            <Button > Get started for free </Button>
+            <Button > Get started</Button>
           </Link>
         </div>
 
@@ -208,7 +208,7 @@ export default function HomePage() {
                 height={28}
                 width={28}
               />
-              <p className="">30days free trial </p>
+              <p className=""> Affordable pricing </p>
             </div>
             <div className="flex items-center gap-3 pt-8">
               <Image

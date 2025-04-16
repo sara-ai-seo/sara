@@ -151,7 +151,7 @@ export const SignupComponent = () => {
           <div className="flex flex-col w-full my-2">
             <p className=" font-bold text-2xl lg:text-4xl">Signup </p>
             <small className="mt-3 text-gray-600">
-              Start your free trial today.
+              Start today and continue to explore.
             </small>
           </div>
           <small className="text-red-500">{error.status && error.msg} </small>

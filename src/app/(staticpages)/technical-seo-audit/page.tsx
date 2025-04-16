@@ -72,7 +72,7 @@ export default function page() {
       <div className="flex lg:flex-row flex-col  h-full justify-between items-center w-full p-16 gap-3">
         <div className="flex flex-col space-y-3 flex-wrap">
           <h2 className="font-bold sm:text-4xl text-3xl ">
-            Start your free trial today
+            Start today
           </h2>
           <p className="text-base text-[#475467] ">
             Everything you need to boost your sites technical SEO and user

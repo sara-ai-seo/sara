@@ -143,11 +143,11 @@ export const annualPricingData = [
 ]
 
 export const faqdata = [
-    {
-        title: 'Is there a free trial available?',
-        answer: 'Yes, we offer a free trial for our SEO services. It allows you to explore the features and benefits of our platform before deciding on a subscription plan.'
+    // {
+    //     title: 'Is there a free trial available?',
+    //     answer: 'Yes, we offer a free trial for our SEO services. It allows you to explore the features and benefits of our platform before deciding on a subscription plan.'
     
-    },
+    // },
     {
         title: 'Can I change my subscription plan?',
         answer: 'Of course. You can upgrade or downgrade your subscription plan at any time to better suit your evolving needs. Changes will take effect during the next billing cycle.'
@@ -164,9 +164,9 @@ export const faqdata = [
         title: 'How does billing work?',
         answer: "Billing for our SEO services is straightforward and transparent. When you subscribe to one of our plans, you'll be billed according to the selected billing cycle—either monthly or annually."
     },
-    {
-        title: 'Is there a refund policy in place?',
-        answer: "Yes, we have a refund policy. If you are dissatisfied with our services within the first [X] days of your subscription, you can request a refund. Please refer to our refund policy for detailed information."
-    },
+    // {
+    //     title: 'Is there a refund policy in place?',
+    //     answer: "Yes, we have a refund policy. If you are dissatisfied with our services within the first [X] days of your subscription, you can request a refund. Please refer to our refund policy for detailed information."
+    // },
     
 ] 
