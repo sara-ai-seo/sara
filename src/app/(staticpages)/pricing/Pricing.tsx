@@ -146,7 +146,7 @@ export default function PricingComponent() {
         <section className="bg-[#F9FAFB] w-full min-h-[286px]">
           <div className="flex flex-col gap-4 lg:flex-row justify-between w-full p-4  lg: py-24 lg:px-20">
             <div className="flex flex-col gap-5">
-              <h4 className='text-[#101828] lg:text-4xl font-semibold text-3xl'>Start your free trial today</h4>
+              <h4 className='text-[#101828] lg:text-4xl font-semibold text-3xl'>Start today</h4>
               <p className='text-[#101828] text-xl font-normal'> Everything you need to track, manage and boost your site’s SEO.</p>
             </div>
             <div className='flex items-center gap-3'>

@@ -99,7 +99,7 @@ export default function ContactForm() {
         )}
       </div>
 
-      <div className="flex flex-col">
+      {/* <div className="flex flex-col">
         <label
           htmlFor="phone_number"
           className="text-sm font-medium text-[#344054]"
@@ -134,7 +134,7 @@ export default function ContactForm() {
         {errors.phonenumber && (
           <small className="text-red-400">{errors.phonenumber.message}</small>
         )}
-      </div>
+      </div> */}
 
       <div className="flex flex-col">
         <label htmlFor="message" className="text-sm font-medium text-[#344054]">
@@ -161,7 +161,7 @@ export default function ContactForm() {
             className="size-4"
           />
           <label htmlFor="privacy_policy">
-            You agree to our <Link href="/">privacy policy.</Link>
+            You agree to our <Link href="/privacy-policy">privacy policy.</Link>
           </label>
         </div>
         {errors.privacy_policy && (
