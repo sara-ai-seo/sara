@@ -12,6 +12,16 @@ const initialState : UserType = {
         name: "",
         location: {
             code: 0
+        }, 
+        profile: {
+            avatar: "",
+            createdAt: "",
+            id: 0,
+            phone: "",
+            updatedAt: "",
+            role: '',
+            userId: 0,
+            status: ''
         }
     },
     message: '',
