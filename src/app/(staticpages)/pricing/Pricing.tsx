@@ -5,6 +5,7 @@ import React, { useState } from 'react'
 import { faqdata, pricingdata, annualPricingData } from './data'
 import { PaymentBody, ReusableModal } from './component/paymentBody'
 import Button from '@/app/dashboard/components/ui/Button'
+import PricingCard from './component/PricingCard'
 
 
 interface Plan {
@@ -19,7 +20,7 @@ interface Plan {
 
 
 export default function PricingComponent() {
-  const [monthly, setMonthly] = useState(true);
+  // const [monthly, setMonthly] = useState(true);
   const [currentPlan, setCurrentPlan] = useState<Plan | null>(null);
   const [paying, setPaying] = useState({
     status: false,
@@ -44,32 +45,40 @@ export default function PricingComponent() {
     setPaying({ ...paying, status: true });
   };
   // console.log("@",currentPlan)
+
+  const data = pricingdata[0]
   return (
     <>
 
       <ReusableModal closeModal={closeModal} show={paying.status} ModalBody={<PaymentBody closeModal={closeModal} amount={currentPlan?.amount ?? 0} description={currentPlan?.description ?? ""} pricingId={currentPlan?.pricingId ?? 0} title={currentPlan?.title ?? ""} price={currentPlan?.price ?? ""} />} />
 
-      <main className='grid gap-16 lg:gap-24'>
-        <section className='text-left grid gap-4 p-4 mt-16 lg:mt-24 lg:px-28'>
+      <main className='grid gap-16 lg:gap-24 py-4 md:py-8'>
+        {/* <section className='text-left grid gap-4 p-4 mt-16 lg:mt-24 lg:px-28'>
           <p className='text-primary text-sm font-semibold lg:text-base'> Pricing plans</p>
           <h3 className='text-[#101828] text-4xl font-semibold lg:text-5xl'> Simple, transparent pricing</h3>
           <p className='text-[#475467] font-normal text-xl leading-7'> Webmaxi is accessible to all websites, no matter the size.</p>
-        </section>
-        <div className='  p-4 lg:px-28  w-full'>
+        </section> */}
+        {/* <div className='  p-4 lg:px-28  w-full'>
           <div className="flex justify-between w-full lg:w-2/3 h-16 items-center bg-[#EAECF0] p-2 rounded-[100px] ">
-            <button onClick={() => setMonthly(true)} className={`${monthly ? 'bg-white text-black' : 'text-[#98A2B3]'}   text-xl w-full h-full rounded-3xl`}> Pay monthly</button>
+            <button onClick={() => setMonthly(true)} className={`${monthly ? 'bg-white text-black' : 'text-[#98A2B3]'}   text-xl w-full h-full rounded-3xl`}> Standard Monthly Plan</button>
             <button onClick={() => setMonthly(false)} className={`${!monthly ? 'bg-white text-black' : 'text-[#98A2B3]'}   text-xl w-full h-full rounded-3xl`}> Pay annually <span className='text-[#6CE9A6] hidden lg:inline'> and save more</span> </button>
           </div>
-        </div>
-        <section className='grid grid-cols-1 lg:grid-cols-3 gap-7 p-4 lg:px-28'>
+        </div> */}
+
+        <PricingCard makePayment={()=> openModal(data)}/>
+       
+
+
+        {/* <section className='grid grid-cols-1 lg:grid-cols-3 gap-7 p-4 lg:px-28'>
           {(monthly ? pricingdata : annualPricingData).map((data, i) => {
+         
             return (
 
               <div key={i} className='min-h-[730px] flex flex-col justify-between max-w-[440px] w-full rounded-2xl border shadow-lg p-6 lg:p-8'>
                 <div className="flex flex-col justify-center items-center w-full">
                   <Image src={data.icon} width={40} height={40} alt='Basic plan' />
                   <p className="text-primary mt-[20px] font-semibold text-xl">{data.title} </p>
-                  <h3 className="text-[#101828] font-semibold text-5xl mt-2">{data.amount} </h3>
+                  <h3 className="text-[#101828] font-semibold text-5xl mt-2">{`$${data.amount}`} </h3>
                   {!monthly && <p className='text-green-400 pt-2'>{`(Save ${data.save})`} </p>}
                   <p className='text-base text-center text-[#475467] mt-2'> {data.description} </p>
                 </div>
@@ -102,7 +111,10 @@ export default function PricingComponent() {
           })
 
           }
-        </section>
+        </section> */}
+
+
+
         <section className='grid p-4 lg:px-28 gap-16'>
           <div className="">
             <h3 className='text-[#101828] text-4xl font-semibold'>
