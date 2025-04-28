@@ -89,11 +89,11 @@ export default function Layout({ children }: Props) {
       icon: <FiUsers />,
       link: "/dashboard/competitor-analysis",
     },
-    {
-      title: "Link building",
-      icon: <IoIosLink />,
-      link: "/dashboard/link-building",
-    },
+    // {
+    //   title: "Link building",
+    //   icon: <IoIosLink />,
+    //   link: "/dashboard/link-building",
+    // },
     // {
     //   title: "Optimization plans",
     //   icon: <FiCheckSquare />,
