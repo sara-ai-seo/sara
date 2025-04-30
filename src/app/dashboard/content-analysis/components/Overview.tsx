@@ -45,7 +45,7 @@ export default function Overview({ OverviewData }: OverviewProps) {
   // console.log(sentiment_connotations, top_domains);
 
   return (
-    <section className="grid grid-cols-3 gap-10 mb-10 overflow-y-auto">
+    <section className="grid grid-cols-3 gap-10 mb-10">
       {/* first grid */}
       <div className="flex flex-col gap-6 h-[480px] ">
         <div className="border rounded-md px-4">
@@ -101,7 +101,7 @@ export default function Overview({ OverviewData }: OverviewProps) {
         {/* </div> */}
       </div>
       {/* third grid */}
-      <div className=" h-[480px] border rounded-md px-4">
+      <div className=" h-[480px] border rounded-md px-4 overflow-auto">
         <div className="mt-6">
           <TitleWithoutUnderline title={"Top domains"} info={"The leading websites that are influencing your content’s ranking."} />
         </div>

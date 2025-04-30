@@ -132,6 +132,7 @@ export type SitePerformanceData = {
           column: number;
           message: string;
           status_code: number;
+          
         }>;
         warnings: Array<{
           line: number;
@@ -142,6 +143,7 @@ export type SitePerformanceData = {
       };
       script_count: number;
       stylesheet_count: number;
+      range?: string;
     }>;
     average_page_load_speed: number;
   };

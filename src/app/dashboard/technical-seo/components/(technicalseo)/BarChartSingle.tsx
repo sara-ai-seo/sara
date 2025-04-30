@@ -95,91 +95,74 @@ const BarChartSingle: React.FC<Props> = ({
 
 export default BarChartSingle;
 
-// import React from 'react';
-// import {
-//   Chart as ChartJS,
-//   CategoryScale,
-//   LinearScale,
-//   BarElement,
-//   Title,
-//   Tooltip,
-//   Legend,
-// } from 'chart.js';
-// import { Bar } from 'react-chartjs-2';
+interface Dataset {
+  label: string;
+  data: number[] | string[];
+  backgroundColor?: string;
+}
 
-// ChartJS.register(
-//   CategoryScale,
-//   LinearScale,
-//   BarElement,
-//   Title,
-//   Tooltip,
-//   Legend
-// );
+interface Props {
+  labels: string[];
+  datasets: Dataset[];
+  title?: string;
+  xAxisLabel?: string;
+  yAxisLabel?: string;
+}
 
-// interface Props {
-//   label: [],
-//   data: []
-// }
+export const BarChartDouble: React.FC<Props> = ({
+  labels,
+  datasets,
+  title = "Chart.js Bar Chart",
+  xAxisLabel = "Crawl date",
+  yAxisLabel = "Number of pages",
+}) => {
+  const options = {
+    responsive: true,
+    scales: {
+      x: {
+        grid: {
+          display: false,
+        },
+        title: {
+          display: true,
+          text: xAxisLabel,
+        },
+      },
+      y: {
+        grid: {
+          display: false,
+        },
+        title: {
+          display: true,
+          text: yAxisLabel,
+        },
+      },
+    },
+    plugins: {
+      legend: {
+        position: "top" as const,
+        display: true, // Show legend since we have multiple datasets
+      },
+      title: {
+        display: true,
+        text: title,
+      },
+    },
+  };
 
-// const labels = ['January', 'February', 'March', 'April', 'May','June', 'July', 'August','September'];
-// const mockData = [100, 300, 100, 200, 500,900, 100, 200, 800, 900];
+  const chartData = {
+    labels,
+    datasets: datasets.map(dataset => ({
+      ...dataset,
+      borderRadius: 10,
+      barPercentage: 0.8, // Adjust bar width
+      categoryPercentage: 0.9, // Adjust space between categories
+    })),
+  };
 
-// export const options = {
-//   responsive: true,
-//   scales: {
-//     x: {
-//         barPercentage: 0.4,
-//         categoryPercentage: 0.4,
-//       grid: {
-//         display: false
-//       },
-//       title: {
-//         display: true,
-//         text:'Crawl date'
-//       }
-
-//     },
-//     y: {
-//       grid: {
-//         display: false
-//       },
-//       title:{
-//         display: true,
-//         text:'Number of pages'
-//       }
-//     }
-//   },
-//   plugins: {
-//     legend: {
-//       position: 'top' as const,
-//       display: false
-//     },
-//     title: {
-//       text: 'Chart.js Bar Chart',
-//     },
-//   },
-// };
-
-// export const data = {
-//   labels,
-//   datasets: [
-//     {
-//       label: 'Dataset 1',
-//       data: mockData,
-//       backgroundColor: '#53B1FD',
-//       borderRadius: 20,
-//       barPercentage: 1.0,
-//       width: 100
-//         // categoryPercentage: 1.0,
-
-//     },
-//   ],
-// };
-
-// export function BarChartSingle() {
-//   return (
-//     <div className='h-full w-full'  >
-//       <Bar options={options} data={data} width={'200%'} height={'60%'} />
-//     </div>
-//   )
-// }
+  return (
+    <div className="h-full w-full">
+      <Bar options={options} data={chartData} width={"150%"} height={"60%"} />
+    </div>
+  );
+};

@@ -49,9 +49,10 @@ export default function SitePerformance() {
 
   const amountJavascriptAndCssLabel: string[] =
     sitePerformanceData[0]?.data.amount_of_javascript.map(
-      (item) => `${item.script_count}-${item.stylesheet_count}`
+      (item) => `${item?.range}`
     ) || [];
 
+    console.log(`AMT`, amountJavascriptAndCssLabel )
   const JavascriptCssData =
     sitePerformanceData[0]?.data.amount_of_javascript.map(
       (item) => item.script_count
@@ -80,7 +81,7 @@ export default function SitePerformance() {
           Page load speed{" "}
           <button title="How quickly a specific page displays all its content.">
             {" "}
-            <RxQuestionMarkCircled />{" "}
+            <RxQuestionMarkCircled />
           </button>{" "}
         </h5>
         <p className=" text-sm font-normal">{pageloadSpeedTotal} </p>
@@ -137,8 +138,14 @@ export default function SitePerformance() {
           <BarChartSingle
             labels={amountJavascriptAndCssLabel}
             data={JavascriptCssData}
-            xAxisLabel="Amount"
-            backgroundColor="#53B1FD"
+            datasets={[
+              {
+                label: "JavaScript and CSS Amount",
+                data: JavascriptCssData,
+                backgroundColor: `#10b981`,
+              },
+            ]}
+            xAxisLabel="Amount of Javascript and CSS"
             yAxisLabel="Number of pages"
           />
         </div>
