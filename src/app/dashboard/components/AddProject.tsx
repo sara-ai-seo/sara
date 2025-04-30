@@ -44,15 +44,37 @@ export default function AddProject() {
 
   // console.log("PROPERTY",property)
 
+
+  //  const { mutate, isError: MutateError, isPending: MutatePending } = useMutation({
+  //         mutationFn: async () => {
+  //           await ApiCall.post(`/user/crawler/rank-tracking/${id.id}`,
+  //             [
+  //               {
+  //                 target: trimDomain(id.domain)
+  //               },
+  //             ]
+  //           )
+  //         },
+  //         onSuccess: () => {
+  //           toast.success("Rankings re-tracked successfully!");
+  //         },
+  //         onError: () => {
+  //           toast.error("Failed to re-track rankings!");
+  //         },
+          
+  //       })
+
+
+
   const { mutate: RankMutate } = useMutation({
-    mutationFn: async () => {
-      await ApiCall.post(`/user/crawler/rank-tracking/${property.id}`,
+    mutationFn: async ({ id, domain }: { id: number; domain: string }) => {
+      await ApiCall.post(`/user/crawler/rank-tracking/${id}`,
         [
           {
-            target: trimDomain(property.domain)
+            target: trimDomain(domain as string)
           },
         ]
-      )
+      );
     },
     onSuccess: () => {
       toast.success("Rankings re-tracked successfully!");
@@ -86,19 +108,9 @@ export default function AddProject() {
       toast.error(error.message);
     },
     onSuccess: async (data) => {
-      // console.log("data", data);
+      console.log("data", data.project);
       await technicalSeoMutation.mutateAsync(data.project.id);
-      const trimmedDomain = trimDomain(data.project.domain);
-      linkBuilding.mutateAsync({
-        id: data.project.id,
-        domain: data.project.domain,
-      });
-      // rankMutation.mutateAsync({
-      //   id: data.project.id,
-      //   target: data.project.domain,
-      //   location_code: User.location.code,
-      // });
-      RankMutate()
+      RankMutate({ id: data.project.id, domain: data.project.domain }); 
 
       dispatch(setActiveProperty(inputUrl));
       dispatch(setActivePropertyObj(data.project));
