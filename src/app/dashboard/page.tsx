@@ -181,38 +181,7 @@ export default function Dashboard() {
           <section className="w-full">
             <TOverview siteHealthScore={siteHealthScore} />
           </section>
-          <div className="w-full grid shadow-md border font-bold text-xl items-start h-[426px] mb-10 rounded-md p-2 md:p-6  ">
-            <div className="">
-              <div className="flex w-full h-full items-start justify-between">
-                <div className={`text-[#101828] flex items-center gap-4`}>
-                  Backlink status
-                  <button title="The links associated with your website either leading out or directing into your website">
-                    <RxQuestionMarkCircled className="text-gray-600" />
-                  </button>
-                </div>
-                {/* <select className={`border rounded-md p-2 text-[#344054] text-sm font-normal`}>
-              <option className={``}>
-                Last 12 months
-              </option>
-              <option className={``}>
-                Last 6 months
-              </option>
-              <option className={``}>
-                Last 3 months
-              </option>
-            </select> */}
-              </div>
-              <hr className="w-full mt-4" />
-            </div>
-            <div className=" h-full w-full max-w-[600px]">
-              {/* <BacklinkGraph /> */}
-              <StackedBarChart
-                label={dataLabel}
-                lostData={lostRd}
-                newData={newRd}
-              />
-            </div>
-          </div>
+        
         </div>
       </div>
     </>

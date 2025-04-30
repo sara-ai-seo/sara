@@ -60,7 +60,7 @@ export default function page() {
         />
       ),
     },
-    { title: "Link gap", content: <LinkGap /> },
+    // { title: "Link gap", content: <LinkGap /> },
   ];
 
   const property = CurrentProperty();

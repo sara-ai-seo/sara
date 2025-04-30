@@ -79,12 +79,13 @@ const router = useRouter()
     queryKey: ["explore-content", activePropertyId],
     queryFn: async () => {
       const result = await ApiCall.get(
-        `/user/crawler/content-analysis/by-tab/${activePropertyId}?tab=extractedExplore`
+        `/user/crawler/content-analysis/${activePropertyId}?tab=extractedExplore`
       );
       return result.data?.project;
     },
   });
-
+  // https://api.webmaxi.net/api/user/crawler/content-analysis/by-tab/11?tab=extractedExplore
+  // {{production_url}}/user/crawler/content-analysis/11?tab=extractedExplore
   // console.log("CONT",data);
 
   return (

@@ -1,7 +1,7 @@
 export const pricingdata = [
     {
         icon: '/pricing/basic.svg',
-        title:'Basic plan',
+        title:'Standard plan',
         price: '$20/mth',
         amount: 20,
         pricingId:2,
@@ -18,7 +18,7 @@ export const pricingdata = [
             'Competitor analysis - $0.20/unit',
             'Keyword explorer - $0.17/unit'
         ],
-        description: "For small businesses, startups, and individual users.",
+        description: "For agencies and businesses",
         fn: ()=> console.log('Hello Basic')
 
     },

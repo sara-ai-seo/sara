@@ -52,7 +52,7 @@ export const ExploreContentTableColumns: ColumnDef<ExploreContentTableItemType>[
             <a href={link} target="_blank" className="text-blue-500 underline">
               {link}
             </a>
-            <p className="text-sm">{description}</p>
+            <p className="text-sm line-clamp-2">{description}</p>
             <div className="flex items-center gap-0.5">
               <p className="text-xs text-gray-500">
                 <strong>Published:</strong>{" "}
