@@ -138,7 +138,13 @@ export default function Crawlability() {
             <BarChartSingle
               labels={labels}
               data={mockData}
-              backgroundColor="#53B1FD"
+              datasets={[
+                {
+                  label: "Crawled Pages", // Add a descriptive label
+                  data: mockData,
+                  backgroundColor: "#53B1FD",
+                },
+              ]}
             />
           </div>
         </section>
@@ -203,7 +209,13 @@ export default function Crawlability() {
             <BarChartSingle
               labels={nonIndexablePagesData}
               data={nonIndexablePagesLabels}
-              backgroundColor="red"
+              datasets={[
+                {
+                  label: "Non-Indexable Pages",
+                  data: nonIndexablePagesLabels,
+                  backgroundColor: "red",
+                },
+              ]}
               xAxisLabel="Blocked by"
             />
           </div>
