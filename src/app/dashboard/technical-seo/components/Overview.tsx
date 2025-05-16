@@ -142,30 +142,40 @@ export default function Overview({ onViewAllIssues }: OverviewProps) {
   );
 
   const overviewResult: OverviewDataType[] =
-    data?.crawlings?.flatMap((crawling: any) =>
-      crawling.crawlingData
-        ?.filter((data: any) => data.tab === "overview")
-        .map((overviewData: CrawlingDataOverview) => ({
+  data?.crawlings?.flatMap((crawling: any) => {
+    if (!crawling?.crawlingData) return [];
+
+    return crawling.crawlingData
+      .filter((data: any) => data?.tab === "overview" && data?.data)
+      .map((overviewData: CrawlingDataOverview) => {
+        const crawlStatus = overviewData?.data?.crawl_status ?? {};
+        const siteIssues = overviewData?.data?.site_issues ?? {};
+        const dataBlock = overviewData?.data ?? {};
+
+        return {
           crawlId: overviewData.id,
-          coreWebVital: overviewData.data.core_web_vitals,
-          cost: overviewData.data.cost,
-          siteHealth: overviewData.data.site_health,
-          Issues: overviewData.data.issues,
-          status_code: overviewData.data.status_code,
-          errorsCount: overviewData.data.site_issues.errors?.length || 0,
-          warningsCount: overviewData.data.site_issues.warnings?.length || 0,
-          tasksCount: overviewData.data.tasks_count,
-          pagesCrawled: overviewData.data.crawl_status.pages_crawled,
-          pagesInQueue: overviewData.data.crawl_status.pages_in_queue,
-          maxCrawlPages: overviewData.data.crawl_status.max_crawl_pages,
-          crawlProgress: overviewData.data.crawl_progress,
-          timeToInteractive: overviewData.data.time_to_interactive,
-          cumulativeLayoutShift: overviewData.data.cumulative_layout_shift,
-          largestContentfulPaint: overviewData.data.largest_contentful_paint,
-          createdAt: overviewData.createdAt,
-          updatedAt: overviewData.updatedAt,
-        }))
-    ) ?? [];
+          coreWebVital: dataBlock.core_web_vitals ?? null,
+          cost: dataBlock.cost ?? null,
+          siteHealth: dataBlock.site_health ?? null,
+          Issues: dataBlock.issues ?? [],
+          status_code: dataBlock.status_code ?? null,
+          errorsCount: Array.isArray(siteIssues.errors) ? siteIssues.errors.length : 0,
+          warningsCount: Array.isArray(siteIssues.warnings) ? siteIssues.warnings.length : 0,
+          tasksCount: dataBlock.tasks_count ?? 0,
+          pagesCrawled: crawlStatus.pages_crawled ?? 0,
+          pagesInQueue: crawlStatus.pages_in_queue ?? 0,
+          maxCrawlPages: crawlStatus.max_crawl_pages ?? 0,
+          crawlProgress: dataBlock.crawl_progress ?? 0,
+          timeToInteractive: dataBlock.time_to_interactive ?? null,
+          cumulativeLayoutShift: dataBlock.cumulative_layout_shift ?? null,
+          largestContentfulPaint: dataBlock.largest_contentful_paint ?? null,
+          createdAt: overviewData.createdAt ?? null,
+          updatedAt: overviewData.updatedAt ?? null,
+        };
+      });
+  }) ?? [];
+
+  console.log("OVERVIEW", overviewResult)
 
   // Safely access the first element in overviewResult
   const issues = overviewResult.length > 0 ? overviewResult[0]?.Issues : []; //null

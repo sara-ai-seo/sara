@@ -1,4 +1,5 @@
 module.exports = {
+  
   webpack(config) {
     // Grab the existing rule that handles SVG imports
     const fileLoaderRule = config.module.rules.find((rule) =>
@@ -12,6 +13,7 @@ module.exports = {
         test: /\.svg$/i,
         resourceQuery: /url/, // *.svg?url
       },
+      
       // Convert all other *.svg imports to React components
       {
         test: /\.svg$/i,
