@@ -4,7 +4,7 @@ import { RxQuestionMarkCircled } from "react-icons/rx";
 import { Title } from "./Overview";
 import { HorizontalBar } from "./(technicalseo)/DualProgressBar";
 import BarChartSingle from "./(technicalseo)/BarChartSingle";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/store";
 // import { completeArray } from "../../components/graphs/StackedBarChart";
@@ -18,6 +18,7 @@ import {
 import ReUsableHTTPStatusCode from "./(technicalseo)/ReusableHTTPStatusCode";
 import { useTechnicalSeoFetchData } from "@/app/services/technicalSeo/TechnicalSeoFetch";
 import ShowDescription from "@/app/component/ShowDescription";
+import { NonIndexedPages } from "./(technicalseo)/NonIndexedPages";
 
 export default function Crawlability() {
   const [Err, setErr] = useState({
@@ -25,25 +26,69 @@ export default function Crawlability() {
     message: "",
   });
 
-  // Type guard to check if a CrawlingData is of type CrawlingDataCrawlability
+
   function isCrawlabilityData(
     data: CrawlingData
   ): data is CrawlingDataCrawlability {
     return data.tab === "crawlabilityAndIndexibility";
   }
-  // const techSeo = useSelector((state: RootState) => state.technicalSeo);
+
   const { data, isLoading } = useTechnicalSeoFetchData();
 
-  // Loop through the crawlings array
+
   const crawlbilityAndIndexibiltyResult: CrawlingDataCrawlability[] =
     data?.crawlings?.flatMap((crawling: any) =>
       crawling.crawlingData.filter(isCrawlabilityData)
     ) ?? [];
 
+
+  const reasons = crawlbilityAndIndexibiltyResult[0]?.data?.reasons
+  interface CrawlingsItem {
+    crawler: {
+      createdAt: string;
+      pages?: number;
+    };
+  }
+
+  interface CrawlingsData {
+    crawlings: CrawlingsItem[];
+  }
+  const crawledPagesPerDate = useMemo(() => {
+    return (data as CrawlingsData).crawlings.map((item: any) => ({
+      date: item?.completedAt || "NA",
+      pages: item?.crawlingData[1]?.data.crawled_detail?.pages_crawled || 0
+    }));
+  }, [data]);
+
+
+  interface UrlItems {
+    url: string;
+    reason: string;
+  }
+  const craawl = crawlbilityAndIndexibiltyResult[0]?.data.items
+  const reason = craawl.map((item) => item.reason);
+  const url = craawl.map((item) => item);
+
+  const groupedByReason = craawl.reduce((acc: Record<string, string[]>, item: UrlItems) => {
+    const { url, reason } = item;
+    acc[reason] = acc[reason] || [];
+    acc[reason].push(url);
+    return acc;
+  }, {});
+
+
+
+  const crawlLabels = crawledPagesPerDate.map(item => {
+    return new Date(item.date).toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric'
+    });
+  });
+
+
+
   const crawled =
     crawlbilityAndIndexibiltyResult[0]?.data.crawled_detail.pages_crawled || 0;
-  const uncrawled =
-    crawlbilityAndIndexibiltyResult[0]?.data.crawled_detail.pages_in_queue || 0;
 
   const indexable = crawlbilityAndIndexibiltyResult[0]?.data.indexable || 0;
   const non_indexable =
@@ -60,55 +105,15 @@ export default function Crawlability() {
     total > 0 ? (sanitizedIndexable / total) * 100 : 0;
   const noIndexablePercentage =
     total > 0 ? (sanitizedNoIndexable / total) * 100 : 0;
-  // console.log(indexable, non_indexable);
-  console.log(crawlbilityAndIndexibiltyResult[0]);
+
+
 
   const statusCodeData = crawlbilityAndIndexibiltyResult[0]?.data.status_code;
   const CrawledDetail = crawlbilityAndIndexibiltyResult[0]?.data.crawled_detail;
   const TotalLinkFound = crawlbilityAndIndexibiltyResult[0]?.data.items;
 
-  const crawledvalue = (crawled / total) * 100;
-
-  const startDate = new Date();
-
-  const labels = Array.from(
-    { length: crawlbilityAndIndexibiltyResult[0]?.data.total_page },
-    (_, i) => {
-      const date = new Date(startDate);
-      date.setDate(startDate.getDate() + i); // Increment the date by 'i' days
-      return moment(date).format("DD MMM YY");
-    }
-  );
-
-  const mockData =
-    Array.from(
-      { length: crawlbilityAndIndexibiltyResult[0]?.data.total_page || 0 },
-      (_, i) => i + 1
-    ) || [];
-
-  const crawldepthlabels1 = ["1", "2", "3", "4+"];
-  const crawldepthlabels = crawldepthlabels1;
-  // console.log(crawldepthlabels);
-  const crawldepthLabelData: any[] = [];
-
-  // const indexibilitData1 = crawlabilityData?.indexability?.unindexableReasons;
-  const indexibilitData1 = "";
-  const categories = Object.keys(indexibilitData1 || []);
-  const categoriesNumber = Object.values(indexibilitData1 || []);
-
-  // const nonIndexablePages =
-  //   crawlbilityAndIndexibiltyResult[0]?.data.items.slice(0, 5);
-  const nonIndexablePages =
-    crawlbilityAndIndexibiltyResult[0]?.data.items;
-
-
-    // console.log("@",nonIndexablePages);
-
-  const nonIndexablePagesData = nonIndexablePages?.map(
-    (page: any) => page.reason
-  );
-
   const nonIndexablePagesLabels = ["0", "20", "40", "60", "80", "100"];
+
 
   return isLoading ? (
     <div className=" w-full h-20 flex items-center justify-center mt-10">
@@ -136,9 +141,15 @@ export default function Crawlability() {
           </div>
           <div className=" h-full w-full">
             <BarChartSingle
-              labels={labels}
-              data={mockData}
-              backgroundColor="#53B1FD"
+              labels={crawlLabels}
+              data={crawledPagesPerDate.map(item => item.pages)}
+              datasets={[
+                {
+                  label: "Crawled Pages",
+                  data: crawledPagesPerDate.map(item => item.pages),
+                  backgroundColor: "#53B1FD",
+                },
+              ]}
             />
           </div>
         </section>
@@ -169,8 +180,8 @@ export default function Crawlability() {
 
               {/* <DualProgressBar leftPercentage={`10px`} /> */}
               <div className="flex justify-between w-full items-center ">
-                <p className="">{indexablePercentage.toFixed(2)}%</p>
                 <p className="">{noIndexablePercentage.toFixed(2)}%</p>
+                <p className="">{indexablePercentage.toFixed(2)}%</p>
               </div>
             </div>
             <div className="flex flex-col justify-center items-center ">
@@ -201,9 +212,14 @@ export default function Crawlability() {
           />
           <div className=" h-full w-full ">
             <BarChartSingle
-              labels={nonIndexablePagesData}
-              data={nonIndexablePagesLabels}
-              backgroundColor="red"
+              labels={Object.keys(reasons || {})}
+              data={Object.values(reasons || {})}
+              datasets={[
+                {
+                  label: "Non-Indexable Pages",
+                  data: nonIndexablePagesLabels,
+                },
+              ]}
               xAxisLabel="Blocked by"
             />
           </div>
@@ -212,6 +228,7 @@ export default function Crawlability() {
       <section
         className={`grid grid-cols-1 md:grid-cols-3 md:gap-4 md:space-y-0 space-y-4`}
       >
+
         <div className="grid p-2 md:p-4 col-span-1 h-full md:h-[348px] justify-items-start  rounded-md w-full border ">
           <Title
             title="HTTP status codes"
@@ -225,23 +242,18 @@ export default function Crawlability() {
             </div>
           </div>
         </div>
-
-        {/* <div className="w-full grid col-span-2 h-full  md:h-[348px] border rounded-md p-6">
+        <section className="w-full grid col-span-2 h-full md:h-[348px] border rounded-md p-6">
           <Title
-            title="Page crawl depth"
+            title="List of pages  not indexed by search engines"
             info={
-              "This is the number of steps of pages crossed to reach the crawled pages"
+              "Pages that search engines haven’t added to their results."
             }
           />
-          <div className=" h-full w-full">
-            <BarChartSingle
-              labels={crawldepthlabels}
-              data={crawldepthLabelData}
-              backgroundColor="#53B1FD"
-              xAxisLabel="Number of clicks"
-            />
+          <div className=" h-full w-full  overflow-auto">
+            <NonIndexedPages data={craawl} />
           </div>
-        </div> */}
+        </section>
+
       </section>
     </main>
   );
