@@ -142,40 +142,39 @@ export default function Overview({ onViewAllIssues }: OverviewProps) {
   );
 
   const overviewResult: OverviewDataType[] =
-  data?.crawlings?.flatMap((crawling: any) => {
-    if (!crawling?.crawlingData) return [];
+    data?.crawlings?.flatMap((crawling: any) => {
+      if (!crawling?.crawlingData) return [];
 
-    return crawling.crawlingData
-      .filter((data: any) => data?.tab === "overview" && data?.data)
-      .map((overviewData: CrawlingDataOverview) => {
-        const crawlStatus = overviewData?.data?.crawl_status ?? {};
-        const siteIssues = overviewData?.data?.site_issues ?? {};
-        const dataBlock = overviewData?.data ?? {};
+      return crawling.crawlingData
+        .filter((data: any) => data?.tab === "overview" && data?.data)
+        .map((overviewData: CrawlingDataOverview) => {
+          const crawlStatus = overviewData?.data?.crawl_status ?? {};
+          const siteIssues = overviewData?.data?.site_issues ?? {};
+          const dataBlock = overviewData?.data ?? {};
 
-        return {
-          crawlId: overviewData.id,
-          coreWebVital: dataBlock.core_web_vitals ?? null,
-          cost: dataBlock.cost ?? null,
-          siteHealth: dataBlock.site_health ?? null,
-          Issues: dataBlock.issues ?? [],
-          status_code: dataBlock.status_code ?? null,
-          errorsCount: Array.isArray(siteIssues.errors) ? siteIssues.errors.length : 0,
-          warningsCount: Array.isArray(siteIssues.warnings) ? siteIssues.warnings.length : 0,
-          tasksCount: dataBlock.tasks_count ?? 0,
-          pagesCrawled: crawlStatus.pages_crawled ?? 0,
-          pagesInQueue: crawlStatus.pages_in_queue ?? 0,
-          maxCrawlPages: crawlStatus.max_crawl_pages ?? 0,
-          crawlProgress: dataBlock.crawl_progress ?? 0,
-          timeToInteractive: dataBlock.time_to_interactive ?? null,
-          cumulativeLayoutShift: dataBlock.cumulative_layout_shift ?? null,
-          largestContentfulPaint: dataBlock.largest_contentful_paint ?? null,
-          createdAt: overviewData.createdAt ?? null,
-          updatedAt: overviewData.updatedAt ?? null,
-        };
-      });
-  }) ?? [];
+          return {
+            crawlId: overviewData.id,
+            coreWebVital: dataBlock.core_web_vitals ?? null,
+            cost: dataBlock.cost ?? null,
+            siteHealth: dataBlock.site_health ?? null,
+            Issues: dataBlock.issues ?? [],
+            status_code: dataBlock.status_code ?? null,
+            errorsCount: Array.isArray(siteIssues.errors) ? siteIssues.errors.length : 0,
+            warningsCount: Array.isArray(siteIssues.warnings) ? siteIssues.warnings.length : 0,
+            tasksCount: dataBlock.tasks_count ?? 0,
+            pagesCrawled: crawlStatus.pages_crawled ?? 0,
+            pagesInQueue: crawlStatus.pages_in_queue ?? 0,
+            maxCrawlPages: crawlStatus.max_crawl_pages ?? 0,
+            crawlProgress: dataBlock.crawl_progress ?? 0,
+            timeToInteractive: dataBlock.time_to_interactive ?? null,
+            cumulativeLayoutShift: dataBlock.cumulative_layout_shift ?? null,
+            largestContentfulPaint: dataBlock.largest_contentful_paint ?? null,
+            createdAt: overviewData.createdAt ?? null,
+            updatedAt: overviewData.updatedAt ?? null,
+          };
+        });
+    }) ?? [];
 
-  console.log("OVERVIEW", overviewResult)
 
   // Safely access the first element in overviewResult
   const issues = overviewResult.length > 0 ? overviewResult[0]?.Issues : []; //null
@@ -204,7 +203,6 @@ export default function Overview({ onViewAllIssues }: OverviewProps) {
       overviewResult.length > 0 ? overviewResult[0]?.maxCrawlPages : null!,
   };
 
-  // console.log(overviewResult[0]);
   const LcpLabel = [
     String(LcpAnalysis?.poor),
 
@@ -213,19 +211,19 @@ export default function Overview({ onViewAllIssues }: OverviewProps) {
   ];
   const LCPdata: ItemProps["data"] = overviewResult
     ? {
-        // labels: Object.keys(technicalSeoData.metrics?.lcp ?? {}),
-        labels: LcpLabel,
-        datasets: [
-          {
-            label: "Total",
-            // data: Object.values(technicalSeoData.metrics?.lcp ?? {}),
-            data: LcpLabel.map((lcp) => Number(lcp) || 0),
-            backgroundColor: ["#F04438", "#FDB022", "#12B76A"],
-            borderColor: ["#F04438", "#FDB022", "#12B76A"],
-            borderWidth: 1,
-          },
-        ],
-      }
+      // labels: Object.keys(technicalSeoData.metrics?.lcp ?? {}),
+      labels: LcpLabel,
+      datasets: [
+        {
+          label: "Total",
+          // data: Object.values(technicalSeoData.metrics?.lcp ?? {}),
+          data: LcpLabel.map((lcp) => Number(lcp) || 0),
+          backgroundColor: ["#F04438", "#FDB022", "#12B76A"],
+          borderColor: ["#F04438", "#FDB022", "#12B76A"],
+          borderWidth: 1,
+        },
+      ],
+    }
     : { labels: [], datasets: [] };
 
   const CLSLabel = [
@@ -236,19 +234,19 @@ export default function Overview({ onViewAllIssues }: OverviewProps) {
   ];
   const CLSdata: ItemProps["data"] = CLSAnalysis
     ? {
-        // labels: Object.keys(technicalSeoData.metrics?.cls ?? {}),
-        labels: CLSLabel,
-        datasets: [
-          {
-            label: "Total",
-            // data: Object.values(technicalSeoData.metrics?.cls ?? {}),
-            data: CLSLabel.map((cml) => Number(cml) || 0),
-            backgroundColor: ["#F04438", "#FDB022", "#12B76A"],
-            borderColor: ["#F04438", "#FDB022", "#12B76A"],
-            borderWidth: 1,
-          },
-        ],
-      }
+      // labels: Object.keys(technicalSeoData.metrics?.cls ?? {}),
+      labels: CLSLabel,
+      datasets: [
+        {
+          label: "Total",
+          // data: Object.values(technicalSeoData.metrics?.cls ?? {}),
+          data: CLSLabel.map((cml) => Number(cml) || 0),
+          backgroundColor: ["#F04438", "#FDB022", "#12B76A"],
+          borderColor: ["#F04438", "#FDB022", "#12B76A"],
+          borderWidth: 1,
+        },
+      ],
+    }
     : { labels: [], datasets: [] };
 
   const FirstInputDelayLabel = [
@@ -259,17 +257,17 @@ export default function Overview({ onViewAllIssues }: OverviewProps) {
   ];
   const TBTdata: ItemProps["data"] = FirstInputDelayLabel
     ? {
-        labels: FirstInputDelayLabel,
-        datasets: [
-          {
-            label: "Total",
-            data: FirstInputDelayLabel.map((cml) => Number(cml) || 0),
-            backgroundColor: ["#F04438", "#FDB022", "#12B76A"],
-            borderColor: ["#F04438", "#FDB022", "#12B76A"],
-            borderWidth: 1,
-          },
-        ],
-      }
+      labels: FirstInputDelayLabel,
+      datasets: [
+        {
+          label: "Total",
+          data: FirstInputDelayLabel.map((cml) => Number(cml) || 0),
+          backgroundColor: ["#F04438", "#FDB022", "#12B76A"],
+          borderColor: ["#F04438", "#FDB022", "#12B76A"],
+          borderWidth: 1,
+        },
+      ],
+    }
     : { labels: [], datasets: [] };
 
   const EachItem = ({
@@ -408,6 +406,7 @@ export default function Overview({ onViewAllIssues }: OverviewProps) {
               </div>
             </div>
             {/* <ReusableProgressiveCircle val={0} title={""} pageTitle={""} /> */}
+
             <div className="grid p-2 md:p-4 col-span-1 h-[308px] justify-items-start  rounded-md w-full border ">
               <Title
                 title="HTTP status codes"
@@ -417,6 +416,7 @@ export default function Overview({ onViewAllIssues }: OverviewProps) {
                 <ReusableHTTPStatusCode item={overviewResult[0]?.status_code} />
               </div>
             </div>
+
             <div className="grid p-2 md:p-4 col-span-1 h-[308px] justify-items-start rounded-md w-full border ">
               <Title
                 title="Site issues"
@@ -516,7 +516,7 @@ export default function Overview({ onViewAllIssues }: OverviewProps) {
                 </thead>
                 <tbody>
                   {issues &&
-                    issues.slice(0,5).map((issue) => {
+                    issues.slice(0, 5).map((issue) => {
                       return (
                         <tr className=" p-2 font-medium" key={issue.title}>
                           <td className="border text-xs text-[#475467] p-2 border-[#c0c2c5] ">
@@ -532,7 +532,7 @@ export default function Overview({ onViewAllIssues }: OverviewProps) {
                               //     : "/dashboard/warning.svg"
                               // }
                               description={issue.description}
-                              // fix={issue.fix}
+                            // fix={issue.fix}
                             />
                           </td>
                           <td className="border text-xs text-[#475467] p-2 border-[#c0c2c5]">

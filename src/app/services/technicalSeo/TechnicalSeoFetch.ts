@@ -60,3 +60,23 @@ export function useTechnicalSeoMutation() {
   // return { technicalSeoMutation, isPending, isError, error };
   return technicalSeoMutation;
 }
+
+interface DataByTab  {
+  tab: string
+}
+
+export function useTechnicalSeoDataByTab({tab}: DataByTab){
+  const id = useSelector(
+    (state: RootState) => state.property.activePropertyObj
+  );
+  const data = useQuery({
+    queryKey: [tab, id ],
+    queryFn: async()=> {
+      const result = await ApiCall.get(`/user/crawler/technical-seo/by-tab/${id.id}?tab=${tab}`)
+      return result.data
+    }
+  
+  })
+
+  return data
+}
