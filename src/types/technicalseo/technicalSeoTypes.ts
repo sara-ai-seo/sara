@@ -94,6 +94,7 @@ export interface CrawlingDataCrawlability {
       url: string;
       reason: string;
     }[];
+    reasons?: string;
     progress: string;
     indexable: number;
     total_page: number;

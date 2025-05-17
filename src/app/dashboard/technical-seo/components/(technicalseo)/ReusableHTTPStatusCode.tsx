@@ -30,6 +30,7 @@ export default function ReUsableHTTPStatusCode({
         labels: {
           usePointStyle: true,
           pointStyle: "circle",
+         
         },
       },
     },
@@ -44,14 +45,24 @@ export default function ReUsableHTTPStatusCode({
 
   const statusData = item;
 
+  // const labelsWithCounts = Object.entries(statusData).map(([key, value]) => {
+
+  //   const description = `${
+  //     statusCodeDescriptions[key as StatusCodeKey]
+  //   } - ${key}`;
+
+  //   return `${description}(${value})`;
+  //   // return <span className="text-xs">`${description}(${value})` </span>;
+  // });
   const labelsWithCounts = Object.entries(statusData).map(([key, value]) => {
-
-    const description = `${
-      statusCodeDescriptions[key as StatusCodeKey]
-    } - ${key}`;
-
-    return `${description}(${value})`;
-  });
+  const description = `${statusCodeDescriptions[key as StatusCodeKey]} - ${key}`;
+  
+  // Split at "-" and take the second part (trim whitespace)
+  const secondPart = description.split("-")[1].trim();
+  
+  // Append count in parentheses
+  return `${secondPart} (${value})`;
+});
 
   const allValuesZero = Object.values(statusData).every((value) => value === 0);
   // const allValuesZero = Object.values([23,3,4,5,4]).every((value) => value === 0);
