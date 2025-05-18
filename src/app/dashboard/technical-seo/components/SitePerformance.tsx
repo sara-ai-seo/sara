@@ -42,9 +42,9 @@ export default function SitePerformance() {
       .filter(isSitePerformanceData) ?? []; 
 
   const pageloadSpeedArray = sitePerformanceData[0]?.data.page_load_speed || [];
-  const pagemet = pageMetrics.data.project.crawlings[0].crawlingData[0].data
+  const pagemet = pageMetrics?.data?.project?.crawlings[0]?.crawlingData[0]?.data || {}
 
-  console.log("DATA", pagemet )
+  // console.log("DATA", pagemet )
 
 
   const pageloadSpeedTotal =
@@ -166,7 +166,7 @@ export default function SitePerformance() {
           />
         </div>
       </section>
-      <section className="flex flex-col w-3/4 border rounded-md p-6 mb-20">
+      <section className="flex flex-col w-full border rounded-md p-6 mb-20">
         <div className="flex  justify-between w-full border-b pb-2">
           <h3 className="text-[#101828] text-xl font-semibold">
             Site performance issues <ShowDescription description="Issues that affect the performance of your site" />
@@ -175,10 +175,10 @@ export default function SitePerformance() {
             onClick={() => setIsPerformanceIssue(!isPerformanceIssue)}
             className="text-blue-400 cursor-pointer"
           >
-            Show
+           {`${!isPerformanceIssue ? "Show" : "Hide"}`}
           </button>
         </div>
-        <div className="">
+        <div className="w-full">
           {isPerformanceIssue && (
             <DataTable
               columns={sitePerformanceIssueColumns}
