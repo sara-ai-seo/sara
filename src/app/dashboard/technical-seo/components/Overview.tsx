@@ -11,16 +11,8 @@ import { FiDownloadCloud } from "react-icons/fi";
 import TableItems from "./(technicalseo)/TableItems";
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/store";
-import { calculatePercentage } from "@/app/utils/PercentageCalculate";
 import ActivityGuage from "./(technicalseo)/ActivityGuage";
-import HTTPStatusCode from "./HTTPStatusCode";
-// import { TechnicalSeoType } from "@/types/TechnicalSeoType";
 import SiteHealthScore from "../../components/SiteHealthScore";
-import { DoughnutSample } from "../../components/DoiughnutSample";
-import {
-  CrawledPages,
-  CrawledPagesComplete,
-} from "../../components/SeoprogressCircle";
 import {
   CrawledDetail,
   CrawlingDataOverview,
@@ -28,21 +20,10 @@ import {
 } from "@/types/technicalseo/technicalSeoTypes";
 import ReusableHTTPStatusCode from "./(technicalseo)/ReusableHTTPStatusCode";
 import { useTechnicalSeoFetchData } from "@/app/services/technicalSeo/TechnicalSeoFetch";
-import { ReusableCrawlStatus } from "./(technicalseo)/ReusableCrawlStatus";
 import Loader from "@/app/component/Loader";
 import { CSVLink, CSVDownload } from "react-csv";
-import { forwardRef } from "react";
-import { Doughnut } from "react-chartjs-2";
 import DoughnutCenterLabel from "./(technicalseo)/DoughnutCenterLabel";
 import ShowDescription from "@/app/component/ShowDescription";
-// import { TechnicalSeoType } from "@/types/TechnicalSeoType";
-// import { useEffect } from "react";
-// import { removeTrailingSlash } from "@/app/utils/RemoveSlash";
-// import ApiCall from "@/app/utils/apicalls/axiosInterceptor";
-// import { setLoading } from "@/redux/features/loaderSlice";
-// import { setTechnicalSeo, fetchTechnicalSEOFailure } from "@/redux/features/technicalSeoSlice";
-// import { useDispatch } from "react-redux";
-// import { FetchTechnicalSeo } from "./FetchTechnicalSeo";
 
 interface ChartData {
   labels: string[];
@@ -135,11 +116,14 @@ interface OverviewProps {
   onViewAllIssues: () => void;
 }
 export default function Overview({ onViewAllIssues }: OverviewProps) {
-  const { data, isLoading } = useTechnicalSeoFetchData();
   // console.log("react query overview", data);
-  const activeProperty = useSelector(
-    (state: RootState) => state.property.activeProperty
-  );
+
+
+  const activePropertyObj = useSelector(
+      (state: RootState) => state.property.activePropertyObj
+    );
+ 
+  const { data, isLoading } = useTechnicalSeoFetchData(activePropertyObj.id);
 
   const overviewResult: OverviewDataType[] =
     data?.crawlings?.flatMap((crawling: any) => {
@@ -175,6 +159,8 @@ export default function Overview({ onViewAllIssues }: OverviewProps) {
         });
     }) ?? [];
 
+   
+    const healthScoreIncrease = overviewResult[0]?.siteHealth ?? 0 - overviewResult[1]?.siteHealth ?? 0;
 
   // Safely access the first element in overviewResult
   const issues = overviewResult.length > 0 ? overviewResult[0]?.Issues : []; //null
@@ -323,7 +309,7 @@ export default function Overview({ onViewAllIssues }: OverviewProps) {
           <section
             className={`grid grid-cols-1 md:grid-cols-4 md:gap-4 md:space-y-0 space-y-4 w-full`}
           >
-            <SiteHealthScore site_health={site_health!} />
+            <SiteHealthScore site_health={site_health!} increase={Number(healthScoreIncrease.toFixed(2))} />
 
             <section className="w-full h-full col-span-3 md:h-[464px] border rounded-md p-6">
               <SubHead
@@ -459,7 +445,7 @@ export default function Overview({ onViewAllIssues }: OverviewProps) {
               </div>
             </div>
           </section>
-          <section className="grid border rounded-md lg:max-w-[75%] w-auto">
+          <section className="grid border rounded-md w-auto">
             <div className=" flex items-center justify-between">
               <div className="flex min-[500px]:flex-row flex-col w-full gap-2 p-2 md:p-4 min-[500px]:items-center justify-between">
                 <h1

@@ -93,13 +93,13 @@ export default function Issues() {
     // Debug logging
     if (!issue) {
       // console.log(`No issue found for key: "${key}"`);
-      console.log('Available issues:', issuesData.map(i => {
-        const titleMatch = i.title.match(/\(([^)]+)\)/);
-        return {
-          title: i.title,
-          extractedKey: titleMatch ? titleMatch[1] : null
-        };
-      }));
+      // console.log('Available issues:', issuesData.map(i => {
+      //   const titleMatch = i.title.match(/\(([^)]+)\)/);
+      //   return {
+      //     title: i.title,
+      //     extractedKey: titleMatch ? titleMatch[1] : null
+      //   };
+      // }));
     }
     
     return issue;
@@ -294,7 +294,7 @@ export default function Issues() {
           <Table>
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id} className="border-b">
+                <TableRow key={headerGroup.id} className="border-b bg-gray-200">
                   {headerGroup.headers.map((header) => (
                     <TableHead 
                       key={header.id}

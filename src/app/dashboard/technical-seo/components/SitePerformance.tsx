@@ -16,6 +16,8 @@ import { DataTable } from "@/components/ui/data-table";
 import { sitePerformanceIssueColumns } from "../column/sitePerformanceIssueColumn";
 import ShowDescription from "@/app/component/ShowDescription";
 import { useQuery } from "@tanstack/react-query";
+import { useSelector } from "react-redux";
+import { RootState } from "@/app/store";
 
 export default function SitePerformance() {
   const [isPerformanceIssue, setIsPerformanceIssue] = useState(false);
@@ -31,11 +33,15 @@ export default function SitePerformance() {
   //   queryKey: ['page_metrics', ]
   // }))
 
-  const pageMetrics = useTechnicalSeoDataByTab({ tab: "pageMetrics" })
+    const activePropertyObj = useSelector(
+      (state: RootState) => state.property.activePropertyObj
+    );
+
+  const pageMetrics = useTechnicalSeoDataByTab({ tab: "pageMetrics", id: activePropertyObj.id });
   
 
 
-  const { data, isLoading } = useTechnicalSeoFetchData();
+  const { data, isLoading } = useTechnicalSeoFetchData(activePropertyObj.id);
   const sitePerformanceData: SitePerformanceData[] =
     data?.crawlings
       ?.flatMap((crawling: any) => crawling.crawlingData) 
