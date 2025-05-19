@@ -31,7 +31,7 @@ interface Props {
 const BarChartSingle: React.FC<Props> = ({
   labels,
   data,
-  title = "Chart.js Bar Chart",
+  title = "",
   xAxisLabel = "Crawl date",
   yAxisLabel = "Number of pages",
   backgroundColor,
@@ -112,7 +112,7 @@ interface Props {
 export const BarChartDouble: React.FC<Props> = ({
   labels,
   datasets,
-  title = "Chart.js Bar Chart",
+  title = "",
   xAxisLabel = "Crawl date",
   yAxisLabel = "Number of pages",
 }) => {

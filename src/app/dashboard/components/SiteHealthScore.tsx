@@ -5,8 +5,9 @@ import SiteHealthDoughnutChart from "../technical-seo/components/(technicalseo)/
 
 interface SiteHealthScoreProps {
   site_health: number;
+  increase?: number;
 }
-export default function SiteHealthScore({ site_health }: SiteHealthScoreProps) {
+export default function SiteHealthScore({ site_health, increase = 0 }: SiteHealthScoreProps) {
   return (
     <div className="grid shadow-md border font-bold items-start h-full w-full rounded-md p-2 lg:p-6">
       <h1 className={`text-[#101828] text-xl flex items-center gap-4`}>
@@ -17,8 +18,8 @@ export default function SiteHealthScore({ site_health }: SiteHealthScoreProps) {
       </h1>
 
       <div className="flex md:flex-col flex-row w-full gap-10">
-        <div className={`size-[60%] md:w-auto`}>
-          <SiteHealthDoughnutChart site_healthPercentage={site_health} />
+        <div className={`size-[40%] md:w-auto`}>
+          <SiteHealthDoughnutChart site_healthPercentage={site_health} increase={increase} />
         </div>
 
         <div className="grid gap-3 h-fit md:self-baseline  self-end  w-fit justify-end">

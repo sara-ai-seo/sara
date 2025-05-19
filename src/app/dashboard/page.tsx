@@ -33,6 +33,7 @@ import {
   CustomPieChart,
 } from "../component/charts/piechart";
 import { ShortenNumber } from "../utils/ShortenedNumber";
+import { calculatePercentageDifference } from "@/lib/DateFormater";
 
 export default function Dashboard() {
   const exportIcon = (
@@ -83,6 +84,10 @@ export default function Dashboard() {
       </div>
     );
   }
+
+
+
+const increase = data.techSeo.differences.siteHealthDifference;
 
   const siteHealthScore = {
     score: Number(ShortenNumber(data.techSeo.current.siteHealth)),
@@ -179,7 +184,7 @@ export default function Dashboard() {
           {/* )} */}
 
           <section className="w-full">
-            <TOverview siteHealthScore={siteHealthScore} />
+            <TOverview siteHealthScore={siteHealthScore} increase={Number(increase.toPrecision(2))} />
           </section>
         
         </div>

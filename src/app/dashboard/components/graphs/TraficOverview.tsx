@@ -4,8 +4,9 @@ import { TrafficOverviewGraph } from "../TrafficOverviewGraph";
 import { FaCircle } from "react-icons/fa";
 
 import "./style.css";
-import { SiteHealthScore, SiteHealthScoreDto } from "../../dashboard/SiteHealthScore";
+import {  SiteHealthScoreDto } from "../../dashboard/SiteHealthScore";
 import { PositionDistribution } from "../../rank-tracker/components/PositionDistribution";
+import SiteHealthScore from "../SiteHealthScore";
 
 export default function TraficOverview() {
   return (
@@ -71,18 +72,19 @@ export default function TraficOverview() {
 
 
 interface TOverviewDto {
-  siteHealthScore: SiteHealthScoreDto,
+  siteHealthScore: number | SiteHealthScoreDto,
+  increase?: number
 
 }
 
 export const TOverview: React.FC<TOverviewDto> = ({
-  siteHealthScore
+  siteHealthScore, increase = 0
 }) => {
   return (
     <section
       className={`lg:h-[580px] grid grid-cols-1 md:grid-cols-3 w-auto lg:w-full gap-4 py-8 justify-between`}
     >
-      <div className="grid col-span-1 md:col-span-1 shadow-md border font-bold text-xl items-start h-full rounded-md p-2 md:p-6 w-auto ">
+      {/* <div className="grid col-span-1 md:col-span-1 shadow-md border font-bold text-xl items-start h-full rounded-md p-2 md:p-6 w-auto ">
         <h1 className={`text-[#101828] flex items-center gap-4`}>
           Site health score
           <button title="This is the overall site health based on general best practice">
@@ -107,7 +109,15 @@ export const TOverview: React.FC<TOverviewDto> = ({
             <p className=" font-normal"> High</p>
           </div>
         </div>
-      </div>
+      </div> */}
+      <SiteHealthScore
+        site_health={
+          typeof siteHealthScore === "number"
+            ? siteHealthScore
+            : siteHealthScore.score
+        }
+        increase={increase}
+      />
       <div className="grid col-span-1 md:col-span-2 w-full shadow-md border font-bold text-xl items-start h-full rounded-md p-2 md:p-6">
         <div className="">
           <div className="flex w-auto h-full items-start justify-between">

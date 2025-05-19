@@ -28,13 +28,13 @@ export const SiteHealthScore: React.FC<SiteHealthScoreDto> = ({score, previous})
         >
           <div className="flex flex-col">
             <p className="text-gray-600 text-center text-sm"> Health score</p>
-            <p className="text-gray-900 text-center text-3xl lg:text-5xl">
+            <p className="text-gray-900 text-center text-2xl lg:text-3xl">
               {" "}
-              {score?.toFixed(0)}%{" "}
+              {score?.toFixed(0)}%
             </p>
             <p className={`${ getClass(diff)} inline-flex items-center justify-center lg:mt-4 mt-2 gap-0.5 text-sm`}>
               <BiUpArrowAlt className={`text-lg ${arrowStyle(diff)} `} />
-              {`${calculatePercentageDifference(previous, score)}`}
+              {`${calculatePercentageDifference(previous, score).toFixed(0)}`}
             </p>
           </div>
         </CircularProgressbarWithChildren>

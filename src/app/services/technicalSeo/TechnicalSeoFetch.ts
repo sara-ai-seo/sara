@@ -12,15 +12,20 @@ const fetchTechseoData = async (id: number) => {
   return result.data.project;
 };
 
-export const useTechnicalSeoFetchData = () => {
-  const id = useSelector(
-    (state: RootState) => state.property.activePropertyObj
-  );
+export const useTechnicalSeoFetchData = (id: number) => {
+
 
   const { data, isLoading } = useQuery({
     queryKey: ["techseodata", id],
-    queryFn: () => fetchTechseoData(id.id),
-    // enabled: !!id, // To ensure the query runs only if the id is available
+    queryFn: () => fetchTechseoData(id),
+    refetchInterval: (data: any) => {
+      const status = data.state?.data?.crawlings?.[0]?.status;
+      // console.log("status", status);
+      if (status === "PENDING") {
+        return 4000;
+      }
+      return false;
+    }
   });
 
   return { data, isLoading };
@@ -62,17 +67,18 @@ export function useTechnicalSeoMutation() {
 }
 
 interface DataByTab  {
-  tab: string
+  tab: string,
+  id: number
 }
 
-export function useTechnicalSeoDataByTab({tab}: DataByTab){
-  const id = useSelector(
-    (state: RootState) => state.property.activePropertyObj
-  );
+export function useTechnicalSeoDataByTab({tab, id}: DataByTab){
+  // const id = useSelector(
+  //   (state: RootState) => state.property.activePropertyObj
+  // );
   const data = useQuery({
     queryKey: [tab, id ],
     queryFn: async()=> {
-      const result = await ApiCall.get(`/user/crawler/technical-seo/by-tab/${id.id}?tab=${tab}`)
+      const result = await ApiCall.get(`/user/crawler/technical-seo/by-tab/${id}?tab=${tab}`)
       return result.data
     }
   
