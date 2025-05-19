@@ -61,7 +61,7 @@ export default function AddProject() {
   //         onError: () => {
   //           toast.error("Failed to re-track rankings!");
   //         },
-          
+
   //       })
 
 
@@ -82,7 +82,7 @@ export default function AddProject() {
     onError: () => {
       toast.error("Failed to re-track rankings!");
     },
-    
+
   })
 
   // console.log("@", property.id,trimDomain(property.domain), User.location.code  )
@@ -106,18 +106,23 @@ export default function AddProject() {
     },
     onError: (error) => {
       toast.error(error.message);
+       setTimeout(() => {
+        window.location.reload();
+      }, 2000);
     },
     onSuccess: async (data) => {
       console.log("data", data.project);
       await technicalSeoMutation.mutateAsync(data.project.id);
-      RankMutate({ id: data.project.id, domain: data.project.domain }); 
+      RankMutate({ id: data.project.id, domain: data.project.domain });
 
       dispatch(setActiveProperty(inputUrl));
       dispatch(setActivePropertyObj(data.project));
       navigate.push("/dashboard");
       dispatch(setModal(""));
 
-      // console.log("current:", data.project)
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
     },
   });
 

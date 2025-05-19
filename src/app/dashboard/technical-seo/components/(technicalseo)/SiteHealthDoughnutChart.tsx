@@ -5,9 +5,11 @@ import { BiUpArrowAlt } from "react-icons/bi";
 
 interface SEOProgressiveCircleProps {
   site_healthPercentage: number;
+  increase?: number;
 }
 const SiteHealthDoughnutChart: FC<SEOProgressiveCircleProps> = ({
   site_healthPercentage,
+  increase = 0
 }) => {
   return (
     <div className="z-0">
@@ -30,14 +32,14 @@ const SiteHealthDoughnutChart: FC<SEOProgressiveCircleProps> = ({
       >
         <div className="flex flex-col">
           <p className="text-gray-600 text-center text-sm"> Health score</p>
-          <p className="text-gray-900 text-center text-3xl lg:text-5xl">
+          <p className="text-gray-900 text-center text-2xl lg:text-4xl">
             {" "}
             {/* {averageSeo?.toFixed(0)}%{" "} */}
             {site_healthPercentage}%
           </p>
           <p className="text-[#027A48] inline-flex items-center justify-center lg:mt-4 mt-2 gap-0.5 text-sm">
-            <BiUpArrowAlt className="text-lg" />
-            12
+            <BiUpArrowAlt className="" />
+            {increase}
           </p>
         </div>
       </CircularProgressbarWithChildren>

@@ -12,15 +12,6 @@ import { RootState } from "@/app/store";
 import moment from "moment";
 import ApiCall from "@/app/utils/apicalls/axiosInterceptor";
 import { useDispatch } from "react-redux";
-import {
-  // fetchTechnicalSEOFailure,
-  setTechnicalSeo,
-} from "@/redux/features/technicalSeoSlice";
-import {
-  fetchPerformanceFailure,
-  fetchPerformanceSuccess,
-} from "@/redux/features/performanceMetric slice";
-import { removeTrailingSlash } from "@/app/utils/RemoveSlash";
 import { useMutation, useQueries, useQuery } from "@tanstack/react-query";
 import { useTechnicalSeoFetchData } from "@/app/services/technicalSeo/TechnicalSeoFetch";
 import { shareOrFallback } from "@/app/utils/shareContentOrFallback";
@@ -29,45 +20,23 @@ import Loader from "@/app/component/Loader";
 import toast from "react-hot-toast";
 import ProgressBarPercent from "@/app/component/ProgressBarPercent";
 import { AxiosError } from "axios";
+import { CrawlingIndicator } from "../components/CrawlingIndicator";
 
 export default function TechnicalSeoLayout() {
-  const [loading, setLoading] = useState(false);
+
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const [progress, setProgress] = useState(0);
+
 
   // const techSeo = useSelector((state: RootState) => state.technicalSeo.metrics);
   const lastUpdated = useSelector(
     (state: RootState) =>
       state.performance.metrics?.history?.scores[0]?.createdAt
   );
-  const activeProperty = useSelector(
-    (state: RootState) => state.property.activeProperty
-  );
+
   const activePropertyObj = useSelector(
     (state: RootState) => state.property.activePropertyObj
   );
-  const dispatch = useDispatch();
-
-  // const FetchTechnicalSeo = async (page?: string) => {
-  //     try {
-  //         await ApiCall.get('/crawl/technical-seo', {
-  //             params: {
-  //                 limit: 100,
-  //                 platform: 'desktop',
-  //                 url: removeTrailingSlash(activeProperty),
-  //                 page: page
-  //             }
-  //         }).then((res) => dispatch(setTechnicalSeo(res.data)));
-  //     } catch (error: any) {
-  //         dispatch(fetchTechnicalSEOFailure(error.message));
-  //     } finally {
-  //         // setLoading(false);
-  //     }
-  // };
-
-  // useEffect(() => {
-  //     FetchTechnicalSeo()
-  // }, [activeProperty,])
 
   const tabs = [
     {
@@ -76,76 +45,64 @@ export default function TechnicalSeoLayout() {
     },
     { title: "Crawlability and indexability", content: <Crawlability /> },
     { title: "Site performance", content: <SitePerformance /> },
-    { title: "Issues", content: <Issues /> },
-    // { title: "Internal linking", content: <InternalLinking /> },
-    // { title: "Crawl comparisons", content: <CrawlComparison /> },
-    // { title: "Audit history", content: <AuditHistory /> },
+    { title: "Issues", content: <Issues /> }
   ];
   const CrawlTechnicalSeo = async () => {
-    try {
-      const response = await ApiCall.post(
-        `/user/crawler/technical-seo/${activePropertyObj.id}`,
-        {},
-
-        {
-          onUploadProgress: (progressEvent) => {
-            if (progressEvent.total) {
-              const percentCompleted = Math.round(
-                (progressEvent.loaded / progressEvent.total) * 100
-              );
-              // console.log(progressEvent);
-              setProgress(percentCompleted);
-            }
-          },
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
-    } catch (error) {
-      console.log(error);
-      if (error instanceof AxiosError) {
-        if (error.response) {
-          throw new Error(
-            error.response?.data.message || "Something went wrong!"
-          );
-        }
-        throw new Error("Crawl Technical SEO Failed");
+    return ApiCall.post(
+      `/user/crawler/technical-seo/${activePropertyObj.id}`,
+      {},
+      {
+        onUploadProgress: (progressEvent) => {
+          if (progressEvent.total) {
+            const percentCompleted = Math.round(
+              (progressEvent.loaded / progressEvent.total) * 100
+            );
+            console.log('Progress:', percentCompleted);
+            setProgress(percentCompleted);
+          }
+        },
+        onDownloadProgress: (progressEvent) => {  // Add download progress too
+          if (progressEvent.total) {
+            const percentCompleted = Math.round(
+              (progressEvent.loaded / progressEvent.total) * 100
+            );
+            console.log('Download Progress:', percentCompleted);
+            setProgress(percentCompleted);
+          }
+        },
+        headers: { "Content-Type": "multipart/form-data" },
       }
-
-      throw new Error("Crawl Technical SEO Failed");
-    } finally {
-      // setLoading(false);
-    }
+    );
   };
 
   const mutate = useMutation({
-    mutationFn: async () => CrawlTechnicalSeo(),
+    mutationFn: CrawlTechnicalSeo,
+    onMutate: () => {
+      setProgress(0);
+    },
     onSuccess: () => {
       toast.success("Recrawl Technical SEO Successfully");
-      setProgress(0);
+      setProgress(100);
+      setTimeout(() => setProgress(0), 1000);
+      // useTechnicalSeoFetchData(activePropertyObj.id);
+
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
     },
     onError: (error) => {
       toast.error(error.message);
       setProgress(0);
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
     },
   });
-  // const fetchTechseoData = async () => {
-  //   const result = await ApiCall.get(
-  //     `/user/crawler/technical-seo/${activePropertyObj?.id}`
 
-  //   );
-  //   console.log("tech seo", result.data);
-  //   dispatch(setTechnicalSeo(result.data));
-  //   return result;
-  // };
-  // const { data, isLoading } = useQuery({
-  //   queryKey: ["techseodata"],
-  //   queryFn: fetchTechseoData,
-  // });
+  const { isLoading, data } = useTechnicalSeoFetchData(activePropertyObj.id);
+  const pendingStatus = data?.crawlings[0]?.status === "PENDING"
 
-  const { isLoading } = useTechnicalSeoFetchData();
-
-  // console.log(activePropertyObj);
-
+  // console.log("tech-seo", data?.crawlings[0]?.status);
   return (
     <section className={`flex w-full h-full justify-start flex-col gap-2 `}>
       <div className="flex sm:flex-row flex-col w-full justify-between sm:items-center gap-2">
@@ -155,18 +112,19 @@ export default function TechnicalSeoLayout() {
           </h2>
         </div>
         <div className="flex w-fit md:w-1/2 items-center justify-end gap-2 md:gap-4">
-          {mutate.isPending ? (
-            <ProgressBarPercent progress={progress} />
-          ) : (
-            <span className="">
-              <button
-                className="rounded-lg sm:text-base text-sm p-2 bg-primary text-white font-semibold hover:bg-blue-500"
-                onClick={() => mutate.mutate()}
-              >
-                {mutate.isPending ? "Crawling..." : " Re-run audit"}
-              </button>
-            </span>
-          )}
+          <span className="">
+            <button
+              className={`rounded-lg sm:text-base text-sm p-2  text-white font-semibold hover:bg-blue-500 ${pendingStatus ? "bg-secondary" : "bg-primary"} flex items-center gap-2`}
+              onClick={() => mutate.mutate()}
+              disabled={mutate.isPending || pendingStatus}
+              title="Re-run audit"
+            >
+              {mutate.isPending ? "Crawling..." :
+                data?.crawlings[0]?.status === "PENDING" ? (
+                  <CrawlingIndicator text="Deep crawling " />) : " Re-run audit"}
+
+            </button>
+          </span>
 
           <span className="">
             <PlainButton
@@ -179,11 +137,45 @@ export default function TechnicalSeoLayout() {
             />
           </span>
         </div>
+
       </div>
       <div className="flex items-center gap-4 my-2">
         <div className="flex items-center gap-2 sm:text-base min-[375px]:text-sm text-xs">
           <p className=" font-semibold"> Last Update:</p>
           <p className=""> {moment(lastUpdated).format("Do MMM YY")} </p>
+        </div>
+        <div> | </div>
+        <div>
+
+          <div className="flex items-center gap-2">
+            <p className=" font-semibold">Crawl status:</p>
+
+            {
+              mutate.isPending ? (
+                <CrawlingIndicator text="Crawling " />
+              ) :
+                data?.crawlings[0]?.status === "PENDING" ?
+                  (
+                    <CrawlingIndicator text="Deep crawling " />
+                  ) : data?.crawlings[0]?.status === "COMPLETED" ? (
+                    <p className="text-green-500">
+                      Completed
+                    </p>
+                  ) : data?.crawlings[0]?.status === "FAILED" ? (
+                    <p className="text-red-500">
+                      Failed
+                    </p>
+                  ) : (
+                    <p className="text-yellow-500">
+                      Unknown
+                    </p>
+                  )
+
+            }
+
+
+          </div>
+
         </div>
       </div>
       <div className="w-full" id="technical-seoId">
@@ -200,11 +192,10 @@ export default function TechnicalSeoLayout() {
                       /* Use the `selected` state to conditionally style the selected tab. */
 
                       <p
-                        className={` cursor-pointer p-2 active:outline-none text-sm font-semibold border-t-0 border-l-0 border-r-0 active:border-r-none ${
-                          selected
+                        className={` cursor-pointer p-2 active:outline-none text-sm font-semibold border-t-0 border-l-0 border-r-0 active:border-r-none ${selected
                             ? "text-primary border-b-2 border-primary"
                             : " text-[#667085] active:border-none"
-                        }`}
+                          }`}
                       >
                         {tab.title}
                       </p>

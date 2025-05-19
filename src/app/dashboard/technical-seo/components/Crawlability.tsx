@@ -33,7 +33,11 @@ export default function Crawlability() {
     return data.tab === "crawlabilityAndIndexibility";
   }
 
-  const { data, isLoading } = useTechnicalSeoFetchData();
+    const activePropertyObj = useSelector(
+      (state: RootState) => state.property.activePropertyObj
+    );
+
+  const { data, isLoading } = useTechnicalSeoFetchData(activePropertyObj.id);
 
 
   const crawlbilityAndIndexibiltyResult: CrawlingDataCrawlability[] =
@@ -53,12 +57,34 @@ export default function Crawlability() {
   interface CrawlingsData {
     crawlings: CrawlingsItem[];
   }
-  const crawledPagesPerDate = useMemo(() => {
-    return (data as CrawlingsData).crawlings.map((item: any) => ({
-      date: item?.completedAt || "NA",
-      pages: item?.crawlingData[1]?.data.crawled_detail?.pages_crawled || 0
-    }));
-  }, [data]);
+ 
+
+ const crawledPagesPerDate = useMemo(() => {
+  const crawlings = (data as CrawlingsData)?.crawlings;
+
+  if (!Array.isArray(crawlings)) return [];
+
+  const seenDates = new Set<string>();
+
+  return crawlings
+    .map((item: any) => {
+      const isoDate = item?.completedAt;
+      const dateOnly = isoDate ? new Date(isoDate).toISOString().split("T")[0] : "NA";
+
+      return {
+        date: dateOnly,
+        pages: item?.crawlingData?.[1]?.data?.crawled_detail?.pages_crawled || 0,
+      };
+    })
+    .filter(entry => {
+      if (seenDates.has(entry.date)) return false;
+      seenDates.add(entry.date);
+      return true;
+    })
+    .slice(0, 7); // ✅ limit to first 7 unique dates
+}, [data]);
+
+
 
 
   interface UrlItems {
@@ -66,10 +92,10 @@ export default function Crawlability() {
     reason: string;
   }
   const craawl = crawlbilityAndIndexibiltyResult[0]?.data.items
-  const reason = craawl.map((item) => item.reason);
-  const url = craawl.map((item) => item);
+  const reason = craawl?.map((item) => item.reason);
+  const url = craawl?.map((item) => item);
 
-  const groupedByReason = craawl.reduce((acc: Record<string, string[]>, item: UrlItems) => {
+  const groupedByReason = (craawl ?? []).reduce((acc: Record<string, string[]>, item: UrlItems) => {
     const { url, reason } = item;
     acc[reason] = acc[reason] || [];
     acc[reason].push(url);
@@ -78,7 +104,7 @@ export default function Crawlability() {
 
 
 
-  const crawlLabels = crawledPagesPerDate.map(item => {
+  const crawlLabels = crawledPagesPerDate?.map(item => {
     return new Date(item.date).toLocaleDateString('en-US', {
       month: 'short',
       day: 'numeric'
@@ -87,8 +113,8 @@ export default function Crawlability() {
 
 
 
-  const crawled =
-    crawlbilityAndIndexibiltyResult[0]?.data.crawled_detail.pages_crawled || 0;
+  const crawled = crawlbilityAndIndexibiltyResult?.[0]?.data?.crawled_detail?.pages_crawled || 0;
+
 
   const indexable = crawlbilityAndIndexibiltyResult[0]?.data.indexable || 0;
   const non_indexable =
@@ -113,6 +139,8 @@ export default function Crawlability() {
   const TotalLinkFound = crawlbilityAndIndexibiltyResult[0]?.data.items;
 
   const nonIndexablePagesLabels = ["0", "20", "40", "60", "80", "100"];
+
+ 
 
 
   return isLoading ? (
