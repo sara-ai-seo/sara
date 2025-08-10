@@ -141,7 +141,7 @@ export default function KeywordGap({
 
               return (
                 <tr key={index}>
-                  <td>{item.keyword}</td>
+                  <td className="px-4">{item.keyword}</td>
                   <td>{item.keyword_volume ? ShortenNumber(item.keyword_volume) : 0}</td>
                   <td>
                     <span
@@ -153,8 +153,10 @@ export default function KeywordGap({
                       <TbPointFilled /> {item.keyword_difficulty ?? 0}
                     </span>
                   </td>
-                 {/* <td>{typeof item?.rank === 'number' ? item.rank.toFixed(2) : 0}</td> */}
-                 <td>{0}</td>
+
+                 <td>{typeof item?.competition === 'number' ? item.competition.toFixed(2) : 0}</td>
+                 <td>{typeof item?.rank === 'number' ? item.rank.toFixed(2) : 0}</td>
+                 
 
                   {/* <td>{item.rank?.toFixed(2) ?? 0}</td> */}
                   <td className="bg-[#EFF8FF] pl-4">{item.domain1?.toFixed(2) ?? 0}</td>
