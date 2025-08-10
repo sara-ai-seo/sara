@@ -83,13 +83,22 @@ export default function TitleShareSettingTop({ title, updateData, keyword }: Pro
             moreClass="text-primary bg-[#EFF8FF]"
             title="Share"
             icon={<IoCloudUploadOutline />}
-            handleClick={() =>
+            // handleClick={() =>
+            //   shareOrFallback({
+            //     url: "content-analysis",
+            //     title: "Content Analysis",
+            //     text: "content analysis",
+            //   })
+            // }
+             handleClick={() => {
+              const currentUrl = window.location.href;
+              
               shareOrFallback({
-                url: "content-analysis",
+                url: currentUrl,
                 title: "Content Analysis",
-                text: "content analysis",
-              })
-            }
+                text: "Check out this content analysis",
+              });
+            }}
           />
         </span>
         {/* <span className="p-3 rounded-md border cursor-pointer ">
