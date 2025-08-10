@@ -86,7 +86,7 @@ export default function LinkGap() {
                     <TableCell className="p-4 text-primary">
                         <p> {item?.target} </p>
                     </TableCell>
-                    <TableCell className=" p-4">{item?.rank} </TableCell>
+                    <TableCell className=" p-4">{0} </TableCell>
                     <TableCell className="p-4">
                       {item?.intersections}
                     </TableCell>

@@ -29,11 +29,12 @@ export default function KeywordGap({
 }: {
   data: KeywordGapType[];
   prev: KeywordGapType[];
-  setStage: ()=> void
+  setStage: () => void
 }) {
   const [selected, setSelected] = useState("Volume");
 
   // const {data} = keywordGapData("keywordGap");
+  console.log("Competitor data:", data)
 
   return (
     <section
@@ -50,18 +51,18 @@ export default function KeywordGap({
           <h3 className="text-[#101828] text-lg text-left font-medium">
             {data.length} Keywords
           </h3>
-         <div className="flex items-center gap-3">
-         {/* <SearchBox
+          <div className="flex items-center gap-3">
+            {/* <SearchBox
             value={""}
             setValue={function (e: any): void {
               throw new Error("Function not implemented.");
             }}
           /> */}
-          <Button className="flex items-center gap-2" onClick={setStage}>
-            <MdAdd />
-            <span className="ml-2">Add competitor</span>
-          </Button>
-         </div>
+            <Button className="flex items-center gap-2" onClick={setStage}>
+              <MdAdd />
+              <span className="ml-2">Add competitor</span>
+            </Button>
+          </div>
         </div>
         <table className="w-full">
           <thead className="w-full bg-[#EAECF0]">
@@ -133,43 +134,35 @@ export default function KeywordGap({
             </tr>
           </thead>
           <tbody>
+           
+
             {data.map((item, index) => {
+              if (!item) return null; // skip null items
+
               return (
-                <tr
-                  className={`${index === data.length - 1 ? "" : "border-b"}`}
-                  key={index}
-                >
-                  <td className="pl-6 py-6">
-                    <span className={`flex gap-2 items-center `}>
-                      {/* <input type="checkbox" value={``} /> */}
-                      <p> {item?.keyword} </p>
-                    </span>
-                  </td>
-                  <td>{ShortenNumber(item?.keyword_volume)}</td>
-                  <td className="">
+                <tr key={index}>
+                  <td>{item.keyword}</td>
+                  <td>{item.keyword_volume ? ShortenNumber(item.keyword_volume) : 0}</td>
+                  <td>
                     <span
-                      className={` rounded-3xl flex items-center ${
-                        item?.keyword_difficulty <
-                          prev[index]?.keyword_difficulty || 0
+                      className={`rounded-3xl flex items-center ${(prev[index]?.keyword_difficulty ?? 0) > (item.keyword_difficulty ?? 0)
                           ? "bg-[#FEF3F2] text-[#F04438]"
                           : "bg-[#F6FEF9] text-[#6CE9A6]"
-                      }`}
+                        }`}
                     >
-                      <TbPointFilled /> {item?.keyword_difficulty}
+                      <TbPointFilled /> {item.keyword_difficulty ?? 0}
                     </span>
                   </td>
-                  <td>{item?.competition?.toFixed(2) ?? 0} </td>
-                  <td>{item?.rank?.toFixed(2) ?? 0} </td>
-                  <td className="bg-[#EFF8FF] pl-4">
-                    {item?.domain1?.toFixed(2)}{" "}
-                  </td>
-                  <td className="bg-[#FDF2FA] pl-4">
-                    {item?.domain2?.toFixed(2)}{" "}
-                  </td>
-                  {/* <td className="bg-[#F4F3FF] pl-4">{item.kd} </td> */}
+                 {/* <td>{typeof item?.rank === 'number' ? item.rank.toFixed(2) : 0}</td> */}
+                 <td>{0}</td>
+
+                  {/* <td>{item.rank?.toFixed(2) ?? 0}</td> */}
+                  <td className="bg-[#EFF8FF] pl-4">{item.domain1?.toFixed(2) ?? 0}</td>
+                  <td className="bg-[#FDF2FA] pl-4">{item.domain2?.toFixed(2) ?? 0}</td>
                 </tr>
               );
             })}
+
           </tbody>
         </table>
       </div>

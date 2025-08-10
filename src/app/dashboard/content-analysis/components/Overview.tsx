@@ -47,7 +47,7 @@ export default function Overview({ OverviewData }: OverviewProps) {
   return (
     <section className="grid grid-cols-3 gap-10 mb-10">
       {/* first grid */}
-      <div className="flex flex-col gap-6 h-[480px] ">
+      <div className="flex flex-col gap-6 min-h-[480px] ">
         <div className="border rounded-md px-4">
           <div className="mt-6">
             <TitleWithoutUnderline

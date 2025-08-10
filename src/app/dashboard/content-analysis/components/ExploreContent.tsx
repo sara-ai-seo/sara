@@ -17,12 +17,12 @@ export default function ExploreContent({ data }: ExploreContentProps) {
     crawling.crawlingData.flatMap((crawlingData) => crawlingData.data)
   ) ?? [{}];
 
-  const transformedDataForTable = exploreResults.map((item) => ({
+  const transformedDataForTable = exploreResults.slice(1).map((item) => ({
     info: {
       title: item.page_title ?? "",
       link: item.url,
       description: item.snippet,
-      author: "",
+      author: item.author || "",
       date_published: new Date(String(item.date_published)),
       language: item.language,
       // socialMediaHandles: {
