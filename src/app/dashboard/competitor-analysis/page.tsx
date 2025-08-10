@@ -42,10 +42,12 @@ export default function page() {
   );
 
   const currentRoute: KeywordGapType[] =
-    data?.project?.crawlings[0]?.crawlingData[0]?.data?.items;
+    data?.project?.crawlings[0]?.crawlingData[0]?.data?.items || [];
   const prevRoute: KeywordGapType[] =
-    data?.project?.crawlings[1]?.crawlingData[0]?.data?.items;
+    data?.project?.crawlings[1]?.crawlingData[0]?.data?.items || [];
 
+    console.log("CR:", currentRoute)
+    console.log("PR:", prevRoute)
   function addNew() {
     setStage(0);
   }
